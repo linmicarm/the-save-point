@@ -1,21 +1,264 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../../generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model HolidayEntry {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  holidayName String
+  year        Int
+  title       String?
+  celebration String?
+  food        String?
+  people      String?
+  mood        String?
+  photoUrl    String?
+  changes     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([userId, holidayName, year])
+  @@index([userId])
+}
+
+model MonthEntry {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  year       Int
+  month      Int
+  mood       String?
+  theme      String?
+  highlight  String?
+  focus      String?
+  foods      String?
+  selfCare   String?
+  activities String?
+  media      String?
+  other      String?
+  photoUrl   String?
+  isPublic   Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([userId, year, month])
+  @@index([userId])
+}
+
+model YearEntry {
+  id          String       @id @default(cuid())
+  userId      String
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  year        Int
+  theme       String?
+  quote       String?
+  resolutions Resolution[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@unique([userId, year])
+  @@index([userId])
+}
+
+model Resolution {
+  id          String     @id @default(cuid())
+  yearEntryId String
+  yearEntry   YearEntry  @relation(fields: [yearEntryId], references: [id], onDelete: Cascade)
+  title       String
+  why         String?
+  notes       String?
+  completed   Boolean    @default(false)
+  tags        String[]
+  position    Int        @default(0)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@index([yearEntryId])
+}
+
+model RhythmBlock {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  label     String
+  items     String[]
+  position  Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model WishItem {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category  String
+  title     String
+  notes     String?
+  completed Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model JournalEntry {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  seasonId   String?
+  season     Season?  @relation(fields: [seasonId], references: [id], onDelete: SetNull)
+  body       String
+  mood       String?
+  prompt     String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([userId])
+  @@index([seasonId])
+}
+
+model Season {
+  id         String    @id @default(cuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name       String
+  emoji      String    @default("✦")
+  color      String    @default("#c4b5fd")
+  intention  String?
+  reflection String?
+  coverUrl   String?
+  startedAt  DateTime  @default(now())
+  endedAt    DateTime?
+  createdAt      DateTime       @default(now())
+  journalEntries JournalEntry[]
+
+  @@index([userId])
+}
+
+model Letter {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  to        String
+  subject   String?
+  body      String
+  openOn    DateTime?
+  isPublic  Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([userId])
+}
+
+model CommonplaceEntry {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  body      String
+  source    String?
+  tags      String[]
+  note      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model Milestone {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  date        DateTime
+  description String?
+  emoji       String?
+  category    String?
+  isPublic    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model NowEntry {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  focus     String?
+  building  String?
+  learning  String?
+  feeling   String?
+  location  String?
+  isPublic  Boolean  @default(false)
+  updatedAt DateTime @updatedAt
+}
+
+model Place {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  type        String
+  description String?
+  emoji       String?
+  year        Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model CapsuleEntry {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  body      String?
+  photoUrl  String?
+  openOn    DateTime
+  isPublic  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
 }
 
 model User {
-  id          String   @id @default(cuid())
-  email       String   @unique
-  username    String   @unique
-  displayName String
-  passwordHash String
-  bio         String?
-  avatarUrl   String?
-  accentColor String   @default("#c4b5fd")
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                 String   @id @default(cuid())
+  email              String   @unique
+  username           String   @unique
+  displayName        String
+  passwordHash       String
+  bio                String?
+  avatarUrl          String?
+  accentColor        String   @default("#c4b5fd")
+  isDiscoverable     Boolean  @default(false)
+  currentlyWatching  String?
+  currentlyReading   String?
+  currentlyPlaying   String?
+  currentlyEating    String?
+  currentlyListening String?
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+  seasons            Season[]
+  journalEntries     JournalEntry[]
+  wishItems          WishItem[]
+  rhythmBlocks       RhythmBlock[]
+  yearEntries        YearEntry[]
+  holidayEntries     HolidayEntry[]
+  monthEntries       MonthEntry[]
+  letters            Letter[]
+  commonplaceEntries CommonplaceEntry[]
+  milestones         Milestone[]
+  nowEntry           NowEntry?
+  places             Place[]
+  capsuleEntries     CapsuleEntry[]
 }

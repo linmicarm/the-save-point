@@ -9,4 +9,7 @@ export default defineConfig({
       '/api': 'http://localhost:5000',
     },
   },
+  optimizeDeps: {
+    include: ['emoji-mart', '@emoji-mart/data', '@emoji-mart/react'],
+  },
 })

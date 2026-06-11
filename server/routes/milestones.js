@@ -13,6 +13,32 @@ router.get('/', requireAuth, async (req, res) => {
   res.json({ milestones })
 })
 
+router.get('/onthisday/:username', async (req, res) => {
+  try {
+    const user = await prisma.user.findUnique({ where: { username: req.params.username } })
+    if (!user) return res.status(404).json({ error: 'User not found.' })
+
+    const today = new Date()
+    const month = today.getMonth() + 1
+    const day   = today.getDate()
+    const currentYear = today.getFullYear()
+
+    const all = await prisma.milestone.findMany({
+      where: { userId: user.id, isPublic: true },
+      orderBy: { date: 'desc' },
+    })
+
+    const milestones = all.filter(m => {
+      const d = new Date(m.date)
+      return d.getMonth() + 1 === month && d.getDate() === day && d.getFullYear() < currentYear
+    })
+
+    res.json({ milestones })
+  } catch {
+    res.status(500).json({ error: 'Something went wrong.' })
+  }
+})
+
 router.get('/public/:username', async (req, res) => {
   const user = await prisma.user.findUnique({ where: { username: req.params.username } })
   if (!user) return res.status(404).json({ error: 'User not found.' })

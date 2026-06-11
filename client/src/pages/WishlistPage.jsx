@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
+import SeasonBadge from '../components/SeasonBadge'
 
 const CATEGORIES = [
   { key: 'cook',  label: 'cook',  emoji: '🍳' },
@@ -26,11 +27,15 @@ export default function WishlistPage() {
   const [adding, setAdding]         = useState(false)
   const [editingId, setEditingId]   = useState(null)
   const [editTitle, setEditTitle]   = useState('')
+  const [activeSeason, setActiveSeason] = useState(null)
 
   useEffect(() => {
     axios.get('/api/wishlist')
       .then(res => setItems(res.data.items))
       .finally(() => setLoading(false))
+    axios.get('/api/seasons/active')
+      .then(r => setActiveSeason(r.data.season || null))
+      .catch(() => {})
   }, [])
 
   const categoryItems = items.filter(i => i.category === activeTab)
@@ -45,6 +50,7 @@ export default function WishlistPage() {
         category: activeTab,
         title: newTitle,
         notes: newNotes || null,
+        seasonId: activeSeason?.id || null,
       })
       setItems(prev => [...prev, res.data.item])
       setNewTitle('')
@@ -268,6 +274,11 @@ function WishItem({ item, editingId, editTitle, setEditTitle, onToggle, onDelete
         )}
         {item.notes && !isEditing && (
           <p className="text-xs text-[#a89bc2] mt-0.5">{item.notes}</p>
+        )}
+        {item.season && !isEditing && (
+          <div className="mt-1.5">
+            <SeasonBadge season={item.season} />
+          </div>
         )}
       </div>
 

@@ -4,14 +4,41 @@
 @import "@fontsource/dm-sans/400.css";
 @import "@fontsource/dm-sans/500.css";
 
+/* Enable class-based dark mode for Tailwind v4 */
+@variant dark (&:where(.dark, .dark *));
+
 :root {
   --font-serif: 'Lora', Georgia, serif;
   --font-sans: 'DM Sans', system-ui, sans-serif;
+
+  --sp-bg:           #faf8ff;
+  --sp-surface:      #ffffff;
+  --sp-surface-2:    #f5f2fb;
+  --sp-text:         #2d2a35;
+  --sp-text-muted:   #7c6f9b;
+  --sp-text-faint:   #a89bc2;
+  --sp-border:       #e4dff0;
+  --sp-border-faint: #ede9f5;
+  --sp-navbar-bg:    rgba(255,255,255,0.9);
+}
+
+.dark {
+  --sp-bg:           #16131e;
+  --sp-surface:      #1f1b2e;
+  --sp-surface-2:    #261f35;
+  --sp-text:         #e8e3f5;
+  --sp-text-muted:   #b8aed4;
+  --sp-text-faint:   #7c7099;
+  --sp-border:       #2e2840;
+  --sp-border-faint: #261f35;
+  --sp-navbar-bg:    rgba(31,27,46,0.92);
 }
 
 body {
   font-family: var(--font-sans);
-  background: #faf8f5;
+  background: var(--sp-bg);
+  color: var(--sp-text);
+  transition: background 0.2s, color 0.2s;
 }
 
 .font-serif {
@@ -88,3 +115,62 @@ a[href]:active {
   from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
+/* ── Dark mode overrides ─────────────────────────────────────────────
+   Components use hardcoded Tailwind hex classes throughout.
+   These overrides intercept the most common ones at the CSS level
+   so individual components don't all need to be updated.
+   ──────────────────────────────────────────────────────────────────── */
+
+/* Backgrounds */
+.dark .bg-white                    { background-color: var(--sp-surface)   !important; }
+.dark .bg-\[\#faf8ff\]             { background-color: var(--sp-bg)        !important; }
+.dark .bg-\[\#faf8f5\]             { background-color: var(--sp-bg)        !important; }
+.dark .bg-\[\#f5f2fb\]             { background-color: var(--sp-surface-2) !important; }
+.dark .bg-\[\#f0ebff\]             { background-color: var(--sp-surface-2) !important; }
+.dark .bg-\[\#ede9f5\]             { background-color: var(--sp-surface-2) !important; }
+.dark .min-h-screen:not([style*="background"]) { background-color: var(--sp-bg) !important; }
+
+/* Text */
+.dark .text-\[\#2d2a35\]           { color: var(--sp-text)       !important; }
+.dark .text-\[\#5a5065\]           { color: var(--sp-text)       !important; }
+.dark .text-\[\#3d3848\]           { color: var(--sp-text)       !important; }
+.dark .text-\[\#7c6f9b\]           { color: var(--sp-text-muted) !important; }
+.dark .text-\[\#a89bc2\]           { color: var(--sp-text-faint) !important; }
+.dark .text-\[\#c4b8d9\]           { color: var(--sp-text-faint) !important; }
+.dark .text-\[\#b0a3c8\]           { color: var(--sp-text-faint) !important; }
+
+/* Borders */
+.dark .border-\[\#e4dff0\]         { border-color: var(--sp-border)       !important; }
+.dark .border-\[\#ede9f5\]         { border-color: var(--sp-border-faint) !important; }
+.dark .border-\[\#e8e3f0\]         { border-color: var(--sp-border)       !important; }
+.dark .border-\[\#f0ebff\]         { border-color: var(--sp-border-faint) !important; }
+.dark .divide-\[\#f0ebff\]         > * + * { border-color: var(--sp-border-faint) !important; }
+.dark .divide-\[\#e4dff0\]         > * + * { border-color: var(--sp-border)       !important; }
+
+/* Inputs and textareas */
+.dark input:not([type="checkbox"]):not([type="radio"]),
+.dark textarea,
+.dark select {
+  background-color: var(--sp-surface-2) !important;
+  color: var(--sp-text) !important;
+  border-color: var(--sp-border) !important;
+}
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: var(--sp-text-faint) !important;
+  opacity: 1;
+}
+
+/* Hover state bg tints that stay too light */
+.dark .hover\:bg-\[\#f5f2fb\]:hover { background-color: var(--sp-surface-2) !important; }
+.dark .hover\:bg-\[\#f5f0ff\]:hover { background-color: var(--sp-surface-2) !important; }
+.dark .hover\:bg-\[\#f0ebff\]:hover { background-color: var(--sp-surface-2) !important; }
+
+/* Accent band (h-1 at top of profile) stays accent colored — no override needed */
+
+/* Shadows feel heavy in dark mode */
+.dark .shadow-sm  { box-shadow: 0 1px 3px rgba(0,0,0,0.4) !important; }
+.dark .shadow-md  { box-shadow: 0 4px 12px rgba(0,0,0,0.4) !important; }
+.dark .shadow-xl  { box-shadow: 0 8px 30px rgba(0,0,0,0.5) !important; }
+.dark .shadow-2xl { box-shadow: 0 12px 40px rgba(0,0,0,0.6) !important; }

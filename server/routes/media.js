@@ -1,77 +1,56 @@
 const express = require('express')
 const router = express.Router()
 
-async function searchWatching(q) {
-  const [movRes, tvRes] = await Promise.all([
-    fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(q)}&media=movie&entity=movie&limit=4`),
-    fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(q)}&media=tvShow&entity=tvSeason&limit=3`),
-  ])
-  const [mov, tv] = await Promise.all([movRes.json(), tvRes.json()])
-  return [
-    ...(mov.results || []).map(r => ({
-      title: r.trackName,
-      subtitle: [r.primaryGenreName, r.releaseDate?.slice(0, 4)].filter(Boolean).join(' · '),
-      imageUrl: r.artworkUrl60?.replace('60x60bb', '100x100bb'),
-    })),
-    ...(tv.results || []).map(r => ({
-      title: r.collectionName || r.trackName,
-      subtitle: ['TV Series', r.releaseDate?.slice(0, 4)].filter(Boolean).join(' · '),
-      imageUrl: r.artworkUrl60?.replace('60x60bb', '100x100bb'),
-    })),
-  ].slice(0, 6)
-}
-
-async function searchReading(q) {
+async function searchWatchingTmdb(q) {
   const res = await fetch(
-    `https://openlibrary.org/search.json?q=${encodeURIComponent(q)}&limit=6&fields=title,author_name,first_publish_year,cover_i`
+    `https://api.themoviedb.org/3/search/multi?api_key=${process.env.TMDB_KEY}&query=${encodeURIComponent(q)}&page=1&include_adult=false`
   )
   const data = await res.json()
-  return (data.docs || []).slice(0, 6).map(r => ({
-    title: r.title,
-    subtitle: [r.author_name?.[0], r.first_publish_year].filter(Boolean).join(' · '),
-    imageUrl: r.cover_i ? `https://covers.openlibrary.org/b/id/${r.cover_i}-S.jpg` : null,
-  }))
-}
-
-async function searchListening(q) {
-  const res = await fetch(
-    `https://itunes.apple.com/search?term=${encodeURIComponent(q)}&media=music&entity=song&limit=6`
-  )
-  const data = await res.json()
-  return (data.results || []).map(r => ({
-    title: r.trackName,
-    subtitle: [r.artistName, r.collectionName].filter(Boolean).join(' · '),
-    imageUrl: r.artworkUrl60?.replace('60x60bb', '100x100bb'),
-  }))
+  return (data.results || [])
+    .filter(r => r.media_type !== 'person' && r.poster_path)
+    .slice(0, 8)
+    .map(r => ({
+      title: r.title || r.name,
+      subtitle: [
+        r.media_type === 'tv' ? 'TV Series' : 'Movie',
+        (r.release_date || r.first_air_date || '').slice(0, 4),
+      ].filter(Boolean).join(' · '),
+      imageUrl: `https://image.tmdb.org/t/p/w200${r.poster_path}`,
+    }))
 }
 
 async function searchPlaying(q) {
-  if (!process.env.RAWG_KEY) return []
   const res = await fetch(
-    `https://api.rawg.io/api/games?key=${process.env.RAWG_KEY}&search=${encodeURIComponent(q)}&page_size=6`
+    `https://store.steampowered.com/api/storesearch/?term=${encodeURIComponent(q)}&l=english&cc=US`,
+    { headers: { 'Accept': 'application/json' } }
   )
   const data = await res.json()
-  return (data.results || []).map(r => ({
+  return (data.items || []).slice(0, 8).map(r => ({
     title: r.name,
-    subtitle: r.genres?.map(g => g.name).slice(0, 2).join(', ') || '',
-    imageUrl: r.background_image,
+    subtitle: r.price?.final ? `$${(r.price.final / 100).toFixed(2)}` : 'Free',
+    // Steam portrait library art — great for the shelf
+    imageUrl: `https://cdn.akamai.steamstatic.com/steam/apps/${r.id}/library_600x900.jpg`,
   }))
 }
 
 router.get('/search', async (req, res) => {
   const { type, q } = req.query
-  if (!q?.trim() || !type) return res.json({ results: [] })
+  if (!q?.trim() || !type) return res.json({ results: [], fallback: false })
 
   try {
-    let results = []
-    if (type === 'watching')  results = await searchWatching(q)
-    else if (type === 'reading')   results = await searchReading(q)
-    else if (type === 'listening') results = await searchListening(q)
-    else if (type === 'playing')   results = await searchPlaying(q)
-    res.json({ results })
+    if (type === 'watching' && process.env.TMDB_KEY) {
+      const results = await searchWatchingTmdb(q)
+      return res.json({ results, fallback: false })
+    }
+    if (type === 'playing') {
+      const results = await searchPlaying(q)
+      return res.json({ results, fallback: results.length === 0 })
+    }
+    // reading + listening handled client-side; signal fallback
+    res.json({ results: [], fallback: true })
   } catch (err) {
     console.error('media search error:', err.message)
-    res.json({ results: [] })
+    res.json({ results: [], fallback: true })
   }
 })
 

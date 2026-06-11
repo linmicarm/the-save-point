@@ -1,6 +1,12 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 import axios from 'axios'
 
+// In production the frontend is on Vercel, API is on Render — needs an absolute base URL.
+// In dev, Vite's proxy handles /api → localhost:5000 so we leave it empty.
+if (import.meta.env.VITE_API_URL) {
+  axios.defaults.baseURL = import.meta.env.VITE_API_URL
+}
+
 const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {

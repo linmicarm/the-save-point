@@ -12,23 +12,26 @@ router.get('/', requireAuth, async (req, res) => {
   const items = await prisma.wishItem.findMany({
     where: { userId: req.userId },
     orderBy: { createdAt: 'asc' },
+    include: { season: { select: { id: true, name: true, emoji: true, color: true } } },
   })
   res.json({ items })
 })
 
 // POST /api/wishlist
 router.post('/', requireAuth, async (req, res) => {
-  const { category, title, notes } = req.body
+  const { category, title, notes, seasonId } = req.body
   if (!title?.trim()) return res.status(400).json({ error: 'Title is required.' })
   if (!VALID_CATEGORIES.includes(category)) return res.status(400).json({ error: 'Invalid category.' })
 
   const item = await prisma.wishItem.create({
     data: {
-      userId: req.userId,
+      userId:   req.userId,
       category,
-      title: title.trim(),
-      notes: notes?.trim() || null,
+      title:    title.trim(),
+      notes:    notes?.trim() || null,
+      seasonId: seasonId || null,
     },
+    include: { season: { select: { id: true, name: true, emoji: true, color: true } } },
   })
   res.status(201).json({ item })
 })
@@ -40,14 +43,16 @@ router.patch('/:id', requireAuth, async (req, res) => {
   })
   if (!item) return res.status(404).json({ error: 'Item not found.' })
 
-  const { title, notes, completed } = req.body
+  const { title, notes, completed, seasonId } = req.body
   const updated = await prisma.wishItem.update({
     where: { id: req.params.id },
     data: {
-      ...(title !== undefined     && { title: title.trim() }),
-      ...(notes !== undefined     && { notes: notes?.trim() || null }),
+      ...(title     !== undefined && { title:    title.trim() }),
+      ...(notes     !== undefined && { notes:    notes?.trim() || null }),
       ...(completed !== undefined && { completed }),
+      ...(seasonId  !== undefined && { seasonId: seasonId || null }),
     },
+    include: { season: { select: { id: true, name: true, emoji: true, color: true } } },
   })
   res.json({ item: updated })
 })

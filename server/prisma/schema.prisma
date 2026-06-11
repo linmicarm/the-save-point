@@ -99,6 +99,8 @@ model WishItem {
   id        String   @id @default(cuid())
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  seasonId  String?
+  season    Season?  @relation(fields: [seasonId], references: [id], onDelete: SetNull)
   category  String
   title     String
   notes     String?
@@ -107,6 +109,7 @@ model WishItem {
   updatedAt DateTime @updatedAt
 
   @@index([userId])
+  @@index([seasonId])
 }
 
 model JournalEntry {
@@ -118,6 +121,7 @@ model JournalEntry {
   body       String
   mood       String?
   prompt     String?
+  isPublic   Boolean  @default(false)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
@@ -139,6 +143,11 @@ model Season {
   endedAt    DateTime?
   createdAt      DateTime       @default(now())
   journalEntries JournalEntry[]
+  mediaLogs      MediaLog[]
+  photos         Photo[]
+  places         Place[]
+  wishItems      WishItem[]
+  habits         Habit[]
 
   @@index([userId])
 }
@@ -166,6 +175,7 @@ model CommonplaceEntry {
   source    String?
   tags      String[]
   note      String?
+  isPublic  Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -205,15 +215,22 @@ model Place {
   id          String   @id @default(cuid())
   userId      String
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  seasonId    String?
+  season      Season?  @relation(fields: [seasonId], references: [id], onDelete: SetNull)
   name        String
   type        String
   description String?
   emoji       String?
   year        Int?
+  tags        String[]
+  photos      Json?
+  rating      Int?
+  isPublic    Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   @@index([userId])
+  @@index([seasonId])
 }
 
 model CapsuleEntry {
@@ -231,6 +248,132 @@ model CapsuleEntry {
   @@index([userId])
 }
 
+model Post {
+  id        String         @id @default(cuid())
+  userId    String
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  body      String
+  images    Json?
+  createdAt DateTime       @default(now())
+  likes     PostLike[]
+  comments  PostComment[]
+  bookmarks PostBookmark[]
+
+  @@index([userId])
+}
+
+model PostLike {
+  id        String   @id @default(cuid())
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([postId, userId])
+  @@index([userId])
+}
+
+model PostComment {
+  id        String   @id @default(cuid())
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  body      String
+  createdAt DateTime @default(now())
+
+  @@index([postId])
+  @@index([userId])
+}
+
+model PostBookmark {
+  id        String   @id @default(cuid())
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([postId, userId])
+  @@index([userId])
+}
+
+model MealEntry {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  weekStart DateTime
+  day       Int
+  mealType  String
+  name      String
+  notes     String?
+  rating    Int?
+  tags      String[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([userId, weekStart])
+}
+
+model ShopItem {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  weekStart DateTime
+  name      String
+  category  String?
+  quantity  String?
+  checked   Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([userId, weekStart])
+}
+
+model BlogPost {
+  id        String        @id @default(cuid())
+  userId    String
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  slug      String
+  content   Json
+  coverUrl  String?
+  tags      String[]
+  mood      String?
+  music     String?
+  isPublic  Boolean       @default(false)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  comments  BlogComment[]
+
+  @@unique([userId, slug])
+  @@index([userId])
+}
+
+model BlogComment {
+  id        String   @id @default(cuid())
+  postId    String
+  post      BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  body      String
+  createdAt DateTime @default(now())
+
+  @@index([postId])
+  @@index([userId])
+}
+
+model UserPageSettings {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sectionsVisible Json?
+  sectionsOrder   Json?
+  updatedAt       DateTime @updatedAt
+}
+
 model User {
   id                 String   @id @default(cuid())
   email              String   @unique
@@ -238,16 +381,26 @@ model User {
   displayName        String
   passwordHash       String
   bio                String?
+  pinnedQuote        String?
   avatarUrl          String?
   accentColor        String   @default("#c4b5fd")
   isDiscoverable     Boolean  @default(false)
-  currentlyWatching  String?
-  currentlyReading   String?
-  currentlyPlaying   String?
-  currentlyEating    String?
-  currentlyListening String?
+  pronouns           String?
+  location           String?
+  website            String?
+  birthday           String?
+  headerUrl          String?
+  currentlyWatching  Json?
+  currentlyReading   Json?
+  currentlyPlaying   Json?
+  currentlyListening Json?
+  currentlyEating    Json?
+  currentlyDrinking  Json?
+  currentlyMaking    Json?
   createdAt          DateTime       @default(now())
   updatedAt          DateTime       @updatedAt
+  passwordResetToken  String?
+  passwordResetExpiry DateTime?
   seasons            Season[]
   journalEntries     JournalEntry[]
   wishItems          WishItem[]
@@ -261,4 +414,141 @@ model User {
   nowEntry           NowEntry?
   places             Place[]
   capsuleEntries     CapsuleEntry[]
+  posts              Post[]
+  postLikes          PostLike[]
+  postComments       PostComment[]
+  postBookmarks      PostBookmark[]
+  blogPosts          BlogPost[]
+  blogComments       BlogComment[]
+  mealEntries        MealEntry[]
+  shopItems          ShopItem[]
+  habits             Habit[]
+  habitLogs          HabitLog[]
+  mediaLogs          MediaLog[]
+  photos             Photo[]
+  recipes            Recipe[]
+  notificationsReceived Notification[] @relation("NotifRecipient")
+  notificationsSent  Notification[]   @relation("NotifActor")
+  followers          Follow[]         @relation("Following")
+  following          Follow[]         @relation("Follower")
+  pageSettings       UserPageSettings?
+}
+
+model Habit {
+  id        String     @id @default(cuid())
+  userId    String
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  seasonId  String?
+  season    Season?    @relation(fields: [seasonId], references: [id], onDelete: SetNull)
+  name      String
+  emoji     String?
+  color     String     @default("#c4b5fd")
+  frequency String     @default("daily")
+  position  Int        @default(0)
+  archived  Boolean    @default(false)
+  createdAt DateTime   @default(now())
+  logs      HabitLog[]
+  @@index([userId])
+  @@index([seasonId])
+}
+
+model HabitLog {
+  id        String   @id @default(cuid())
+  habitId   String
+  habit     Habit    @relation(fields: [habitId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date      String
+  value     Int      @default(1)
+  note      String?
+  createdAt DateTime @default(now())
+  @@unique([habitId, date])
+  @@index([userId])
+}
+
+model MediaLog {
+  id         String    @id @default(cuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  seasonId   String?
+  season     Season?   @relation(fields: [seasonId], references: [id], onDelete: SetNull)
+  type       String
+  title      String
+  creator    String?
+  coverUrl   String?
+  status     String    @default("want")
+  rating     Int?
+  notes      String?
+  startedAt  DateTime?
+  finishedAt DateTime?
+  tags       String[]
+  isPublic   Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  @@index([userId])
+  @@index([userId, type])
+  @@index([seasonId])
+}
+
+model Photo {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  seasonId  String?
+  season    Season?  @relation(fields: [seasonId], references: [id], onDelete: SetNull)
+  url       String
+  caption   String?
+  takenAt   DateTime?
+  tags      String[]
+  isPublic  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  @@index([userId])
+  @@index([seasonId])
+}
+
+model Recipe {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  ingredients Json?
+  steps       Json?
+  coverUrl    String?
+  tags        String[]
+  prepTime    Int?
+  cookTime    Int?
+  servings    Int?
+  rating      Int?
+  notes       String?
+  isPublic    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  @@index([userId])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation("NotifRecipient", fields: [userId], references: [id], onDelete: Cascade)
+  actorId   String
+  actor     User     @relation("NotifActor", fields: [actorId], references: [id], onDelete: Cascade)
+  type      String
+  entityId  String?
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  @@index([userId])
+  @@index([userId, read])
+}
+
+model Follow {
+  id          String   @id @default(cuid())
+  followerId  String
+  follower    User     @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
+  followingId String
+  following   User     @relation("Following", fields: [followingId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  @@unique([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
 }

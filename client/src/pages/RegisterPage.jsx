@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
+import OnboardingModal from '../components/OnboardingModal'
 
 export default function RegisterPage() {
   const { register } = useAuth()
@@ -11,6 +12,7 @@ export default function RegisterPage() {
   const [usernameStatus, setUsernameStatus] = useState(null) // 'available' | 'taken' | 'checking'
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [showOnboarding, setShowOnboarding] = useState(false)
 
   const handleChange = (e) => {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
@@ -35,7 +37,7 @@ export default function RegisterPage() {
     setLoading(true)
     try {
       await register(form.email, form.username, form.password, form.displayName)
-      navigate('/home')
+      setShowOnboarding(true)
     } catch (err) {
       setError(err.response?.data?.error || 'Something went wrong.')
     } finally {
@@ -45,6 +47,7 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen bg-[#faf8f5] flex items-center justify-center px-4">
+      {showOnboarding && <OnboardingModal onClose={() => { setShowOnboarding(false); navigate('/home') }} />}
       <div className="w-full max-w-sm">
 
         <div className="text-center mb-8">

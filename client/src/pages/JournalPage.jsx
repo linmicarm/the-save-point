@@ -11,10 +11,21 @@ function formatDate(iso) {
   })
 }
 
-function EntryCard({ entry, onDelete }) {
+function EntryCard({ entry, onDelete, onTogglePublic }) {
   const [expanded, setExpanded] = useState(false)
+  const [toggling, setToggling] = useState(false)
   const preview = entry.body.slice(0, 160)
   const isLong = entry.body.length > 160
+
+  const handleTogglePublic = async (e) => {
+    e.stopPropagation()
+    setToggling(true)
+    try {
+      await onTogglePublic(entry.id, !entry.isPublic)
+    } finally {
+      setToggling(false)
+    }
+  }
 
   return (
     <div className="bg-white border border-[#ede9f5] rounded-2xl p-5">
@@ -31,6 +42,15 @@ function EntryCard({ entry, onDelete }) {
           )}
         </div>
         <div className="flex items-center gap-3 shrink-0">
+          <button
+            onClick={handleTogglePublic}
+            disabled={toggling}
+            title={entry.isPublic ? 'visible on your profile — click to make private' : 'private — click to share on profile'}
+            className="text-xs transition-colors disabled:opacity-40"
+            style={{ color: entry.isPublic ? '#a89bc2' : '#d4cfe3' }}
+          >
+            {entry.isPublic ? '🌐' : '🔒'}
+          </button>
           <span className="text-xs text-[#c4b8d9]">{formatDate(entry.createdAt)}</span>
           <DeleteButton onDelete={() => onDelete(entry.id)} label="✕" className="text-xs text-[#d4cfe3] hover:text-rose-300 transition-colors" />
         </div>
@@ -66,6 +86,7 @@ export default function JournalPage() {
   const [loading, setLoading]   = useState(true)
   const [body, setBody]         = useState('')
   const [mood, setMood]         = useState('')
+  const [isPublic, setIsPublic] = useState(false)
   const [usePrompt, setUsePrompt] = useState(false)
   const [saving, setSaving]     = useState(false)
   const [error, setError]       = useState('')
@@ -89,10 +110,12 @@ export default function JournalPage() {
         body,
         mood: mood || null,
         prompt: usePrompt ? prompt : null,
+        isPublic,
       })
       setEntries(prev => [res.data.entry, ...prev])
       setBody('')
       setMood('')
+      setIsPublic(false)
       setUsePrompt(false)
     } catch {
       setError('Something went wrong.')
@@ -107,6 +130,15 @@ export default function JournalPage() {
       setEntries(prev => prev.filter(e => e.id !== id))
     } catch {
       console.error('delete failed')
+    }
+  }
+
+  const handleTogglePublic = async (id, newValue) => {
+    try {
+      await axios.patch(`/api/journal/${id}`, { isPublic: newValue })
+      setEntries(prev => prev.map(e => e.id === id ? { ...e, isPublic: newValue } : e))
+    } catch {
+      console.error('toggle failed')
     }
   }
 
@@ -195,6 +227,18 @@ export default function JournalPage() {
             <div className="flex items-center gap-3">
               {error && <p className="text-xs text-rose-400">{error}</p>}
               <button
+                type="button"
+                onClick={() => setIsPublic(p => !p)}
+                title={isPublic ? 'public — visible on your profile' : 'private — only you can see this'}
+                className="text-xs px-2.5 py-1.5 rounded-xl border transition-colors"
+                style={isPublic
+                  ? { borderColor: '#c4b5fd', color: '#7c6f9b', background: '#c4b5fd18' }
+                  : { borderColor: '#e4dff0', color: '#c4b8d9', background: 'transparent' }
+                }
+              >
+                {isPublic ? '🌐 public' : '🔒 private'}
+              </button>
+              <button
                 onClick={handleSave}
                 disabled={saving || !body.trim()}
                 className="text-xs px-4 py-2 rounded-xl bg-[#c4b5fd] hover:bg-[#b39ef7] text-white font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
@@ -213,7 +257,7 @@ export default function JournalPage() {
         ) : (
           <div className="space-y-3 stagger-children">
             {entries.map(entry => (
-              <EntryCard key={entry.id} entry={entry} onDelete={handleDelete} />
+              <EntryCard key={entry.id} entry={entry} onDelete={handleDelete} onTogglePublic={handleTogglePublic} />
             ))}
           </div>
         )}

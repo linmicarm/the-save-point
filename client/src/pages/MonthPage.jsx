@@ -305,7 +305,7 @@ function MonthModal({ entry, onClose, onSave, onDelete }) {
   )
 }
 
-function MonthCard({ month, year, entry, onClick }) {
+function MonthCard({ month, entry, onClick }) {
   const isEmpty = !entry
 
   return (

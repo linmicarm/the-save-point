@@ -64,6 +64,24 @@ router.get('/', requireAuth, async (req, res) => {
   res.json({ entries })
 })
 
+// GET /public/:username  — public journal entries for a user profile
+router.get('/public/:username', async (req, res) => {
+  try {
+    const user = await prisma.user.findUnique({ where: { username: req.params.username } })
+    if (!user) return res.status(404).json({ error: 'User not found.' })
+    const entries = await prisma.journalEntry.findMany({
+      where: { userId: user.id, isPublic: true },
+      orderBy: { createdAt: 'desc' },
+      take: 30,
+      include: { season: { select: { id: true, name: true, emoji: true, color: true } } },
+    })
+    res.json({ entries })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: 'Something went wrong.' })
+  }
+})
+
 // GET /api/journal/:id
 router.get('/:id', requireAuth, async (req, res) => {
   const entry = await prisma.journalEntry.findFirst({
@@ -76,7 +94,7 @@ router.get('/:id', requireAuth, async (req, res) => {
 
 // POST /api/journal
 router.post('/', requireAuth, async (req, res) => {
-  const { body, mood, prompt } = req.body
+  const { body, mood, prompt, isPublic } = req.body
   if (!body?.trim()) return res.status(400).json({ error: 'Entry body is required.' })
 
   const activeSeason = await prisma.season.findFirst({
@@ -91,10 +109,32 @@ router.post('/', requireAuth, async (req, res) => {
       body: body.trim(),
       mood: mood?.trim() || null,
       prompt: prompt || null,
+      isPublic: isPublic ?? false,
     },
     include: { season: { select: { id: true, name: true, emoji: true, color: true } } },
   })
   res.status(201).json({ entry })
+})
+
+// PATCH /api/journal/:id
+router.patch('/:id', requireAuth, async (req, res) => {
+  const existing = await prisma.journalEntry.findFirst({
+    where: { id: req.params.id, userId: req.userId },
+  })
+  if (!existing) return res.status(404).json({ error: 'Entry not found.' })
+
+  const { body, mood, prompt, isPublic } = req.body
+  const entry = await prisma.journalEntry.update({
+    where: { id: req.params.id },
+    data: {
+      ...(body     !== undefined && { body: body.trim() }),
+      ...(mood     !== undefined && { mood: mood?.trim() || null }),
+      ...(prompt   !== undefined && { prompt: prompt || null }),
+      ...(isPublic !== undefined && { isPublic }),
+    },
+    include: { season: { select: { id: true, name: true, emoji: true, color: true } } },
+  })
+  res.json({ entry })
 })
 
 // DELETE /api/journal/:id

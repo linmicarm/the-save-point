@@ -1,6 +1,8 @@
 const express = require('express')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const crypto = require('crypto')
+const nodemailer = require('nodemailer')
 const { PrismaClient } = require('@prisma/client')
 
 const router = express.Router()
@@ -76,6 +78,77 @@ router.get('/check-username/:username', async (req, res) => {
   const { username } = req.params
   const exists = await prisma.user.findUnique({ where: { username } })
   res.json({ available: !exists })
+})
+
+// POST /api/auth/forgot-password
+router.post('/forgot-password', async (req, res) => {
+  const { email } = req.body
+  if (!email) return res.status(400).json({ error: 'Email required.' })
+  try {
+    const user = await prisma.user.findUnique({ where: { email } })
+    // Always return success to prevent email enumeration
+    if (!user) return res.json({ ok: true })
+
+    const token = crypto.randomBytes(32).toString('hex')
+    const expiry = new Date(Date.now() + 1000 * 60 * 60) // 1 hour
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { passwordResetToken: token, passwordResetExpiry: expiry },
+    })
+
+    const resetUrl = `${process.env.CLIENT_URL}/reset-password?token=${token}`
+
+    if (process.env.SMTP_HOST) {
+      const transporter = nodemailer.createTransport({
+        host: process.env.SMTP_HOST,
+        port: Number(process.env.SMTP_PORT) || 587,
+        auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
+      })
+      await transporter.sendMail({
+        from: process.env.SMTP_FROM || 'noreply@savepoint.app',
+        to: user.email,
+        subject: 'Reset your Save Point password',
+        html: `<p>Hi ${user.displayName},</p><p>Click the link below to reset your password. It expires in 1 hour.</p><p><a href="${resetUrl}">${resetUrl}</a></p><p>If you didn't request this, ignore this email.</p>`,
+      })
+    }
+
+    // In development or when email not configured, log the link
+    if (!process.env.SMTP_HOST) {
+      console.log(`[DEV] Password reset link for ${email}: ${resetUrl}`)
+    }
+
+    res.json({ ok: true })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: 'Something went wrong.' })
+  }
+})
+
+// POST /api/auth/reset-password
+router.post('/reset-password', async (req, res) => {
+  const { token, password } = req.body
+  if (!token || !password) return res.status(400).json({ error: 'Token and password required.' })
+  if (password.length < 8) return res.status(400).json({ error: 'Password must be at least 8 characters.' })
+  try {
+    const user = await prisma.user.findFirst({
+      where: {
+        passwordResetToken: token,
+        passwordResetExpiry: { gt: new Date() },
+      },
+    })
+    if (!user) return res.status(400).json({ error: 'Invalid or expired reset token.' })
+
+    const hash = await bcrypt.hash(password, 10)
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { passwordHash: hash, passwordResetToken: null, passwordResetExpiry: null },
+    })
+    res.json({ ok: true })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: 'Something went wrong.' })
+  }
 })
 
 function requireAuth(req, res, next) {

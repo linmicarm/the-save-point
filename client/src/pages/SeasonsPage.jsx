@@ -130,7 +130,7 @@ export default function SeasonsPage() {
 
   const activeSeason = seasons.find(s => !s.endedAt) || null
 
-  const handleModalSave = (updated) => {
+  const handleModalSave = (_updated) => {
     setShowModal(false)
     axios.get('/api/seasons')
       .then(res => setSeasons(res.data.seasons))

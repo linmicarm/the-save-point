@@ -23,3 +23,14 @@ describe('NAV_SECTIONS', () => {
     }
   })
 })
+
+describe('folded pages', () => {
+  it('maps a folded page to its menu entry', async () => {
+    const { canonical, labelFor, roomFor } = await import('./navSections')
+    expect(canonical('/week')).toBe('/habits')
+    expect(canonical('/habits')).toBe('/habits')
+    expect(canonical('/nope')).toBeNull()
+    expect(labelFor('/year')).toBe('month & year')
+    expect(roomFor('/capsule')).toBe('memories')
+  })
+})

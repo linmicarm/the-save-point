@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext'
 import DeleteButton from '../components/DeleteButton'
 import Button from '../components/Button'
 import BackLink from '../components/BackLink'
+import PageTabs from '../components/PageTabs'
 
 function isOpen(openOn) {
   return new Date(openOn) <= new Date()
@@ -166,6 +167,7 @@ export default function CapsulePage() {
     <div className="min-h-screen bg-[#faf8f5]">
       <div className="h-1 w-full bg-[#c4b5fd]" />
       <div className="max-w-lg mx-auto px-5 py-10">
+        <PageTabs group="letters" />
         <div className="flex items-center justify-between mb-8">
           <BackLink to={`/u/${user.username}`} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">← your page</BackLink>
           <Button variant="secondary" size="sm" onClick={() => setCreating(true)}>+ new capsule</Button>

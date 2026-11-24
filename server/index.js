@@ -49,6 +49,7 @@ const followRoutes     = require('./routes/follows')
 const searchRoutes     = require('./routes/search')
 const exportRoutes     = require('./routes/export')
 const uploadRoutes     = require('./routes/upload')
+const checkinRoutes    = require('./routes/checkins')
 
 const app = express()
 
@@ -95,6 +96,7 @@ app.use('/api/follows',       followRoutes)
 app.use('/api/search',        searchRoutes)
 app.use('/api/export',        exportRoutes)
 app.use('/api/upload',        uploadRoutes)
+app.use('/api/checkins',      checkinRoutes)
 
 // ── Health check — useful for Render health probes and uptime monitors
 app.get('/api/health', (req, res) => {

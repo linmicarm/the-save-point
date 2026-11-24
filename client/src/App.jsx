@@ -10,9 +10,9 @@ import MobileNav from './components/MobileNav'
 // Always-loaded (tiny, needed immediately or for auth flow)
 import LoginPage    from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
-import RedirectToProfile from './components/RedirectToProfile'
 
 // Lazy-loaded — split into separate chunks
+const SeasonHomePage    = lazy(() => import('./pages/SeasonHomePage'))
 const UserPage          = lazy(() => import('./pages/UserPage'))
 const JournalPage       = lazy(() => import('./pages/JournalPage'))
 const WishlistPage      = lazy(() => import('./pages/WishlistPage'))
@@ -65,7 +65,7 @@ function AnimatedRoutes() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/reset-password"  element={<ResetPasswordPage />} />
-          <Route path="/home"    element={<ProtectedRoute><RedirectToProfile /></ProtectedRoute>} />
+          <Route path="/home"    element={<ProtectedRoute><SeasonHomePage /></ProtectedRoute>} />
 
           {/* profile */}
           <Route path="/u/:username"                       element={<UserPage />} />

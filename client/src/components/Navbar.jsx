@@ -91,7 +91,7 @@ export default function Navbar() {
 
         {/* logo */}
         <Link
-          to={user ? `/u/${user.username}` : '/login'}
+          to={user ? '/home' : '/login'}
           className="flex items-center gap-2 shrink-0 group"
         >
           <span className="text-base transition-all group-hover:scale-110" style={{ color: '#c4b5fd', display: 'inline-block' }}>✦</span>
@@ -102,6 +102,28 @@ export default function Navbar() {
             save point
           </span>
         </Link>
+
+        {user && (
+          <div className="hidden lg:flex items-center gap-1 ml-4">
+            {[
+              { to: '/home', label: 'home' },
+              { to: '/journal', label: 'journal' },
+              { to: `/u/${user.username}`, label: 'your page' },
+            ].map(({ to, label }) => {
+              const active = location.pathname === to
+              return (
+                <Link
+                  key={to}
+                  to={to}
+                  className="px-3 py-1.5 rounded-xl text-[13px] transition-colors"
+                  style={{ color: active ? 'var(--sp-text)' : 'var(--sp-text-faint)', background: active ? 'var(--sp-surface-2)' : 'transparent' }}
+                >
+                  {label}
+                </Link>
+              )
+            })}
+          </div>
+        )}
 
         <div className="flex-1" />
 

@@ -2,9 +2,9 @@ import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 
 const MOBILE_TABS = [
-  { to: 'profile',       label: 'me',       icon: '✦' },
-  { to: '/feed',         label: 'feed',      icon: '📰' },
+  { to: '/home',         label: 'home',      icon: '🌱' },
   { to: '/journal',      label: 'journal',   icon: '📓' },
+  { to: 'profile',       label: 'me',        icon: '✦' },
   { to: '/discover',     label: 'discover',  icon: '🌐' },
   { to: '/notifications',label: 'alerts',    icon: '🔔' },
 ]

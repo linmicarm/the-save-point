@@ -29,7 +29,7 @@
   --sp-surface-2:    #f5ede0;   /* warm cream for hover / inputs   */
   --sp-text:         #3b2f2f;   /* warm dark brown                 */
   --sp-text-muted:   #8c6e5d;   /* warm sienna                     */
-  --sp-text-faint:   #b89e8a;   /* warm tan                        */
+  --sp-text-faint:   #94796a;   /* warm tan — darkened for contrast on cream */
   --sp-border:       #e8d9c8;   /* warm tan border                 */
   --sp-border-faint: #f0e6d8;   /* lighter warm border             */
   --sp-navbar-bg:    rgba(253,249,244,0.92);
@@ -42,7 +42,7 @@
   --sp-surface-2:    #2d2318;
   --sp-text:         #ede0cf;
   --sp-text-muted:   #c4a882;
-  --sp-text-faint:   #8a7260;
+  --sp-text-faint:   #a89580;   /* lightened for contrast on dark surfaces */
   --sp-border:       #3d3028;
   --sp-border-faint: #2d2318;
   --sp-navbar-bg:    rgba(26,21,16,0.94);
@@ -72,6 +72,10 @@ body::after {
 /* ── Font utility classes ────────────────────────────────────────────── */
 .font-display { font-family: var(--font-display); }
 .font-serif   { font-family: var(--font-serif);   }
+/* Caveat's x-height is ~0.40em vs ~0.50em for DM Sans / Lora, so at the same font-size it
+   reads about a fifth smaller. font-size-adjust evens that out for everything set in the
+   hand font (class, inline style or the ornament divider) without touching each call site. */
+.font-hand, .divider-ornament, [style*="--font-hand"] { font-size-adjust: 0.5; }
 .font-hand    { font-family: var(--font-hand);     }
 
 /* ── Light-mode background remapping ────────────────────────────────────

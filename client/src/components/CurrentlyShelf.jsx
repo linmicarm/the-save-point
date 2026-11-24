@@ -148,9 +148,9 @@ export default function CurrentlyShelf({ fieldDef, items = [], isOwn, accent, ac
           <button
             onClick={() => setAdding(true)}
             className="text-[11px] transition-colors"
-            style={{ fontFamily: 'var(--font-hand)', color: `rgba(${accentRgb}, 0.45)` }}
+            style={{ fontFamily: 'var(--font-hand)', color: `rgba(${accentRgb}, 0.75)` }}
             onMouseEnter={e => e.currentTarget.style.color = accent}
-            onMouseLeave={e => e.currentTarget.style.color = `rgba(${accentRgb}, 0.45)`}
+            onMouseLeave={e => e.currentTarget.style.color = `rgba(${accentRgb}, 0.75)`}
           >+ add</button>
         )}
       </div>

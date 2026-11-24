@@ -26,7 +26,7 @@ export default function SectionHeader({ label, accent, accentRgb, linkTo }) {
         <Link
           to={linkTo}
           className="text-[11px] shrink-0 transition-opacity hover:opacity-100"
-          style={{ fontFamily: 'var(--font-hand)', color: `rgba(${accentRgb}, 0.6)`, opacity: 0.75 }}
+          style={{ fontFamily: 'var(--font-hand)', color: `rgba(${accentRgb}, 0.85)`, opacity: 0.9 }}
         >
           see all →
         </Link>

@@ -148,8 +148,23 @@ model Season {
   places         Place[]
   wishItems      WishItem[]
   habits         Habit[]
+  checkIns       CheckIn[]
 
   @@index([userId])
+}
+
+model CheckIn {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  seasonId  String?
+  season    Season?  @relation(fields: [seasonId], references: [id], onDelete: SetNull)
+  weather   String   // sunny | cloudy | rainy | stormy (validated in the route)
+  note      String?
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([seasonId])
 }
 
 model Letter {
@@ -402,6 +417,7 @@ model User {
   passwordResetToken  String?
   passwordResetExpiry DateTime?
   seasons            Season[]
+  checkIns           CheckIn[]
   journalEntries     JournalEntry[]
   wishItems          WishItem[]
   rhythmBlocks       RhythmBlock[]

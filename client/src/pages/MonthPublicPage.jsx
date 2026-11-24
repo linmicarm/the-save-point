@@ -71,7 +71,7 @@ export default function MonthPublicPage() {
 
         <div className="flex items-center gap-3 mb-1">
           <span className="text-2xl">{entry.mood || '✦'}</span>
-          <h1 className="text-2xl font-medium text-[#2d2a35]" style={{ fontFamily: 'var(--font-serif)' }}>
+          <h1 className="text-2xl" style={{ fontFamily: 'var(--font-display)', fontWeight: 600, color: 'var(--sp-text)' }}>
             {monthLabel}
           </h1>
         </div>

@@ -292,23 +292,14 @@ export default function HabitsPage() {
         {/* header */}
         <div className="flex items-start justify-between mb-8 gap-4 flex-wrap">
           <div>
-            <h1
-              className="text-2xl font-medium text-[#2d2a35]"
-              style={{ fontFamily: 'var(--font-serif)' }}
-            >
+            <h1 className="text-2xl" style={{ fontFamily: 'var(--font-display)', fontWeight: 600, color: 'var(--sp-text)' }}>
               habits
             </h1>
             <p className="text-sm text-[#a89bc2] mt-1">
               {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
             </p>
           </div>
-          <button
-            onClick={() => setShowAddForm(v => !v)}
-            className="text-xs px-4 py-2 rounded-full text-white transition-opacity hover:opacity-90"
-            style={{ background: accent }}
-          >
-            + new habit
-          </button>
+          <Button variant="primary" size="sm" color={accent} onClick={() => setShowAddForm(v => !v)}>+ new habit</Button>
         </div>
 
         {/* add form */}
@@ -328,13 +319,7 @@ export default function HabitsPage() {
           <div className="text-center py-20">
             <p className="text-4xl mb-4">🌱</p>
             <p className="text-sm text-[#a89bc2] mb-6">start tracking your first habit</p>
-            <button
-              onClick={() => setShowAddForm(true)}
-              className="text-xs px-4 py-2 rounded-xl text-white transition-opacity hover:opacity-90"
-              style={{ background: accent }}
-            >
-              add a habit
-            </button>
+            <Button variant="primary" size="sm" color={accent} onClick={() => setShowAddForm(true)}>add a habit</Button>
           </div>
         ) : (
           <div className="space-y-3">

@@ -139,10 +139,7 @@ export default function BookmarksPage() {
       <div className="max-w-5xl mx-auto px-5 py-8">
         {/* header */}
         <div className="mb-8">
-          <h1
-            className="text-2xl font-medium text-[#2d2a35]"
-            style={{ fontFamily: 'var(--font-serif)' }}
-          >
+          <h1 className="text-2xl" style={{ fontFamily: 'var(--font-display)', fontWeight: 600, color: 'var(--sp-text)' }}>
             bookmarks
           </h1>
           <p className="text-sm text-[#a89bc2] mt-1">posts you've saved for later</p>

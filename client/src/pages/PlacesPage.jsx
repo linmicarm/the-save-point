@@ -410,7 +410,7 @@ export default function PlacesPage() {
         <div className="flex items-center justify-between mb-1">
           <Link to={`/u/${user.username}`} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">← your page</Link>
         </div>
-        <h1 className="text-2xl font-medium text-[#2d2a35] mb-1" style={{ fontFamily: 'var(--font-serif)' }}>places</h1>
+        <h1 className="text-2xl mb-1" style={{ fontFamily: 'var(--font-display)', fontWeight: 600, color: 'var(--sp-text)' }}>places</h1>
         <p className="text-sm text-[#a89bc2] mb-6">the places that made you, and the ones still waiting</p>
 
         {/* ── FILTER BAR ── */}

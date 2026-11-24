@@ -113,12 +113,7 @@ function ManualAddForm({ onCommit, onCancel, showSearch, type, label, accentRgb,
 
       <div className="flex gap-2 pt-1">
         {mode === 'manual' && (
-          <button
-            onClick={commit}
-            disabled={!title.trim()}
-            className="text-xs px-3 py-1.5 rounded-lg text-white disabled:opacity-40 transition-opacity"
-            style={{ background: accent }}
-          >add</button>
+          <Button variant="primary" size="sm" color={accent} onClick={commit} disabled={!title.trim()}>add</Button>
         )}
         <Button variant="quiet" onClick={onCancel}>cancel</Button>
       </div>

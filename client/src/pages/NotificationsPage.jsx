@@ -165,7 +165,7 @@ export default function NotificationsPage() {
 
         {/* header */}
         <div className="flex items-center gap-3 mb-8">
-          <h1 className="text-2xl font-medium text-[#2d2a35]" style={{ fontFamily: 'var(--font-serif)' }}>
+          <h1 className="text-2xl" style={{ fontFamily: 'var(--font-display)', fontWeight: 600, color: 'var(--sp-text)' }}>
             notifications
           </h1>
           {unreadCount > 0 && (

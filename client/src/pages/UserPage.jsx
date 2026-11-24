@@ -134,7 +134,7 @@ function SideNav({ accentRgb, accent, location, isOwn, onExport, onLogout }) {
         <div key={group} className="mb-5">
           {/* group label — Caveat handwriting, warm and subtle */}
           <p className="text-[11px] mb-1.5 px-2"
-            style={{ fontFamily: 'var(--font-hand)', color: `rgba(${accentRgb}, 0.55)`, letterSpacing: '0.04em' }}>
+            style={{ fontFamily: 'var(--font-hand)', color: `rgba(${accentRgb}, 0.8)`, letterSpacing: '0.04em' }}>
             {group}
           </p>
           <div className="flex flex-col gap-0.5">
@@ -272,7 +272,7 @@ function PageHeader({ profile, season, accent, accentRgb, isOwn, authUser,
             )}
             {profile.pinnedQuote && (
               <p className="text-[12px] italic mt-2 leading-relaxed"
-                style={{ color: `rgba(${accentRgb}, 0.55)`,
+                style={{ color: `rgba(${accentRgb}, 0.8)`,
                   borderLeft: `2px solid rgba(${accentRgb}, 0.2)`, paddingLeft: '10px' }}>
                 "{profile.pinnedQuote}"
               </p>
@@ -617,7 +617,7 @@ function AboutSection({ profile, accentRgb }) {
   return (
     <section className="mt-10 pt-8" style={{ borderTop: `1px solid rgba(${accentRgb}, 0.1)` }}>
       <div className="flex flex-wrap gap-x-6 gap-y-2 text-[12px]"
-        style={{ color: `rgba(${accentRgb}, 0.55)` }}>
+        style={{ color: `rgba(${accentRgb}, 0.8)` }}>
         {profile.website && (
           <a href={profile.website.startsWith('http') ? profile.website : `https://${profile.website}`}
             target="_blank" rel="noopener noreferrer"

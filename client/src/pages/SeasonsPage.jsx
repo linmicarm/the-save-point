@@ -20,11 +20,26 @@ function duration(startedAt, endedAt) {
   return `${(days / 365).toFixed(1)}y`
 }
 
-function SeasonCard({ season, onUpdate }) {
+function SeasonCard({ season, onUpdate, onDelete }) {
+  const [confirmingDelete, setConfirmingDelete] = useState(false)
+  const [deleting, setDeleting] = useState(false)
+  const [deleteError, setDeleteError] = useState('')
   const [editing, setEditing]       = useState(false)
   const [reflection, setReflection] = useState(season.reflection || '')
   const [saving, setSaving]         = useState(false)
   const isActive = !season.endedAt
+
+  const removeSeason = async () => {
+    setDeleting(true)
+    setDeleteError('')
+    try {
+      await axios.delete(`/api/seasons/${season.id}`)
+      onDelete(season.id)
+    } catch {
+      setDeleteError('Could not delete — try again.')
+      setDeleting(false)
+    }
+  }
 
   const saveReflection = async () => {
     setSaving(true)
@@ -118,6 +133,26 @@ function SeasonCard({ season, onUpdate }) {
               )}
             </div>
           )}
+
+          {/* delete — removes the season only; what you wrote stays */}
+          <div className="mt-5 pt-3" style={{ borderTop: '1px solid var(--sp-border-faint)' }}>
+            {confirmingDelete ? (
+              <div>
+                <p className="text-xs leading-relaxed mb-2" style={{ color: 'var(--sp-text-muted)' }}>
+                  this removes the season only. your entries, check-ins and seeds stay in your journal.
+                </p>
+                <div className="flex gap-2 items-center">
+                  <Button size="sm" onClick={removeSeason} disabled={deleting}>
+                    {deleting ? 'deleting...' : 'delete season'}
+                  </Button>
+                  <Button variant="quiet" onClick={() => setConfirmingDelete(false)}>keep it</Button>
+                </div>
+                {deleteError && <p className="text-xs text-rose-400 mt-2">{deleteError}</p>}
+              </div>
+            ) : (
+              <Button variant="quiet" onClick={() => setConfirmingDelete(true)}>delete season</Button>
+            )}
+          </div>
         </div>
       </div>
     </div>
@@ -143,6 +178,8 @@ export default function SeasonsPage() {
     axios.get('/api/seasons')
       .then(res => setSeasons(res.data.seasons))
   }
+
+  const removeSeasonFromList = (id) => setSeasons(prev => prev.filter(s => s.id !== id))
 
   const updateSeason = (updated) => {
     setSeasons(prev => prev.map(s => s.id === updated.id ? updated : s))
@@ -183,7 +220,7 @@ export default function SeasonsPage() {
         ) : (
           <div className="space-y-4">
             {seasons.map(season => (
-              <SeasonCard key={season.id} season={season} onUpdate={updateSeason} />
+              <SeasonCard key={season.id} season={season} onUpdate={updateSeason} onDelete={removeSeasonFromList} />
             ))}
           </div>
         )}

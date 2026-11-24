@@ -23,6 +23,7 @@ const YearPage          = lazy(() => import('./pages/YearPage'))
 const TraditionsPage    = lazy(() => import('./pages/TraditionsPage'))
 const MonthPage         = lazy(() => import('./pages/MonthPage'))
 const SeasonsPage       = lazy(() => import('./pages/SeasonsPage'))
+const SeasonDetailPage  = lazy(() => import('./pages/SeasonDetailPage'))
 const LettersPage       = lazy(() => import('./pages/LettersPage'))
 const CommonplacePage   = lazy(() => import('./pages/CommonplacePage'))
 const MilestonesPage    = lazy(() => import('./pages/MilestonesPage'))
@@ -87,6 +88,7 @@ function AnimatedRoutes() {
 
           {/* time */}
           <Route path="/seasons"    element={<ProtectedRoute><SeasonsPage /></ProtectedRoute>} />
+          <Route path="/seasons/:id" element={<ProtectedRoute><SeasonDetailPage /></ProtectedRoute>} />
           <Route path="/month"      element={<ProtectedRoute><MonthPage /></ProtectedRoute>} />
           <Route path="/year"       element={<ProtectedRoute><YearPage /></ProtectedRoute>} />
           <Route path="/traditions" element={<ProtectedRoute><TraditionsPage /></ProtectedRoute>} />

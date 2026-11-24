@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-
+import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
 import SeasonModal from '../components/SeasonModal'
@@ -21,142 +21,45 @@ function duration(startedAt, endedAt) {
   return `${(days / 365).toFixed(1)}y`
 }
 
-function SeasonCard({ season, onUpdate, onDelete }) {
-  const [confirmingDelete, setConfirmingDelete] = useState(false)
-  const [deleting, setDeleting] = useState(false)
-  const [deleteError, setDeleteError] = useState('')
-  const [editing, setEditing]       = useState(false)
-  const [reflection, setReflection] = useState(season.reflection || '')
-  const [saving, setSaving]         = useState(false)
+// A whole card is one big tap target that opens the season.
+function SeasonCard({ season }) {
   const isActive = !season.endedAt
-
-  const removeSeason = async () => {
-    setDeleting(true)
-    setDeleteError('')
-    try {
-      await axios.delete(`/api/seasons/${season.id}`)
-      onDelete(season.id)
-    } catch {
-      setDeleteError('Could not delete — try again.')
-      setDeleting(false)
-    }
-  }
-
-  const saveReflection = async () => {
-    setSaving(true)
-    try {
-      const res = await axios.patch(`/api/seasons/${season.id}`, { reflection })
-      onUpdate(res.data.season)
-      setEditing(false)
-    } finally {
-      setSaving(false)
-    }
-  }
-
   return (
-    <div
-      className="rounded-2xl border overflow-hidden"
-      style={{ borderColor: `${season.color}44`, background: isActive ? `${season.color}08` : 'var(--sp-surface)' }}
+    <Link
+      to={`/seasons/${season.id}`}
+      className="block rounded-2xl border overflow-hidden transition-all hover:shadow-md"
+      style={{ borderColor: `${season.color}55`, background: isActive ? `${season.color}12` : 'var(--sp-surface)' }}
     >
-      {/* color bar */}
       <div className="h-1 w-full" style={{ background: season.color }} />
-
       <div className="p-5">
-        {/* header */}
-        <div className="flex items-start justify-between mb-3">
-          <div className="flex items-center gap-2.5">
+        <div className="flex items-start justify-between">
+          <div className="flex items-center gap-3 min-w-0">
             <span className="text-2xl">{season.emoji}</span>
-            <div>
+            <div className="min-w-0">
               <div className="flex items-center gap-2">
-                <h3 className="text-sm font-medium text-[#2d2a35]" style={{ fontFamily: 'var(--font-serif)' }}>
+                <h3 className="text-base" style={{ fontFamily: 'var(--font-display)', fontWeight: 600, color: 'var(--sp-text)' }}>
                   {season.name}
                 </h3>
                 {isActive && (
-                  <span className="text-[9px] px-1.5 py-0.5 rounded-full text-white" style={{ background: season.color }}>
-                    active
+                  <span className="text-[10px] px-2 py-0.5 rounded-full" style={{ background: season.color, color: '#2d2a35' }}>
+                    current
                   </span>
                 )}
               </div>
-              <p className="text-[11px] text-[#c4b8d9] mt-0.5">{formatDateRange(season.startedAt, season.endedAt)}</p>
+              <p className="text-xs mt-0.5" style={{ color: 'var(--sp-text-faint)' }}>
+                {formatDateRange(season.startedAt, season.endedAt)} · {duration(season.startedAt, season.endedAt)}
+              </p>
             </div>
           </div>
-          <span className="text-[11px] text-[#c4b8d9] mt-1">{duration(season.startedAt, season.endedAt)}</span>
+          <span className="text-lg leading-none mt-1" style={{ color: 'var(--sp-text-faint)' }} aria-hidden>›</span>
         </div>
-
         {season.intention && (
-          <p className="text-xs text-[#7c6f9b] italic mb-3 pl-10">"{season.intention}"</p>
+          <p className="text-sm italic mt-3 leading-snug line-clamp-2" style={{ fontFamily: 'var(--font-serif)', color: 'var(--sp-text-muted)' }}>
+            "{season.intention}"
+          </p>
         )}
-
-        {/* reflection */}
-        <div className="pl-10">
-          {editing ? (
-            <div>
-              <textarea
-                value={reflection}
-                onChange={e => setReflection(e.target.value)}
-                placeholder="looking back, what defined this season for you?"
-                rows={3}
-                autoFocus
-                className="w-full text-sm text-[#5a5065] bg-[#faf8ff] border border-[#e4dff0] rounded-xl px-3 py-2 focus:outline-none focus:border-[#a89bc2] resize-none placeholder-[#c4b8d9] leading-relaxed"
-              />
-              <div className="flex gap-2 mt-2">
-                <Button variant="primary" size="sm" onClick={saveReflection} disabled={saving}>
-                  {saving ? 'saving...' : 'save'}
-                </Button>
-                <Button variant="quiet" onClick={() => { setEditing(false); setReflection(season.reflection || '') }}>
-                  cancel
-                </Button>
-              </div>
-            </div>
-          ) : season.reflection ? (
-            <div>
-              <p className="text-sm text-[#5a5065] leading-relaxed whitespace-pre-wrap">{season.reflection}</p>
-              <div className="mt-3"><Button size="sm" onClick={() => setEditing(true)}>edit reflection</Button></div>
-            </div>
-          ) : (
-            <Button size="sm" onClick={() => setEditing(true)}>+ add a reflection</Button>
-          )}
-
-          {/* closing ceremony words */}
-          {(season.carryForward || season.released) && (
-            <div className="mt-4 pt-3 space-y-2.5" style={{ borderTop: '1px solid var(--sp-border-faint)' }}>
-              {season.carryForward && (
-                <div>
-                  <p className="text-[10px] uppercase tracking-widest text-[#c4b8d9] mb-0.5">carried forward</p>
-                  <p className="text-sm text-[#5a5065] leading-relaxed whitespace-pre-wrap">{season.carryForward}</p>
-                </div>
-              )}
-              {season.released && (
-                <div>
-                  <p className="text-[10px] uppercase tracking-widest text-[#c4b8d9] mb-0.5">let go</p>
-                  <p className="text-sm text-[#5a5065] leading-relaxed whitespace-pre-wrap">{season.released}</p>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* delete — removes the season only; what you wrote stays */}
-          <div className="mt-5 pt-3" style={{ borderTop: '1px solid var(--sp-border-faint)' }}>
-            {confirmingDelete ? (
-              <div>
-                <p className="text-xs leading-relaxed mb-2" style={{ color: 'var(--sp-text-muted)' }}>
-                  this removes the season only. your entries, check-ins and seeds stay in your journal.
-                </p>
-                <div className="flex gap-2 items-center">
-                  <Button size="sm" onClick={removeSeason} disabled={deleting}>
-                    {deleting ? 'deleting...' : 'delete season'}
-                  </Button>
-                  <Button variant="quiet" onClick={() => setConfirmingDelete(false)}>keep it</Button>
-                </div>
-                {deleteError && <p className="text-xs text-rose-400 mt-2">{deleteError}</p>}
-              </div>
-            ) : (
-              <Button variant="quiet" onClick={() => setConfirmingDelete(true)}>delete season</Button>
-            )}
-          </div>
-        </div>
       </div>
-    </div>
+    </Link>
   )
 }
 
@@ -180,11 +83,7 @@ export default function SeasonsPage() {
       .then(res => setSeasons(res.data.seasons))
   }
 
-  const removeSeasonFromList = (id) => setSeasons(prev => prev.filter(s => s.id !== id))
 
-  const updateSeason = (updated) => {
-    setSeasons(prev => prev.map(s => s.id === updated.id ? updated : s))
-  }
 
   if (loading) return (
     <div className="min-h-screen bg-[#faf8f5] flex items-center justify-center">
@@ -221,7 +120,7 @@ export default function SeasonsPage() {
         ) : (
           <div className="space-y-4">
             {seasons.map(season => (
-              <SeasonCard key={season.id} season={season} onUpdate={updateSeason} onDelete={removeSeasonFromList} />
+              <SeasonCard key={season.id} season={season} />
             ))}
           </div>
         )}

@@ -160,7 +160,7 @@ export default function RhythmPage() {
         </div>
 
         {/* heading */}
-        <h1 className="text-2xl font-medium text-[#2d2a35] mb-1" style={{ fontFamily: 'var(--font-serif)' }}>
+        <h1 className="text-2xl mb-1" style={{ fontFamily: 'var(--font-display)', fontWeight: 600, color: 'var(--sp-text)' }}>
           my week
         </h1>
         <p className="text-sm text-[#a89bc2] mb-8">your living map of how the week flows</p>

@@ -170,7 +170,7 @@ export default function CapsulePage() {
           <Button variant="secondary" size="sm" onClick={() => setCreating(true)}>+ new capsule</Button>
         </div>
 
-        <h1 className="text-2xl font-medium text-[#2d2a35] mb-1" style={{ fontFamily: 'var(--font-serif)' }}>capsule</h1>
+        <h1 className="text-2xl mb-1" style={{ fontFamily: 'var(--font-display)', fontWeight: 600, color: 'var(--sp-text)' }}>capsule</h1>
         <p className="text-sm text-[#a89bc2] mb-8">seal a moment away and let time open it</p>
 
         {creating && (

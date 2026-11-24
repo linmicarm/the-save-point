@@ -277,10 +277,7 @@ export default function FeedPage() {
   return (
     <div className="min-h-screen bg-[#faf8ff]">
       <div className="max-w-2xl mx-auto px-5 py-8 pt-2">
-        <h1
-          className="text-2xl font-medium text-[#2d2a35] mb-1"
-          style={{ fontFamily: 'var(--font-serif)' }}
-        >
+        <h1 className="text-2xl mb-1" style={{ fontFamily: 'var(--font-display)', fontWeight: 600, color: 'var(--sp-text)' }}>
           feed
         </h1>
         <p className="text-sm text-[#a89bc2] mb-8">what's happening with people you follow</p>

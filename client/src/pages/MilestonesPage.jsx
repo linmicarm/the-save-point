@@ -162,7 +162,7 @@ export default function MilestonesPage() {
           <Button variant="secondary" size="sm" onClick={() => setAdding(true)}>+ add milestone</Button>
         </div>
 
-        <h1 className="text-2xl font-medium text-[#2d2a35] mb-1" style={{ fontFamily: 'var(--font-serif)' }}>milestones</h1>
+        <h1 className="text-2xl mb-1" style={{ fontFamily: 'var(--font-display)', fontWeight: 600, color: 'var(--sp-text)' }}>milestones</h1>
         <p className="text-sm text-[#a89bc2] mb-8">the moments that marked you</p>
 
         {usedCats.length > 0 && (

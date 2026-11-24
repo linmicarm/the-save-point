@@ -316,18 +316,12 @@ export default function PhotosPage() {
         {/* header */}
         <div className="flex items-start justify-between mb-8 gap-4 flex-wrap">
           <div>
-            <h1 className="text-2xl font-medium text-[#2d2a35]" style={{ fontFamily: 'var(--font-serif)' }}>
+            <h1 className="text-2xl" style={{ fontFamily: 'var(--font-display)', fontWeight: 600, color: 'var(--sp-text)' }}>
               photos
             </h1>
             <p className="text-sm text-[#a89bc2] mt-1">your photo memories</p>
           </div>
-          <button
-            onClick={() => setShowUploadForm(v => !v)}
-            className="text-xs px-4 py-2 rounded-full text-white transition-opacity hover:opacity-90 shrink-0"
-            style={{ background: accent }}
-          >
-            + upload
-          </button>
+          <Button variant="primary" size="sm" color={accent} onClick={() => setShowUploadForm(v => !v)}>+ upload</Button>
         </div>
 
         {/* upload form */}
@@ -343,13 +337,7 @@ export default function PhotosPage() {
           <div className="text-center py-20">
             <p className="text-4xl mb-4">📷</p>
             <p className="text-sm text-[#a89bc2] mb-6">capture your memories</p>
-            <button
-              onClick={() => setShowUploadForm(true)}
-              className="text-xs px-4 py-2 rounded-xl text-white transition-opacity hover:opacity-90"
-              style={{ background: accent }}
-            >
-              upload your first photo
-            </button>
+            <Button variant="primary" size="sm" color={accent} onClick={() => setShowUploadForm(true)}>upload your first photo</Button>
           </div>
         ) : (
           <div className="columns-2 md:columns-3 lg:columns-4 gap-3">

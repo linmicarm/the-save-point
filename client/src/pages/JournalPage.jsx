@@ -4,6 +4,7 @@ import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
 import EmojiPicker from '../components/EmojiPicker'
 import DeleteButton from '../components/DeleteButton'
+import WeatherCheckIn from '../components/WeatherCheckIn'
 
 function formatDate(iso) {
   return new Date(iso).toLocaleDateString('en-US', {
@@ -171,6 +172,9 @@ export default function JournalPage() {
         <p className="mb-8" style={{ fontFamily: 'var(--font-hand)', color: 'var(--sp-text-faint)', fontSize: '0.95rem' }}>
           private, always ✦
         </p>
+
+        {/* weather check-in */}
+        <WeatherCheckIn />
 
         {/* daily prompt */}
         <div className="rounded-2xl p-4 mb-6 cursor-pointer transition-all"

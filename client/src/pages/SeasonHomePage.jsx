@@ -33,6 +33,7 @@ export default function SeasonHomePage() {
   const [entries, setEntries]     = useState([])
   const [loading, setLoading]     = useState(true)
   const [showModal, setShowModal] = useState(false)
+  const [weather, setWeather]     = useState(null)   // today's check-in, for the garden's sky
 
   useEffect(() => {
     Promise.all([
@@ -103,10 +104,10 @@ export default function SeasonHomePage() {
         )}
 
         {/* weather */}
-        <WeatherCheckIn />
+        <WeatherCheckIn onWeather={setWeather} />
 
         {/* garden + seeds — only once there's a season to plant in */}
-        {season && <SeedGarden key={season.id} />}
+        {season && <SeedGarden key={season.id} weather={weather} color={accent} />}
 
         {/* today's prompt — a doorway to the journal, not a form */}
         <Link

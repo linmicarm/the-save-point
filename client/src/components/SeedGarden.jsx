@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import Button from './Button'
+import GardenScene from './GardenScene'
 import { stageFor, isActive, tendedToday } from '../utils/garden'
 
 // Seeds: a few small things you're tending this season. Tending one grows it;
@@ -20,7 +21,7 @@ const inputStyle = {
   fontFamily: 'var(--font-serif)',
 }
 
-export default function SeedGarden() {
+export default function SeedGarden({ weather = null, color }) {
   const [seeds, setSeeds]       = useState([])
   const [loading, setLoading]   = useState(true)
   const [title, setTitle]       = useState('')
@@ -71,15 +72,9 @@ export default function SeedGarden() {
       <p className="text-[11px] mb-3 uppercase tracking-widest" style={label}>your garden</p>
 
       {/* the garden itself — every seed you've planted this season, replanted ones included */}
-      {seeds.length > 0 && (
-        <div className="flex flex-wrap items-end gap-3 mb-4 text-3xl leading-none" aria-label="your garden">
-          {seeds.map(s => (
-            <span key={s.id} title={`${s.title} — ${stageFor(s.actionCount).name}`}>
-              {stageFor(s.actionCount).emoji}
-            </span>
-          ))}
-        </div>
-      )}
+      <div className="mb-4">
+        <GardenScene seeds={seeds} weather={weather} color={color} />
+      </div>
 
       {active.length === 0 && (
         <p className="text-sm italic mb-4" style={{ fontFamily: 'var(--font-serif)', color: 'var(--sp-text-muted)' }}>

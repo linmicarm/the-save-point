@@ -2,6 +2,7 @@ import { useState } from 'react'
 import axios from 'axios'
 import EmojiPicker from './EmojiPicker'
 import { SEASON_TEMPLATES, applyTemplate } from '../utils/seasonTemplates'
+import { stageFor, isActive } from '../utils/garden'
 
 const COLOR_PRESETS = [
   '#c4b5fd', '#fda4af', '#86efac',
@@ -31,7 +32,7 @@ function TemplatePicker({ onPick }) {
 export default function SeasonModal({ season, onClose, onSave }) {
   const isNew = !season
 
-  // 'edit' | 'closed' | 'new'
+  // 'edit' | 'ceremony' | 'closed'
   const [step, setStep] = useState('edit')
 
   const [form, setForm] = useState({
@@ -41,7 +42,10 @@ export default function SeasonModal({ season, onClose, onSave }) {
     intention: season?.intention || '',
     coverUrl:  season?.coverUrl  || '',
   })
-  const [reflection, setReflection] = useState('')
+  const [reflection, setReflection]     = useState(season?.reflection || '')
+  const [carryForward, setCarryForward] = useState('')
+  const [released, setReleased]         = useState('')
+  const [summary, setSummary]           = useState(null)   // { seeds, entryCount } for the ceremony
   const [saving, setSaving]   = useState(false)
   const [closing, setClosing] = useState(false)
   const [error, setError]     = useState('')
@@ -67,15 +71,28 @@ export default function SeasonModal({ season, onClose, onSave }) {
     }
   }
 
+  // step 1: open the ceremony and gather what grew this season
+  const beginCeremony = async () => {
+    setError('')
+    setStep('ceremony')
+    const days = Math.max(1, Math.floor((Date.now() - new Date(season.startedAt)) / 86400000) + 1)
+    try {
+      const [seedsRes, entriesRes] = await Promise.all([
+        axios.get('/api/seeds'),
+        axios.get('/api/journal', { params: { seasonId: season.id, limit: 200 } }),
+      ])
+      setSummary({ days, seeds: seedsRes.data.seeds, entryCount: entriesRes.data.entries.length })
+    } catch {
+      setSummary({ days, seeds: [], entryCount: null })   // the summary is a nicety — never block closing
+    }
+  }
+
+  // step 2: one call closes the season with everything you wrote
   const handleClose = async () => {
     setClosing(true)
     setError('')
     try {
-      // save reflection then close
-      if (reflection.trim()) {
-        await axios.patch(`/api/seasons/${season.id}`, { reflection })
-      }
-      await axios.post(`/api/seasons/${season.id}/close`)
+      await axios.post(`/api/seasons/${season.id}/close`, { reflection, carryForward, released })
       setStep('closed')
     } catch {
       setError('Something went wrong.')
@@ -105,6 +122,87 @@ export default function SeasonModal({ season, onClose, onSave }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center px-4 modal-backdrop" style={{ background: 'rgba(45, 42, 53, 0.4)' }}>
       <div className="bg-white rounded-2xl w-full max-w-sm p-6 shadow-xl modal-sheet max-h-[90vh] overflow-y-auto">
+
+        {/* ── CEREMONY ── */}
+        {step === 'ceremony' && (
+          <>
+            <div className="text-center mb-5">
+              <p className="text-3xl mb-2">{season?.emoji || '✦'}</p>
+              <h2 className="text-base font-medium text-[#2d2a35] mb-1" style={{ fontFamily: 'var(--font-serif)' }}>
+                closing {season?.name}
+              </h2>
+              <p className="text-xs text-[#a89bc2]">take a moment to look back before it ends</p>
+            </div>
+
+            {/* what grew */}
+            <div className="rounded-xl border border-[#ede9f5] bg-[#faf8ff] px-4 py-3 mb-5">
+              <p className="text-xs text-[#a89bc2] mb-2">
+                {summary ? `${summary.days} days` : ''}
+                {summary?.entryCount != null && ` · ${summary.entryCount >= 200 ? '200+' : summary.entryCount} journal ${summary.entryCount === 1 ? 'entry' : 'entries'}`}
+              </p>
+              {summary?.seeds?.length > 0 ? (
+                <div className="flex flex-wrap gap-x-4 gap-y-1.5">
+                  {summary.seeds.map(s => (
+                    <span key={s.id} className="text-xs text-[#7c6f9b]" title={stageFor(s.actionCount).name}>
+                      <span className="text-lg mr-1 align-middle">{stageFor(s.actionCount).emoji}</span>
+                      {s.title}{!isActive(s) && ' (replanted)'}
+                    </span>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-xs text-[#c4b8d9] italic">{summary ? 'no seeds this season — that\'s okay' : '…'}</p>
+              )}
+            </div>
+
+            <div className="mb-4">
+              <p className="text-xs text-[#a89bc2] mb-1.5">what do you want to remember about this season? <span className="text-[#d4cfe3]">(optional)</span></p>
+              <textarea
+                value={reflection}
+                onChange={e => setReflection(e.target.value)}
+                rows={2}
+                className="w-full px-3 py-2.5 rounded-xl border border-[#e4dff0] bg-[#faf8ff] text-sm text-[#5a5065] placeholder-[#c4b8d9] focus:outline-none focus:border-[#a89bc2] resize-none leading-relaxed"
+              />
+            </div>
+
+            <div className="mb-4">
+              <p className="text-xs text-[#a89bc2] mb-1.5">what are you carrying forward? <span className="text-[#d4cfe3]">(optional)</span></p>
+              <textarea
+                value={carryForward}
+                onChange={e => setCarryForward(e.target.value)}
+                rows={2}
+                placeholder="habits, people, lessons worth keeping…"
+                className="w-full px-3 py-2.5 rounded-xl border border-[#e4dff0] bg-[#faf8ff] text-sm text-[#5a5065] placeholder-[#c4b8d9] focus:outline-none focus:border-[#a89bc2] resize-none leading-relaxed"
+              />
+            </div>
+
+            <div className="mb-5">
+              <p className="text-xs text-[#a89bc2] mb-1.5">what are you ready to let go of? <span className="text-[#d4cfe3]">(optional)</span></p>
+              <textarea
+                value={released}
+                onChange={e => setReleased(e.target.value)}
+                rows={2}
+                placeholder="what you're setting down, with thanks…"
+                className="w-full px-3 py-2.5 rounded-xl border border-[#e4dff0] bg-[#faf8ff] text-sm text-[#5a5065] placeholder-[#c4b8d9] focus:outline-none focus:border-[#a89bc2] resize-none leading-relaxed"
+              />
+            </div>
+
+            {error && <p className="text-xs text-rose-400 mb-3">{error}</p>}
+
+            <div className="flex flex-col gap-2">
+              <button
+                onClick={handleClose}
+                disabled={closing}
+                className="w-full py-2.5 rounded-xl text-white text-xs font-medium transition-opacity disabled:opacity-50"
+                style={{ background: form.color }}
+              >
+                {closing ? 'closing...' : 'close this season'}
+              </button>
+              <button onClick={() => setStep('edit')} className="text-xs text-[#c4b8d9] hover:text-[#a89bc2] transition-colors text-center py-1">
+                not yet
+              </button>
+            </div>
+          </>
+        )}
 
         {/* ── CLOSED STATE ── */}
         {step === 'closed' && (
@@ -246,30 +344,15 @@ export default function SeasonModal({ season, onClose, onSave }) {
               />
             </div>
 
-            {/* reflection — only on active (non-new) seasons so you can jot closing thoughts */}
-            {!isNew && (
-              <div className="mb-5">
-                <p className="text-xs text-[#a89bc2] mb-1.5">closing reflection <span className="text-[#d4cfe3]">(optional)</span></p>
-                <textarea
-                  value={reflection}
-                  onChange={e => setReflection(e.target.value)}
-                  placeholder="anything you want to remember about this season before it ends..."
-                  rows={2}
-                  className="w-full px-3 py-2.5 rounded-xl border border-[#e4dff0] bg-[#faf8ff] text-sm text-[#5a5065] placeholder-[#c4b8d9] focus:outline-none focus:border-[#a89bc2] resize-none leading-relaxed"
-                />
-              </div>
-            )}
-
             {error && <p className="text-xs text-rose-400 mb-3">{error}</p>}
 
             <div className="flex gap-2">
               {!isNew && (
                 <button
-                  onClick={handleClose}
-                  disabled={closing}
-                  className="flex-1 py-2.5 rounded-xl border border-[#e4dff0] text-xs text-[#a89bc2] hover:text-[#7c6f9b] transition-colors disabled:opacity-50"
+                  onClick={beginCeremony}
+                  className="flex-1 py-2.5 rounded-xl border border-[#e4dff0] text-xs text-[#a89bc2] hover:text-[#7c6f9b] transition-colors"
                 >
-                  {closing ? 'closing...' : 'end this season'}
+                  end this season
                 </button>
               )}
               <button

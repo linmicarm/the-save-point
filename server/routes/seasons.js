@@ -90,16 +90,28 @@ router.patch('/:id', requireAuth, async (req, res) => {
   res.json({ season: updated })
 })
 
-// POST /api/seasons/:id/close — close a season
+// POST /api/seasons/:id/close — close a season (the closing ceremony)
+// Optional body: { reflection, carryForward, released }. Everything is saved in the
+// same single update as endedAt, so a season can't end without its closing words
+// (or the other way around). Sending no body still works.
 router.post('/:id/close', requireAuth, async (req, res) => {
   const season = await prisma.season.findFirst({
     where: { id: req.params.id, userId: req.userId },
   })
   if (!season) return res.status(404).json({ error: 'Season not found.' })
+  if (season.endedAt) return res.status(400).json({ error: 'This season has already ended.' })
+
+  const { reflection, carryForward, released } = req.body ?? {}
+  const clean = (v) => (typeof v === 'string' ? v.trim().slice(0, 2000) || null : undefined)
 
   const updated = await prisma.season.update({
     where: { id: req.params.id },
-    data: { endedAt: new Date() },
+    data: {
+      endedAt: new Date(),
+      ...(clean(reflection)   !== undefined && { reflection:   clean(reflection) }),
+      ...(clean(carryForward) !== undefined && { carryForward: clean(carryForward) }),
+      ...(clean(released)     !== undefined && { released:     clean(released) }),
+    },
   })
   res.json({ season: updated })
 })

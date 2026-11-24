@@ -110,6 +110,24 @@ function SeasonCard({ season, onUpdate }) {
               + add a reflection
             </button>
           )}
+
+          {/* closing ceremony words */}
+          {(season.carryForward || season.released) && (
+            <div className="mt-4 pt-3 border-t border-[#f0ecfa] space-y-2.5">
+              {season.carryForward && (
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest text-[#c4b8d9] mb-0.5">carried forward</p>
+                  <p className="text-sm text-[#5a5065] leading-relaxed whitespace-pre-wrap">{season.carryForward}</p>
+                </div>
+              )}
+              {season.released && (
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest text-[#c4b8d9] mb-0.5">let go</p>
+                  <p className="text-sm text-[#5a5065] leading-relaxed whitespace-pre-wrap">{season.released}</p>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

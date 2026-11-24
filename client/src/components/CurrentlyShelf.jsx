@@ -44,9 +44,9 @@ function CoverTile({ item, isOwn, onRemove, portrait = true }) {
       ) : null}
       <div
         className={`${size} rounded-xl flex items-center justify-center p-2 shadow-sm ${item.imageUrl ? 'hidden' : ''}`}
-        style={{ background: 'rgba(196,181,253,0.15)' }}
+        style={{ background: 'var(--sp-surface-2)' }}
       >
-        <p className="text-[9px] text-center leading-tight text-[#a89bc2] line-clamp-4">{item.title}</p>
+        <p className="text-[9px] text-center leading-tight line-clamp-4" style={{ color: 'var(--sp-text-faint)' }}>{item.title}</p>
       </div>
       {isOwn && (
         <button
@@ -70,7 +70,7 @@ function ManualAddForm({ onCommit, onCancel, showSearch, type, label, accentRgb,
   }
 
   return (
-    <div className="mt-2 bg-white border border-[#e4dff0] rounded-xl p-3 shadow-sm space-y-2.5">
+    <div className="mt-2 rounded-xl p-3 shadow-sm space-y-2.5" style={{ background: 'var(--sp-surface)', border: '1px solid var(--sp-border)' }}>
       {showSearch && (
         <div className="flex gap-2 mb-1">
           {['search', 'manual'].map(m => (
@@ -138,16 +138,19 @@ export default function CurrentlyShelf({ fieldDef, items = [], isOwn, accent, ac
       {/* header */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <span className="text-base">{emoji}</span>
-          <p className="text-[11px] font-medium uppercase tracking-wider" style={{ color: accent }}>{label}</p>
+          <span className="text-sm">{emoji}</span>
+          <p className="text-[13px]"
+            style={{ fontFamily: 'var(--font-display)', fontWeight: 500, color: accent, letterSpacing: '-0.01em' }}>
+            {label}
+          </p>
         </div>
         {isOwn && !adding && (
           <button
             onClick={() => setAdding(true)}
             className="text-[11px] transition-colors"
-            style={{ color: `rgba(${accentRgb}, 0.4)` }}
+            style={{ fontFamily: 'var(--font-hand)', color: `rgba(${accentRgb}, 0.45)` }}
             onMouseEnter={e => e.currentTarget.style.color = accent}
-            onMouseLeave={e => e.currentTarget.style.color = `rgba(${accentRgb}, 0.4)`}
+            onMouseLeave={e => e.currentTarget.style.color = `rgba(${accentRgb}, 0.45)`}
           >+ add</button>
         )}
       </div>

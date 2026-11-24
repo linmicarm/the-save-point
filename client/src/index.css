@@ -1,39 +1,54 @@
 @import "tailwindcss";
+
+/* ── Fonts ───────────────────────────────────────────────────────────── */
+@import "@fontsource/fraunces/400.css";
+@import "@fontsource/fraunces/500.css";
+@import "@fontsource/fraunces/600.css";
+@import "@fontsource/fraunces/700.css";
+@import "@fontsource/fraunces/400-italic.css";
 @import "@fontsource/lora/400.css";
 @import "@fontsource/lora/500.css";
+@import "@fontsource/caveat/400.css";
+@import "@fontsource/caveat/500.css";
 @import "@fontsource/dm-sans/400.css";
 @import "@fontsource/dm-sans/500.css";
 
 /* Enable class-based dark mode for Tailwind v4 */
 @variant dark (&:where(.dark, .dark *));
 
+/* ── Design tokens ───────────────────────────────────────────────────── */
 :root {
-  --font-serif: 'Lora', Georgia, serif;
-  --font-sans: 'DM Sans', system-ui, sans-serif;
+  --font-display: 'Fraunces', Georgia, serif;   /* logo, headings, section titles */
+  --font-serif:   'Lora', Georgia, serif;        /* body prose, journal entries    */
+  --font-sans:    'DM Sans', system-ui, sans-serif; /* UI chrome                  */
+  --font-hand:    'Caveat', cursive;             /* timestamps, mood labels, accents */
 
-  --sp-bg:           #faf8ff;
-  --sp-surface:      #ffffff;
-  --sp-surface-2:    #f5f2fb;
-  --sp-text:         #2d2a35;
-  --sp-text-muted:   #7c6f9b;
-  --sp-text-faint:   #a89bc2;
-  --sp-border:       #e4dff0;
-  --sp-border-faint: #ede9f5;
-  --sp-navbar-bg:    rgba(255,255,255,0.9);
+  /* Warm parchment palette — cottagecore / Ghibli */
+  --sp-bg:           #fdf9f4;   /* warm cream parchment            */
+  --sp-surface:      #fffefb;   /* warm white for cards            */
+  --sp-surface-2:    #f5ede0;   /* warm cream for hover / inputs   */
+  --sp-text:         #3b2f2f;   /* warm dark brown                 */
+  --sp-text-muted:   #8c6e5d;   /* warm sienna                     */
+  --sp-text-faint:   #b89e8a;   /* warm tan                        */
+  --sp-border:       #e8d9c8;   /* warm tan border                 */
+  --sp-border-faint: #f0e6d8;   /* lighter warm border             */
+  --sp-navbar-bg:    rgba(253,249,244,0.92);
 }
 
 .dark {
-  --sp-bg:           #16131e;
-  --sp-surface:      #1f1b2e;
-  --sp-surface-2:    #261f35;
-  --sp-text:         #e8e3f5;
-  --sp-text-muted:   #b8aed4;
-  --sp-text-faint:   #7c7099;
-  --sp-border:       #2e2840;
-  --sp-border-faint: #261f35;
-  --sp-navbar-bg:    rgba(31,27,46,0.92);
+  /* Cozy cabin at night */
+  --sp-bg:           #1a1510;
+  --sp-surface:      #231c15;
+  --sp-surface-2:    #2d2318;
+  --sp-text:         #ede0cf;
+  --sp-text-muted:   #c4a882;
+  --sp-text-faint:   #8a7260;
+  --sp-border:       #3d3028;
+  --sp-border-faint: #2d2318;
+  --sp-navbar-bg:    rgba(26,21,16,0.94);
 }
 
+/* ── Base ────────────────────────────────────────────────────────────── */
 body {
   font-family: var(--font-sans);
   background: var(--sp-bg);
@@ -41,11 +56,90 @@ body {
   transition: background 0.2s, color 0.2s;
 }
 
-.font-serif {
-  font-family: var(--font-serif);
+/* Subtle paper grain — a faint SVG noise overlay gives the "not digital" feel */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0.028;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
 }
 
-/* page transitions */
+/* ── Font utility classes ────────────────────────────────────────────── */
+.font-display { font-family: var(--font-display); }
+.font-serif   { font-family: var(--font-serif);   }
+.font-hand    { font-family: var(--font-hand);     }
+
+/* ── Light-mode background remapping ────────────────────────────────────
+   Components use hardcoded Tailwind hex classes. These overrides route the
+   old cold-lavender values through the new warm CSS variables without
+   touching every individual component.
+   ──────────────────────────────────────────────────────────────────────── */
+.bg-\[\#faf8ff\]  { background-color: var(--sp-bg)        !important; }
+.bg-\[\#faf8f5\]  { background-color: var(--sp-bg)        !important; }
+.bg-\[\#f5f2fb\]  { background-color: var(--sp-surface-2) !important; }
+.bg-\[\#f0ebff\]  { background-color: var(--sp-surface-2) !important; }
+.bg-\[\#ede9f5\]  { background-color: var(--sp-surface-2) !important; }
+
+/* Border remapping */
+.border-\[\#e4dff0\]      { border-color: var(--sp-border)       !important; }
+.border-\[\#ede9f5\]      { border-color: var(--sp-border-faint) !important; }
+.border-\[\#e8e3f0\]      { border-color: var(--sp-border)       !important; }
+.border-\[\#f0ebff\]      { border-color: var(--sp-border-faint) !important; }
+.divide-\[\#f0ebff\] > * + * { border-color: var(--sp-border-faint) !important; }
+.divide-\[\#e4dff0\] > * + * { border-color: var(--sp-border)       !important; }
+
+/* Text remapping */
+.text-\[\#2d2a35\] { color: var(--sp-text)       !important; }
+.text-\[\#5a5065\] { color: var(--sp-text-muted) !important; }
+.text-\[\#3d3848\] { color: var(--sp-text)       !important; }
+.text-\[\#7c6f9b\] { color: var(--sp-text-muted) !important; }
+.text-\[\#a89bc2\] { color: var(--sp-text-faint) !important; }
+.text-\[\#c4b8d9\] { color: var(--sp-text-faint) !important; }
+.text-\[\#b0a3c8\] { color: var(--sp-text-faint) !important; }
+
+/* Hover remapping */
+.hover\:text-\[\#2d2a35\]:hover { color: var(--sp-text) !important; }
+.hover\:text-\[\#3d3848\]:hover { color: var(--sp-text) !important; }
+.hover\:bg-\[\#f5f2fb\]:hover   { background-color: var(--sp-surface-2) !important; }
+.hover\:bg-\[\#f5f0ff\]:hover   { background-color: var(--sp-surface-2) !important; }
+.hover\:bg-\[\#f0ebff\]:hover   { background-color: var(--sp-surface-2) !important; }
+
+/* ── Decorative helpers ──────────────────────────────────────────────── */
+
+/* Soft ornamental divider — use <div className="divider-ornament" /> */
+.divider-ornament {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--sp-border);
+  font-family: var(--font-hand);
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  color: var(--sp-text-faint);
+  margin: 1.5rem 0;
+}
+.divider-ornament::before,
+.divider-ornament::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--sp-border);
+}
+
+/* Warm card style — add className="card-warm" to any card */
+.card-warm {
+  background: var(--sp-surface);
+  border: 1px solid var(--sp-border);
+  border-radius: 1.25rem;
+  box-shadow: 0 1px 3px rgba(59, 47, 47, 0.05), 0 0 0 0.5px rgba(59,47,47,0.04);
+}
+
+/* ── Animations ──────────────────────────────────────────────────────── */
 @keyframes page-enter {
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -54,7 +148,6 @@ body {
   animation: page-enter 0.18s ease-out;
 }
 
-/* card stagger */
 @keyframes card-enter {
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -62,19 +155,18 @@ body {
 .stagger-children > * {
   animation: card-enter 0.25s ease both;
 }
-.stagger-children > *:nth-child(1)  { animation-delay:   0ms; }
-.stagger-children > *:nth-child(2)  { animation-delay:  50ms; }
-.stagger-children > *:nth-child(3)  { animation-delay: 100ms; }
-.stagger-children > *:nth-child(4)  { animation-delay: 150ms; }
-.stagger-children > *:nth-child(5)  { animation-delay: 200ms; }
-.stagger-children > *:nth-child(6)  { animation-delay: 240ms; }
-.stagger-children > *:nth-child(7)  { animation-delay: 280ms; }
-.stagger-children > *:nth-child(8)  { animation-delay: 320ms; }
-.stagger-children > *:nth-child(9)  { animation-delay: 350ms; }
-.stagger-children > *:nth-child(10) { animation-delay: 380ms; }
+.stagger-children > *:nth-child(1)    { animation-delay:   0ms; }
+.stagger-children > *:nth-child(2)    { animation-delay:  50ms; }
+.stagger-children > *:nth-child(3)    { animation-delay: 100ms; }
+.stagger-children > *:nth-child(4)    { animation-delay: 150ms; }
+.stagger-children > *:nth-child(5)    { animation-delay: 200ms; }
+.stagger-children > *:nth-child(6)    { animation-delay: 240ms; }
+.stagger-children > *:nth-child(7)    { animation-delay: 280ms; }
+.stagger-children > *:nth-child(8)    { animation-delay: 320ms; }
+.stagger-children > *:nth-child(9)    { animation-delay: 350ms; }
+.stagger-children > *:nth-child(10)   { animation-delay: 380ms; }
 .stagger-children > *:nth-child(n+11) { animation-delay: 400ms; }
 
-/* modal */
 @keyframes backdrop-in {
   from { opacity: 0; }
   to   { opacity: 1; }
@@ -83,19 +175,21 @@ body {
   from { opacity: 0; transform: translateY(12px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-.modal-backdrop {
-  animation: backdrop-in 0.15s ease;
-}
-.modal-sheet {
-  animation: sheet-up 0.2s ease-out;
+.modal-backdrop { animation: backdrop-in 0.15s ease; }
+.modal-sheet    { animation: sheet-up 0.2s ease-out; }
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-/* button press feel */
+/* ── Micro-interactions ──────────────────────────────────────────────── */
 button:not(:disabled):active,
 a[href]:active {
   transform: scale(0.97);
 }
 
+/* ── Utilities ───────────────────────────────────────────────────────── */
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -107,22 +201,9 @@ a[href]:active {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
+.scrollbar-hide::-webkit-scrollbar { display: none; }
 
-@keyframes toast-in {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* ── Dark mode overrides ─────────────────────────────────────────────
-   Components use hardcoded Tailwind hex classes throughout.
-   These overrides intercept the most common ones at the CSS level
-   so individual components don't all need to be updated.
-   ──────────────────────────────────────────────────────────────────── */
-
-/* Backgrounds */
+/* ── Dark mode overrides ─────────────────────────────────────────────── */
 .dark .bg-white                    { background-color: var(--sp-surface)   !important; }
 .dark .bg-\[\#faf8ff\]             { background-color: var(--sp-bg)        !important; }
 .dark .bg-\[\#faf8f5\]             { background-color: var(--sp-bg)        !important; }
@@ -131,7 +212,6 @@ a[href]:active {
 .dark .bg-\[\#ede9f5\]             { background-color: var(--sp-surface-2) !important; }
 .dark .min-h-screen:not([style*="background"]) { background-color: var(--sp-bg) !important; }
 
-/* Text */
 .dark .text-\[\#2d2a35\]           { color: var(--sp-text)       !important; }
 .dark .text-\[\#5a5065\]           { color: var(--sp-text)       !important; }
 .dark .text-\[\#3d3848\]           { color: var(--sp-text)       !important; }
@@ -140,15 +220,13 @@ a[href]:active {
 .dark .text-\[\#c4b8d9\]           { color: var(--sp-text-faint) !important; }
 .dark .text-\[\#b0a3c8\]           { color: var(--sp-text-faint) !important; }
 
-/* Borders */
 .dark .border-\[\#e4dff0\]         { border-color: var(--sp-border)       !important; }
 .dark .border-\[\#ede9f5\]         { border-color: var(--sp-border-faint) !important; }
 .dark .border-\[\#e8e3f0\]         { border-color: var(--sp-border)       !important; }
 .dark .border-\[\#f0ebff\]         { border-color: var(--sp-border-faint) !important; }
-.dark .divide-\[\#f0ebff\]         > * + * { border-color: var(--sp-border-faint) !important; }
-.dark .divide-\[\#e4dff0\]         > * + * { border-color: var(--sp-border)       !important; }
+.dark .divide-\[\#f0ebff\] > * + * { border-color: var(--sp-border-faint) !important; }
+.dark .divide-\[\#e4dff0\] > * + * { border-color: var(--sp-border)       !important; }
 
-/* Inputs and textareas */
 .dark input:not([type="checkbox"]):not([type="radio"]),
 .dark textarea,
 .dark select {
@@ -162,15 +240,11 @@ a[href]:active {
   opacity: 1;
 }
 
-/* Hover state bg tints that stay too light */
 .dark .hover\:bg-\[\#f5f2fb\]:hover { background-color: var(--sp-surface-2) !important; }
 .dark .hover\:bg-\[\#f5f0ff\]:hover { background-color: var(--sp-surface-2) !important; }
 .dark .hover\:bg-\[\#f0ebff\]:hover { background-color: var(--sp-surface-2) !important; }
 
-/* Accent band (h-1 at top of profile) stays accent colored — no override needed */
-
-/* Shadows feel heavy in dark mode */
-.dark .shadow-sm  { box-shadow: 0 1px 3px rgba(0,0,0,0.4) !important; }
+.dark .shadow-sm  { box-shadow: 0 1px 3px rgba(0,0,0,0.4)  !important; }
 .dark .shadow-md  { box-shadow: 0 4px 12px rgba(0,0,0,0.4) !important; }
 .dark .shadow-xl  { box-shadow: 0 8px 30px rgba(0,0,0,0.5) !important; }
-.dark .shadow-2xl { box-shadow: 0 12px 40px rgba(0,0,0,0.6) !important; }
+.dark .shadow-2xl { box-shadow: 0 12px 40px rgba(0,0,0,0.6)!important; }

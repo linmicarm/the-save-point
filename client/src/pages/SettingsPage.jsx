@@ -337,7 +337,22 @@ const TABS = [
 
 export default function SettingsPage() {
   const { user } = useAuth()
+  const { showToast } = useToast()
   const [activeTab, setActiveTab] = useState('account')
+
+  const exportData = async () => {
+    try {
+      const res = await axios.get('/api/export', { responseType: 'blob' })
+      const url = URL.createObjectURL(res.data)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = 'savepoint-export.json'
+      a.click()
+      URL.revokeObjectURL(url)
+    } catch {
+      showToast('Export failed', 'error')
+    }
+  }
 
   return (
     <div className="min-h-screen bg-[#faf8ff]">
@@ -391,6 +406,17 @@ export default function SettingsPage() {
               <div className="bg-white border border-[#e4dff0] rounded-2xl px-5 py-5">
                 <p className="text-sm font-medium text-[#2d2a35] mb-4">change password</p>
                 <ChangePasswordForm />
+              </div>
+            </div>
+
+            <div className="mb-10">
+              <SectionHeading>your data</SectionHeading>
+              <div className="bg-white border border-[#e4dff0] rounded-2xl px-5 py-5 flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-sm font-medium text-[#2d2a35]">download everything</p>
+                  <p className="text-xs text-[#a89bc2] mt-0.5">your journal, photos, letters and more, in one file you keep.</p>
+                </div>
+                <Button size="sm" onClick={exportData} className="shrink-0">export</Button>
               </div>
             </div>
 

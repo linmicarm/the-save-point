@@ -154,6 +154,20 @@ export default function SeasonHomePage() {
           </section>
         )}
 
+        {/* the rest of this season's time-based pages, reachable from here */}
+        {season && (
+          <section className="mb-8">
+            <p className="text-sm mb-2" style={label}>around this season</p>
+            <div className="flex flex-wrap gap-2">
+              <Button to="/week" size="sm">this week</Button>
+              <Button to="/month" size="sm">month in review</Button>
+              <Button to="/year" size="sm">this year</Button>
+              <Button to="/milestones" size="sm">milestones</Button>
+              <Button to={`/seasons/${season.id}`} size="sm">this season</Button>
+            </div>
+          </section>
+        )}
+
         {/* footer actions */}
         <div className="flex items-center justify-between pt-6" style={{ borderTop: '1px solid var(--sp-border-faint)' }}>
           <Button to={`/u/${user.username}`} size="sm">your page</Button>

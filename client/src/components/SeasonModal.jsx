@@ -1,11 +1,32 @@
 import { useState } from 'react'
 import axios from 'axios'
 import EmojiPicker from './EmojiPicker'
+import { SEASON_TEMPLATES, applyTemplate } from '../utils/seasonTemplates'
 
 const COLOR_PRESETS = [
   '#c4b5fd', '#fda4af', '#86efac',
   '#fdba74', '#93c5fd', '#d4b896',
 ]
+
+function TemplatePicker({ onPick }) {
+  return (
+    <div className="mb-4">
+      <p className="text-xs text-[#a89bc2] mb-2">start from a transition <span className="text-[#d4cfe3]">(optional)</span></p>
+      <div className="flex flex-wrap gap-2">
+        {SEASON_TEMPLATES.map(t => (
+          <button
+            key={t.key}
+            type="button"
+            onClick={() => onPick(t)}
+            className="text-xs px-3 py-1.5 rounded-full border border-[#e4dff0] bg-[#faf8ff] text-[#7c6f9b] hover:border-[#c4b5fd] hover:bg-[#c4b5fd18] transition-colors"
+          >
+            {t.emoji} {t.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 export default function SeasonModal({ season, onClose, onSave }) {
   const isNew = !season
@@ -24,6 +45,8 @@ export default function SeasonModal({ season, onClose, onSave }) {
   const [saving, setSaving]   = useState(false)
   const [closing, setClosing] = useState(false)
   const [error, setError]     = useState('')
+
+  const pickTemplate = (t) => setForm(f => ({ ...f, ...applyTemplate(t) }))
 
   const handleSave = async () => {
     if (!form.name.trim()) return setError('Give your season a name.')
@@ -95,6 +118,8 @@ export default function SeasonModal({ season, onClose, onSave }) {
             </div>
 
             {/* new season form */}
+            <TemplatePicker onPick={pickTemplate} />
+
             <div className="mb-4">
               <p className="text-xs text-[#a89bc2] mb-2">emoji</p>
               <EmojiPicker value={form.emoji} onChange={e => setForm(f => ({ ...f, emoji: e }))} />
@@ -160,6 +185,8 @@ export default function SeasonModal({ season, onClose, onSave }) {
               </h2>
               <button onClick={onClose} className="text-[#c4b8d9] hover:text-[#a89bc2] text-lg leading-none">✕</button>
             </div>
+
+            {isNew && <TemplatePicker onPick={pickTemplate} />}
 
             {/* emoji */}
             <div className="mb-4">

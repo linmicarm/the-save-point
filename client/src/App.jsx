@@ -7,6 +7,7 @@ import ProtectedRoute from './components/ProtectedRoute'
 import Navbar from './components/Navbar'
 import MobileNav from './components/MobileNav'
 import MoreMenu from './components/MoreMenu'
+import ScrollMemory from './components/ScrollMemory'
 
 // Always-loaded (tiny, needed immediately or for auth flow)
 import LoginPage    from './pages/LoginPage'
@@ -124,6 +125,7 @@ function AnimatedRoutes() {
 export default function App() {
   return (
     <BrowserRouter>
+      <ScrollMemory />
       <ThemeProvider>
       <AuthProvider>
       <ToastProvider>

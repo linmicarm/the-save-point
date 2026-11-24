@@ -3,10 +3,9 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
 const nodemailer = require('nodemailer')
-const { PrismaClient } = require('@prisma/client')
 
 const router = express.Router()
-const prisma = new PrismaClient()
+const prisma = require('../db')
 
 const signToken = (userId) =>
   jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '7d' })

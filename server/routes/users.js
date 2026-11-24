@@ -1,9 +1,8 @@
 const express = require('express')
 const jwt = require('jsonwebtoken')
-const { PrismaClient } = require('@prisma/client')
 
 const router = express.Router()
-const prisma = new PrismaClient()
+const prisma = require('../db')
 
 const PUBLIC_FIELDS = {
   id: true, username: true, displayName: true, bio: true, pinnedQuote: true,

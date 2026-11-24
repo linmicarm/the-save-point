@@ -1,9 +1,8 @@
 const express = require('express')
 const jwt = require('jsonwebtoken')
-const { PrismaClient } = require('@prisma/client')
 
 const router = express.Router()
-const prisma = new PrismaClient()
+const prisma = require('../db')
 
 // GET /api/months — all entries for the authenticated user
 router.get('/', requireAuth, async (req, res) => {

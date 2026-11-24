@@ -1,9 +1,8 @@
 const express = require('express')
 const jwt = require('jsonwebtoken')
-const { PrismaClient } = require('@prisma/client')
 
 const router = express.Router()
-const prisma = new PrismaClient()
+const prisma = require('../db')
 
 // GET /api/medialog/public/:username — public entries for profile page
 router.get('/public/:username', async (req, res) => {

@@ -123,8 +123,12 @@ export default function MoreMenu({ open, onClose }) {
                   style={{ color: 'var(--sp-text)' }}
                 >
                   <span>{section.label}</span>
-                  <span style={{ color: 'var(--sp-text-faint)' }} aria-hidden>
-                    {isOpen ? '−' : section.items.length}
+                  <span
+                    className="inline-block text-xs transition-transform"
+                    style={{ color: 'var(--sp-text-faint)', transform: isOpen ? 'rotate(180deg)' : 'none' }}
+                    aria-hidden
+                  >
+                    ⌄
                   </span>
                 </button>
                 {isOpen && (

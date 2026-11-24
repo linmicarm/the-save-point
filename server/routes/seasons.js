@@ -89,6 +89,19 @@ router.patch('/:id', requireAuth, async (req, res) => {
   res.json({ season: updated })
 })
 
+// DELETE /api/seasons/:id — remove a season, keep everything inside it.
+// Every relation to Season is onDelete: SetNull, so entries, check-ins, seeds etc.
+// are un-linked from the season, never deleted.
+router.delete('/:id', requireAuth, async (req, res) => {
+  const season = await prisma.season.findFirst({
+    where: { id: req.params.id, userId: req.userId },
+  })
+  if (!season) return res.status(404).json({ error: 'Season not found.' })
+
+  await prisma.season.delete({ where: { id: req.params.id } })
+  res.json({ ok: true })
+})
+
 // POST /api/seasons/:id/close — close a season (the closing ceremony)
 // Optional body: { reflection, carryForward, released }. Everything is saved in the
 // same single update as endedAt, so a season can't end without its closing words

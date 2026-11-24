@@ -315,7 +315,7 @@ export default function MediaLogPage() {
     try {
       const params = type !== 'all' ? `?type=${type}` : ''
       const res = await axios.get(`/api/medialog${params}`)
-      setEntries(res.data.entries || res.data || [])
+      setEntries(res.data.mediaLogs || [])
     } catch {
       setEntries([])
     } finally {

@@ -132,12 +132,13 @@ export default function SeasonModal({ season, onClose, onSave }) {
                 closing {season?.name}
               </h2>
               <p className="text-xs text-[#a89bc2]">take a moment to look back before it ends</p>
+              <p className="text-[11px] text-[#c4b8d9] mt-1">everything here is optional</p>
             </div>
 
             {/* what grew */}
             <div className="rounded-xl border border-[#ede9f5] bg-[#faf8ff] px-4 py-3 mb-5">
               <p className="text-xs text-[#a89bc2] mb-2">
-                {summary ? `${summary.days} days` : ''}
+                {summary ? `${summary.days} ${summary.days === 1 ? 'day' : 'days'}` : ''}
                 {summary?.entryCount != null && ` · ${summary.entryCount >= 200 ? '200+' : summary.entryCount} journal ${summary.entryCount === 1 ? 'entry' : 'entries'}`}
               </p>
               {summary?.seeds?.length > 0 ? (
@@ -155,7 +156,7 @@ export default function SeasonModal({ season, onClose, onSave }) {
             </div>
 
             <div className="mb-4">
-              <p className="text-xs text-[#a89bc2] mb-1.5">what do you want to remember about this season? <span className="text-[#d4cfe3]">(optional)</span></p>
+              <p className="text-xs text-[#a89bc2] mb-1.5">what do you want to remember about this season?</p>
               <textarea
                 value={reflection}
                 onChange={e => setReflection(e.target.value)}
@@ -165,7 +166,7 @@ export default function SeasonModal({ season, onClose, onSave }) {
             </div>
 
             <div className="mb-4">
-              <p className="text-xs text-[#a89bc2] mb-1.5">what are you carrying forward? <span className="text-[#d4cfe3]">(optional)</span></p>
+              <p className="text-xs text-[#a89bc2] mb-1.5">what are you carrying forward?</p>
               <textarea
                 value={carryForward}
                 onChange={e => setCarryForward(e.target.value)}
@@ -176,7 +177,7 @@ export default function SeasonModal({ season, onClose, onSave }) {
             </div>
 
             <div className="mb-5">
-              <p className="text-xs text-[#a89bc2] mb-1.5">what are you ready to let go of? <span className="text-[#d4cfe3]">(optional)</span></p>
+              <p className="text-xs text-[#a89bc2] mb-1.5">what are you ready to let go of?</p>
               <textarea
                 value={released}
                 onChange={e => setReleased(e.target.value)}

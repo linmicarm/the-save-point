@@ -73,9 +73,9 @@ body::after {
 .font-display { font-family: var(--font-display); }
 .font-serif   { font-family: var(--font-serif);   }
 /* Caveat's x-height is ~0.40em vs ~0.50em for DM Sans / Lora, so at the same font-size it
-   reads about a fifth smaller. font-size-adjust evens that out for everything set in the
+   reads about a fifth smaller. font-size-adjust (0.56 = 40% bigger than raw Caveat, a touch larger than body text) evens that out for everything set in the
    hand font (class, inline style or the ornament divider) without touching each call site. */
-.font-hand, .divider-ornament, [style*="--font-hand"] { font-size-adjust: 0.5; }
+.font-hand, .divider-ornament, [style*="--font-hand"] { font-size-adjust: 0.56; }
 .font-hand    { font-family: var(--font-hand);     }
 
 /* ── Light-mode background remapping ────────────────────────────────────

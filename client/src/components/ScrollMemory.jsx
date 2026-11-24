@@ -31,6 +31,7 @@ export default function ScrollMemory() {
 
   // on navigation: restore (back/forward) or reset (new page)
   useLayoutEffect(() => {
+    rememberPath(location.pathname)
     const saved = navType === 'POP' ? positions.get(location.key) : undefined
     if (!saved) {
       if (navType !== 'REPLACE') window.scrollTo(0, 0)
@@ -46,7 +47,19 @@ export default function ScrollMemory() {
     }
     tryRestore()
     return () => cancelAnimationFrame(frame)
-  }, [location.key, navType])
+  }, [location.key, location.pathname, navType])
 
   return null
+}
+
+// Which path sits one step back in this tab's history? BackLink uses it to decide
+// whether "← your page" should step back (restoring scroll) or push a new entry.
+const pathByIdx = new Map()
+export function previousPath() {
+  const idx = window.history.state?.idx
+  return typeof idx === 'number' ? pathByIdx.get(idx - 1) : undefined
+}
+export function rememberPath(pathname) {
+  const idx = window.history.state?.idx
+  if (typeof idx === 'number') pathByIdx.set(idx, pathname)
 }

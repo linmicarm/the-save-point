@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+
 import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
 import SeasonModal from '../components/SeasonModal'
 import Button from '../components/Button'
+import BackLink from '../components/BackLink'
 
 function formatDateRange(startedAt, endedAt) {
   const fmt = (iso) => new Date(iso).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
@@ -198,9 +199,9 @@ export default function SeasonsPage() {
 
         {/* nav */}
         <div className="flex items-center justify-between mb-8">
-          <Link to={`/u/${user.username}`} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">
+          <BackLink to={`/u/${user.username}`} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">
             ← your page
-          </Link>
+          </BackLink>
           <Button size="sm" onClick={() => setShowModal(true)}>
             {activeSeason ? 'manage season' : '+ new season'}
           </Button>

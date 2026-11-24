@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+
 import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
 import EmojiPicker from '../components/EmojiPicker'
 import DeleteButton from '../components/DeleteButton'
 import WeatherCheckIn from '../components/WeatherCheckIn'
+import BackLink from '../components/BackLink'
 
 function formatDate(iso) {
   return new Date(iso).toLocaleDateString('en-US', {
@@ -153,11 +154,11 @@ export default function JournalPage() {
 
         {/* breadcrumb */}
         <div className="flex items-center justify-between mb-8">
-          <Link to={`/u/${user.username}`}
+          <BackLink to={`/u/${user.username}`}
             className="text-xs transition-colors"
             style={{ fontFamily: 'var(--font-hand)', color: 'var(--sp-text-faint)' }}>
             ← your page
-          </Link>
+          </BackLink>
           <p className="text-xs" style={{ fontFamily: 'var(--font-hand)', color: 'var(--sp-text-faint)' }}>
             {entries.length} {entries.length === 1 ? 'entry' : 'entries'}
           </p>

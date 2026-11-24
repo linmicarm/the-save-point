@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
 import { useToast } from '../contexts/ToastContext'
+import BackLink from '../components/BackLink'
 
 const MOOD_EMOJIS = {
   inspired: '✨', soft: '🌸', happy: '😊', tender: '🥺', melancholy: '😔',
@@ -153,7 +154,7 @@ export default function BlogPostPage() {
       <div className="text-center">
         <p className="text-3xl mb-3">✦</p>
         <p className="text-sm text-[#a89bc2]">post not found</p>
-        <Link to={`/u/${username}`} className="text-xs text-[#c4b8d9] hover:text-[#a89bc2] mt-4 block">← back to profile</Link>
+        <BackLink to={`/u/${username}`} className="text-xs text-[#c4b8d9] hover:text-[#a89bc2] mt-4 block">← back to profile</BackLink>
       </div>
     </div>
   )
@@ -176,9 +177,9 @@ export default function BlogPostPage() {
 
       <div className="max-w-2xl mx-auto px-5 py-10">
         {/* back link */}
-        <Link to={`/u/${username}/blog`} className="text-xs text-[#c4b8d9] hover:text-[#a89bc2] transition-colors mb-8 block">
+        <BackLink to={`/u/${username}/blog`} className="text-xs text-[#c4b8d9] hover:text-[#a89bc2] transition-colors mb-8 block">
           ← {post.user.displayName}'s blog
-        </Link>
+        </BackLink>
 
         {/* meta row */}
         <div className="flex items-center gap-3 mb-4 flex-wrap">

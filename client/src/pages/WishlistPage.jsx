@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+
 import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
 import SeasonBadge from '../components/SeasonBadge'
 import Button from '../components/Button'
+import BackLink from '../components/BackLink'
 
 const CATEGORIES = [
   { key: 'cook',  label: 'cook',  emoji: '🍳' },
@@ -100,9 +101,9 @@ export default function WishlistPage() {
 
         {/* nav */}
         <div className="flex items-center justify-between mb-8">
-          <Link to={`/u/${user.username}`} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">
+          <BackLink to={`/u/${user.username}`} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">
             ← your page
-          </Link>
+          </BackLink>
           <p className="text-xs text-[#c4b8d9]">
             {totalCount} {totalCount === 1 ? 'thing' : 'things'} still wanting
           </p>

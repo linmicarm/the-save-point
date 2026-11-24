@@ -16,6 +16,7 @@ import { useAuth } from '../contexts/AuthContext'
 import { useToast } from '../contexts/ToastContext'
 import { DEFAULT_SECTION_ORDER, DEFAULT_SECTION_VISIBLE } from '../utils/sections'
 import Button from '../components/Button'
+import BackLink from '../components/BackLink'
 
 // ─────────────────────────────────────────────
 //  Section metadata
@@ -343,10 +344,10 @@ export default function SettingsPage() {
       <div className="max-w-2xl mx-auto px-5 py-8 pt-2">
 
         <div className="mb-8">
-          <Link to={`/u/${user?.username}`}
+          <BackLink to={`/u/${user?.username}`}
             className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">
             ← your page
-          </Link>
+          </BackLink>
         </div>
 
         <h1 className="text-2xl mb-1" style={{ fontFamily: 'var(--font-display)', fontWeight: 600, color: 'var(--sp-text)' }}>

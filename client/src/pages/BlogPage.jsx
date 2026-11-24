@@ -4,6 +4,7 @@ import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
 import { useToast } from '../contexts/ToastContext'
 import Button from '../components/Button'
+import BackLink from '../components/BackLink'
 
 function timeAgo(date) {
   const diff = Date.now() - new Date(date).getTime()
@@ -48,7 +49,7 @@ export default function BlogPage() {
         {/* header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <Link to={`/u/${user?.username}`} className="text-xs text-[#c4b8d9] hover:text-[#a89bc2] transition-colors block mb-1">← profile</Link>
+            <BackLink to={`/u/${user?.username}`} className="text-xs text-[#c4b8d9] hover:text-[#a89bc2] transition-colors block mb-1">← profile</BackLink>
             <h1 className="text-2xl" style={{ fontFamily: 'var(--font-display)', fontWeight: 600, color: 'var(--sp-text)' }}>my blog</h1>
           </div>
           <Button variant="primary" size="sm" color="#c4b5fd" onClick={() => navigate('/blog/new')}>+ write</Button>

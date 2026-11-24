@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import axios from 'axios'
+import BackLink from '../components/BackLink'
 
 const MONTH_NAMES = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -64,9 +65,9 @@ export default function MonthPublicPage() {
       <div className="max-w-lg mx-auto px-5 py-10">
 
         <div className="flex items-center justify-between mb-8">
-          <Link to={`/u/${username}`} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">
+          <BackLink to={`/u/${username}`} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">
             ← {username}
-          </Link>
+          </BackLink>
         </div>
 
         <div className="flex items-center gap-3 mb-1">

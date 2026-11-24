@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+
 import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
 import EmojiPicker from '../components/EmojiPicker'
 import DeleteButton from '../components/DeleteButton'
 import Button from '../components/Button'
+import BackLink from '../components/BackLink'
 
 const PRESET_HOLIDAYS = [
   { name: "Christmas",        emoji: "🎄" },
@@ -279,9 +280,9 @@ export default function TraditionsPage() {
 
         {/* nav */}
         <div className="flex items-center justify-between mb-8">
-          <Link to={`/u/${user.username}`} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">
+          <BackLink to={`/u/${user.username}`} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">
             ← your page
-          </Link>
+          </BackLink>
           <Button variant="secondary" size="sm" onClick={() => setShowPicker(true)}>+ add entry</Button>
         </div>
 

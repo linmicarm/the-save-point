@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+
 import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
 import SeasonModal from '../components/SeasonModal'
 import Button from '../components/Button'
+import BackLink from '../components/BackLink'
 
 function formatDateRange(startedAt, endedAt) {
   const fmt = (iso) => new Date(iso).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
@@ -20,11 +21,26 @@ function duration(startedAt, endedAt) {
   return `${(days / 365).toFixed(1)}y`
 }
 
-function SeasonCard({ season, onUpdate }) {
+function SeasonCard({ season, onUpdate, onDelete }) {
+  const [confirmingDelete, setConfirmingDelete] = useState(false)
+  const [deleting, setDeleting] = useState(false)
+  const [deleteError, setDeleteError] = useState('')
   const [editing, setEditing]       = useState(false)
   const [reflection, setReflection] = useState(season.reflection || '')
   const [saving, setSaving]         = useState(false)
   const isActive = !season.endedAt
+
+  const removeSeason = async () => {
+    setDeleting(true)
+    setDeleteError('')
+    try {
+      await axios.delete(`/api/seasons/${season.id}`)
+      onDelete(season.id)
+    } catch {
+      setDeleteError('Could not delete — try again.')
+      setDeleting(false)
+    }
+  }
 
   const saveReflection = async () => {
     setSaving(true)
@@ -118,6 +134,26 @@ function SeasonCard({ season, onUpdate }) {
               )}
             </div>
           )}
+
+          {/* delete — removes the season only; what you wrote stays */}
+          <div className="mt-5 pt-3" style={{ borderTop: '1px solid var(--sp-border-faint)' }}>
+            {confirmingDelete ? (
+              <div>
+                <p className="text-xs leading-relaxed mb-2" style={{ color: 'var(--sp-text-muted)' }}>
+                  this removes the season only. your entries, check-ins and seeds stay in your journal.
+                </p>
+                <div className="flex gap-2 items-center">
+                  <Button size="sm" onClick={removeSeason} disabled={deleting}>
+                    {deleting ? 'deleting...' : 'delete season'}
+                  </Button>
+                  <Button variant="quiet" onClick={() => setConfirmingDelete(false)}>keep it</Button>
+                </div>
+                {deleteError && <p className="text-xs text-rose-400 mt-2">{deleteError}</p>}
+              </div>
+            ) : (
+              <Button variant="quiet" onClick={() => setConfirmingDelete(true)}>delete season</Button>
+            )}
+          </div>
         </div>
       </div>
     </div>
@@ -144,6 +180,8 @@ export default function SeasonsPage() {
       .then(res => setSeasons(res.data.seasons))
   }
 
+  const removeSeasonFromList = (id) => setSeasons(prev => prev.filter(s => s.id !== id))
+
   const updateSeason = (updated) => {
     setSeasons(prev => prev.map(s => s.id === updated.id ? updated : s))
   }
@@ -161,9 +199,9 @@ export default function SeasonsPage() {
 
         {/* nav */}
         <div className="flex items-center justify-between mb-8">
-          <Link to={`/u/${user.username}`} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">
+          <BackLink to={`/u/${user.username}`} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">
             ← your page
-          </Link>
+          </BackLink>
           <Button size="sm" onClick={() => setShowModal(true)}>
             {activeSeason ? 'manage season' : '+ new season'}
           </Button>
@@ -183,7 +221,7 @@ export default function SeasonsPage() {
         ) : (
           <div className="space-y-4">
             {seasons.map(season => (
-              <SeasonCard key={season.id} season={season} onUpdate={updateSeason} />
+              <SeasonCard key={season.id} season={season} onUpdate={updateSeason} onDelete={removeSeasonFromList} />
             ))}
           </div>
         )}

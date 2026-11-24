@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+
 import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
 import DeleteButton from '../components/DeleteButton'
 import Button from '../components/Button'
+import BackLink from '../components/BackLink'
 
 function isUnlocked(openOn) {
   if (!openOn) return true
@@ -161,7 +162,7 @@ export default function LettersPage() {
       <div className="max-w-lg mx-auto px-5 py-10">
 
         <div className="flex items-center justify-between mb-8">
-          <Link to={`/u/${user.username}`} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">← your page</Link>
+          <BackLink to={`/u/${user.username}`} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">← your page</BackLink>
           <Button variant="secondary" size="sm" onClick={() => setComposing(true)}>+ write a letter</Button>
         </div>
 

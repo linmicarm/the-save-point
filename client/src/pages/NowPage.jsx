@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
 import { useToast } from '../contexts/ToastContext'
+import BackLink from '../components/BackLink'
 
 const FIELDS = [
   { key: 'focus',    label: 'focused on',   placeholder: 'what has most of your attention right now?' },
@@ -45,9 +46,9 @@ function PublicNowPage({ username }) {
       <div className="text-center">
         <p className="text-3xl mb-3">✦</p>
         <p className="text-sm text-[#a89bc2]">this now page is private</p>
-        <Link to={`/u/${username}`} className="text-xs text-[#c4b8d9] hover:text-[#a89bc2] transition-colors mt-3 block">
+        <BackLink to={`/u/${username}`} className="text-xs text-[#c4b8d9] hover:text-[#a89bc2] transition-colors mt-3 block">
           ← {username}'s page
-        </Link>
+        </BackLink>
       </div>
     </div>
   )
@@ -59,9 +60,9 @@ function PublicNowPage({ username }) {
       <div className="h-1 w-full bg-[#c4b5fd]" />
       <div className="max-w-lg mx-auto px-5 py-10">
         <div className="flex items-center justify-between mb-8">
-          <Link to={`/u/${username}`} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">
+          <BackLink to={`/u/${username}`} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">
             ← {username}'s page
-          </Link>
+          </BackLink>
           {entry.updatedAt && (
             <p className="text-[10px] text-[#c4b8d9]">{timeAgo(entry.updatedAt)}</p>
           )}
@@ -155,7 +156,7 @@ function EditNowPage({ user }) {
       <div className="max-w-lg mx-auto px-5 py-10">
 
         <div className="flex items-center justify-between mb-8">
-          <Link to={`/u/${user.username}`} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">← your page</Link>
+          <BackLink to={`/u/${user.username}`} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">← your page</BackLink>
           <div className="flex items-center gap-3">
             {entry?.updatedAt && <p className="text-[10px] text-[#c4b8d9]">{timeAgo(entry.updatedAt)}</p>}
             <button

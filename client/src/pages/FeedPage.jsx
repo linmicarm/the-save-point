@@ -178,7 +178,7 @@ function PostCard({ post: initialPost, currentUser }) {
   const accent = post.author?.accentColor || '#c4b5fd'
 
   return (
-    <div className="bg-white border border-[#e4dff0] rounded-2xl px-5 py-4" style={{ borderColor: '#e4dff0' }}>
+    <div className="bg-white border border-[#e4dff0] rounded-2xl px-5 py-4" style={{ borderColor: 'var(--sp-border)' }}>
       {/* Author row */}
       <div className="flex items-center gap-3 mb-3">
         <Link to={`/u/${post.author?.username}`}>

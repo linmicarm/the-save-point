@@ -4,6 +4,7 @@ import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
 import EmojiPicker from '../components/EmojiPicker'
 import DeleteButton from '../components/DeleteButton'
+import Button from '../components/Button'
 
 const CATEGORIES = ['personal', 'career', 'travel', 'relationships', 'health', 'creative', 'learning', 'home', 'financial', 'spiritual']
 
@@ -61,7 +62,7 @@ function MilestoneItem({ m, onUpdate, onDelete }) {
               {CATEGORIES.map(c => (
                 <button key={c} onClick={() => setDraft(d => ({ ...d, category: d.category === c ? null : c }))}
                   className="text-[10px] px-2.5 py-1 rounded-full border transition-colors"
-                  style={draft.category === c ? { background: CAT_COLORS[c] + '33', color: CAT_COLORS[c], borderColor: CAT_COLORS[c] + '66' } : { background: 'white', color: '#c4b8d9', borderColor: '#ede9f5' }}>
+                  style={draft.category === c ? { background: CAT_COLORS[c] + '33', color: CAT_COLORS[c], borderColor: CAT_COLORS[c] + '66' } : { background: 'var(--sp-surface)', color: 'var(--sp-text-faint)', borderColor: 'var(--sp-border-faint)' }}>
                   {c}
                 </button>
               ))}
@@ -72,11 +73,11 @@ function MilestoneItem({ m, onUpdate, onDelete }) {
                 <button
                   onClick={() => setDraft(d => ({ ...d, isPublic: !d.isPublic }))}
                   className="text-[10px] px-2 py-0.5 rounded-md border transition-colors"
-                  style={draft.isPublic ? { background: '#c4b5fd22', color: '#7c6f9b', borderColor: '#c4b5fd66' } : { background: 'transparent', color: '#c4b8d9', borderColor: '#e4dff0' }}
+                  style={draft.isPublic ? { background: '#c4b5fd22', color: 'var(--sp-text-muted)', borderColor: '#c4b5fd66' } : { background: 'transparent', color: 'var(--sp-text-faint)', borderColor: 'var(--sp-border)' }}
                 >
                   {draft.isPublic ? '✦ public' : 'private'}
                 </button>
-                <button onClick={() => { setEditing(false); setDraft({ ...m, date: m.date.split('T')[0] }) }} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">cancel</button>
+                <Button variant="quiet" onClick={() => { setEditing(false); setDraft({ ...m, date: m.date.split('T')[0] }) }}>cancel</Button>
                 <button onClick={save} disabled={saving} className="text-xs px-3 py-1.5 rounded-lg bg-[#c4b5fd] text-white hover:bg-[#b39ef7] disabled:opacity-50 transition-colors">
                   {saving ? 'saving...' : 'save'}
                 </button>
@@ -99,7 +100,7 @@ function MilestoneItem({ m, onUpdate, onDelete }) {
               </div>
               <div className="flex items-center gap-2 ml-2 mt-1 shrink-0">
                 {m.isPublic && <span className="text-[9px] text-[#c4b5fd]">✦</span>}
-                <button onClick={() => setEditing(true)} className="text-[10px] text-[#c4b8d9] hover:text-[#a89bc2] opacity-0 group-hover:opacity-100 transition-all">edit</button>
+                <Button variant="secondary" size="sm" onClick={() => setEditing(true)}>edit</Button>
               </div>
             </div>
           </div>
@@ -158,7 +159,7 @@ export default function MilestonesPage() {
       <div className="max-w-lg mx-auto px-5 py-10">
         <div className="flex items-center justify-between mb-8">
           <Link to={`/u/${user.username}`} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">← your page</Link>
-          <button onClick={() => setAdding(true)} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">+ add milestone</button>
+          <Button variant="secondary" size="sm" onClick={() => setAdding(true)}>+ add milestone</Button>
         </div>
 
         <h1 className="text-2xl font-medium text-[#2d2a35] mb-1" style={{ fontFamily: 'var(--font-serif)' }}>milestones</h1>
@@ -168,13 +169,13 @@ export default function MilestonesPage() {
           <div className="flex flex-wrap gap-2 mb-6">
             <button onClick={() => setFilterCat(null)}
               className="text-[10px] px-2.5 py-1 rounded-full border transition-colors"
-              style={!filterCat ? { background: '#2d2a3522', color: '#2d2a35', borderColor: '#2d2a3544' } : { background: 'white', color: '#c4b8d9', borderColor: '#ede9f5' }}>
+              style={!filterCat ? { background: 'color-mix(in srgb, var(--sp-text) 13%, transparent)', color: 'var(--sp-text)', borderColor: 'color-mix(in srgb, var(--sp-text) 27%, transparent)' } : { background: 'var(--sp-surface)', color: 'var(--sp-text-faint)', borderColor: 'var(--sp-border-faint)' }}>
               all
             </button>
             {usedCats.map(c => (
               <button key={c} onClick={() => setFilterCat(filterCat === c ? null : c)}
                 className="text-[10px] px-2.5 py-1 rounded-full border transition-colors"
-                style={filterCat === c ? { background: (CAT_COLORS[c] || '#c4b5fd') + '33', color: CAT_COLORS[c] || '#c4b5fd', borderColor: (CAT_COLORS[c] || '#c4b5fd') + '66' } : { background: 'white', color: '#a89bc2', borderColor: '#ede9f5' }}>
+                style={filterCat === c ? { background: (CAT_COLORS[c] || '#c4b5fd') + '33', color: CAT_COLORS[c] || '#c4b5fd', borderColor: (CAT_COLORS[c] || '#c4b5fd') + '66' } : { background: 'var(--sp-surface)', color: 'var(--sp-text-faint)', borderColor: 'var(--sp-border-faint)' }}>
                 {c}
               </button>
             ))}
@@ -203,7 +204,7 @@ export default function MilestonesPage() {
                 {CATEGORIES.map(c => (
                   <button key={c} onClick={() => setDraft(d => ({ ...d, category: d.category === c ? '' : c }))}
                     className="text-[10px] px-2.5 py-1 rounded-full border transition-colors"
-                    style={draft.category === c ? { background: CAT_COLORS[c] + '33', color: CAT_COLORS[c], borderColor: CAT_COLORS[c] + '66' } : { background: 'white', color: '#c4b8d9', borderColor: '#ede9f5' }}>
+                    style={draft.category === c ? { background: CAT_COLORS[c] + '33', color: CAT_COLORS[c], borderColor: CAT_COLORS[c] + '66' } : { background: 'var(--sp-surface)', color: 'var(--sp-text-faint)', borderColor: 'var(--sp-border-faint)' }}>
                     {c}
                   </button>
                 ))}
@@ -222,9 +223,7 @@ export default function MilestonesPage() {
           <div className="text-center py-16">
             <p className="text-3xl mb-4">✦</p>
             <p className="text-sm text-[#a89bc2] mb-6">no milestones yet</p>
-            <button onClick={() => setAdding(true)} className="text-xs px-4 py-2 rounded-xl bg-[#c4b5fd] text-white hover:bg-[#b39ef7] transition-colors">
-              add your first milestone
-            </button>
+            <Button variant="primary" onClick={() => setAdding(true)}>add your first milestone</Button>
           </div>
         ) : (
           <div className="stagger-children">

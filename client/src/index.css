@@ -106,6 +106,20 @@ body::after {
 .text-\[\#c4b8d9\] { color: var(--sp-text-faint) !important; }
 .text-\[\#b0a3c8\] { color: var(--sp-text-faint) !important; }
 
+/* ── Audit gaps: hardcoded hex classes that had no theme mapping ─────────
+   Pale fills, near-black text and very faint greys that read fine on the old
+   cold-lavender palette but vanish (or glare) on the warm light/dark themes.
+   Mapped to tokens here so every page follows the theme without per-file edits. */
+.bg-\[\#f5f0ff\], .bg-\[\#f5f3ff\], .bg-\[\#f0ecfa\], .bg-\[\#f0ecfb\],
+.bg-\[\#f0edf8\], .bg-\[\#f5f5f5\]            { background-color: var(--sp-surface-2) !important; }
+.bg-\[\#e4dff0\], .bg-\[\#e9e0ff\]            { background-color: var(--sp-border)    !important; }
+.border-\[\#f5f2fc\], .border-\[\#f0ecfa\], .border-\[\#f0ecfb\] { border-color: var(--sp-border-faint) !important; }
+.border-\[\#c4b8d9\], .border-\[\#d4cfe3\]    { border-color: var(--sp-border)       !important; }
+.text-\[\#3d3545\]                             { color: var(--sp-text)       !important; }
+.text-\[\#d4cfe3\], .text-\[\#e4dff0\]        { color: var(--sp-text-faint) !important; }
+.hover\:text-\[\#a89bc2\]:hover                { color: var(--sp-text-muted) !important; }
+input::placeholder, textarea::placeholder { color: var(--sp-text-faint) !important; opacity: 1; }
+
 /* Hover remapping */
 .hover\:text-\[\#2d2a35\]:hover { color: var(--sp-text) !important; }
 .hover\:text-\[\#3d3848\]:hover { color: var(--sp-text) !important; }

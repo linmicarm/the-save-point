@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import { useToast } from '../contexts/ToastContext'
+import Button from '../components/Button'
 
 // ── constants ─────────────────────────────────────────────────────
 const MEAL_TYPES = [
@@ -113,7 +114,7 @@ function MealCard({ entry, onDelete, onEdit }) {
           {entry.name}
         </button>
         <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
-          <button onClick={() => onEdit(entry)} className="text-[10px] text-[#c4b8d9] hover:text-[#7c6f9b]">edit</button>
+          <Button variant="secondary" size="sm" onClick={() => onEdit(entry)}>edit</Button>
           <button onClick={() => onDelete(entry.id)} className="text-[10px] text-[#c4b8d9] hover:text-rose-400">✕</button>
         </div>
       </div>
@@ -172,7 +173,7 @@ function MealForm({ initial, onSave, onCancel }) {
           className="text-[11px] px-3 py-1 rounded-full text-white disabled:opacity-40 bg-[#c4b5fd]">
           {initial ? 'update' : 'add'}
         </button>
-        <button type="button" onClick={onCancel} className="text-[11px] text-[#c4b8d9] hover:text-[#a89bc2]">cancel</button>
+        <Button variant="quiet" type="button" onClick={onCancel}>cancel</Button>
       </div>
     </form>
   )
@@ -220,10 +221,7 @@ function ShoppingList({ items, onAdd, onToggle, onDelete }) {
               {showDone ? 'hide done' : `show ${checkedCount} done`}
             </button>
           )}
-          <button onClick={() => setShowForm(v => !v)}
-            className="text-[11px] px-3 py-1 rounded-full bg-[#f0ebff] text-[#7c6f9b] hover:bg-[#e9e0ff] transition-colors">
-            + add
-          </button>
+          <Button variant="secondary" size="sm" onClick={() => setShowForm(v => !v)}>+ add</Button>
         </div>
       </div>
 
@@ -246,15 +244,14 @@ function ShoppingList({ items, onAdd, onToggle, onDelete }) {
                 onClick={() => setNewCat(v => v === c.key ? '' : c.key)}
                 className="text-[10px] px-2.5 py-1 rounded-full border transition-colors"
                 style={newCat === c.key
-                  ? { background: '#f0ebff', color: '#7c6f9b', borderColor: '#c4b5fd' }
-                  : { color: '#a89bc2', borderColor: '#e4dff0' }}
+                  ? { background: '#f0ebff', color: 'var(--sp-text-muted)', borderColor: '#c4b5fd' }
+                  : { color: 'var(--sp-text-faint)', borderColor: 'var(--sp-border)' }}
               >{c.emoji} {c.label}</button>
             ))}
           </div>
           <div className="flex gap-2">
-            <button type="submit" disabled={!newName.trim()}
-              className="text-[11px] px-3 py-1 rounded-full bg-[#c4b5fd] text-white disabled:opacity-40">add</button>
-            <button type="button" onClick={() => setShowForm(false)} className="text-[11px] text-[#c4b8d9] hover:text-[#a89bc2]">cancel</button>
+            <Button variant="secondary" size="sm" type="submit" disabled={!newName.trim()}>add</Button>
+            <Button variant="quiet" type="button" onClick={() => setShowForm(false)}>cancel</Button>
           </div>
         </form>
       )}
@@ -274,7 +271,7 @@ function ShoppingList({ items, onAdd, onToggle, onDelete }) {
                     className="w-4 h-4 rounded-md border-2 shrink-0 flex items-center justify-center transition-colors"
                     style={item.checked
                       ? { background: '#c4b5fd', borderColor: '#c4b5fd' }
-                      : { borderColor: '#d4cfe3' }}>
+                      : { borderColor: 'var(--sp-border)' }}>
                     {item.checked && <span className="text-white text-[9px]">✓</span>}
                   </button>
                   <span className={`text-sm flex-1 ${item.checked ? 'line-through text-[#c4b8d9]' : 'text-[#3d3545]'}`}>
@@ -437,10 +434,7 @@ export default function MealPlanPage() {
                               onSave={data => addEntry(dayIdx, key, data)}
                               onCancel={() => setAdding(null)} />
                           ) : (
-                            <button
-                              onClick={() => { setAdding({ day: dayIdx, mealType: key }); setEditing(null) }}
-                              className="mt-1.5 text-[10px] text-[#d4cfe3] hover:text-[#a89bc2] transition-colors flex items-center gap-1"
-                            >+ add</button>
+                            <Button variant="secondary" size="sm" className="mt-1.5" onClick={() => { setAdding({ day: dayIdx, mealType: key }); setEditing(null) }}>+ add</Button>
                           )}
                         </div>
                       )

@@ -62,7 +62,7 @@ function NotificationItem({ notif, accent, onDelete }) {
   return (
     <div
       className="flex items-start gap-3 px-4 py-3.5 rounded-2xl group transition-colors"
-      style={!notif.read ? { background: `rgba(${accentRgb}, 0.06)` } : { background: 'white' }}
+      style={!notif.read ? { background: `rgba(${accentRgb}, 0.06)` } : { background: 'var(--sp-surface)' }}
     >
       {/* actor avatar */}
       <Link to={`/u/${notif.actor?.username}`} className="shrink-0 hover:opacity-80 transition-opacity mt-0.5">

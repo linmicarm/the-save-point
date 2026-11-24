@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
 import DeleteButton from '../components/DeleteButton'
+import Button from '../components/Button'
 
 const PRESET_TAGS = [
   'personal', 'fitness', 'financial', 'spiritual',
@@ -115,12 +116,7 @@ function ResolutionItem({ resolution, onUpdate, onDelete }) {
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
-          <button
-            onClick={() => { setExpanded(true); setEditing(true) }}
-            className="text-[10px] text-[#d4cfe3] hover:text-[#a89bc2] transition-colors"
-          >
-            edit
-          </button>
+          <Button variant="secondary" size="sm" onClick={() => { setExpanded(true); setEditing(true) }}>edit</Button>
           <DeleteButton onDelete={() => onDelete(resolution.id)} label="✕" className="text-[10px] text-[#e4dff0] hover:text-rose-300 transition-colors" />
           <button
             onClick={() => setExpanded(e => !e)}
@@ -174,7 +170,7 @@ function ResolutionItem({ resolution, onUpdate, onDelete }) {
                       className="text-[10px] px-2 py-1 rounded-full font-medium transition-opacity"
                       style={draft.tags.includes(tag)
                         ? { background: tagStyle(tag).bg, color: tagStyle(tag).text, outline: `1.5px solid ${tagStyle(tag).text}44` }
-                        : { background: '#f5f3fa', color: '#b0a3c8' }
+                        : { background: 'var(--sp-surface-2)', color: 'var(--sp-text-faint)' }
                       }
                     >
                       {tag}
@@ -190,7 +186,7 @@ function ResolutionItem({ resolution, onUpdate, onDelete }) {
                     className="flex-1 text-xs text-[#2d2a35] bg-white border border-[#e4dff0] rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-[#a89bc2] placeholder-[#c4b8d9]"
                   />
                   {customTag.trim() && (
-                    <button onClick={addCustomTag} className="text-xs text-[#a89bc2] hover:text-[#7c6f9b]">add</button>
+                    <Button variant="secondary" size="sm" onClick={addCustomTag}>add</Button>
                   )}
                 </div>
                 {draft.tags.filter(t => !PRESET_TAGS.includes(t)).length > 0 && (
@@ -216,9 +212,7 @@ function ResolutionItem({ resolution, onUpdate, onDelete }) {
                 >
                   {saving ? 'saving...' : 'save'}
                 </button>
-                <button onClick={cancelEdit} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">
-                  cancel
-                </button>
+                <Button variant="quiet" onClick={cancelEdit}>cancel</Button>
               </div>
             </>
           ) : (
@@ -359,12 +353,7 @@ export default function YearPage() {
           <Link to={`/u/${user.username}`} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">
             ← your page
           </Link>
-          <button
-            onClick={() => setShowNewYear(true)}
-            className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors"
-          >
-            + new year
-          </button>
+          <Button variant="secondary" size="sm" onClick={() => setShowNewYear(true)}>+ new year</Button>
         </div>
 
         {/* jan 1 prompt */}
@@ -387,12 +376,7 @@ export default function YearPage() {
               no years yet
             </h1>
             <p className="text-sm text-[#a89bc2] mb-6">start with this year or any year that matters to you</p>
-            <button
-              onClick={() => setShowNewYear(true)}
-              className="text-xs px-4 py-2 rounded-xl bg-[#c4b5fd] text-white hover:bg-[#b39ef7] transition-colors"
-            >
-              begin a year
-            </button>
+            <Button variant="primary" onClick={() => setShowNewYear(true)}>begin a year</Button>
           </div>
         ) : (
           <>
@@ -405,9 +389,9 @@ export default function YearPage() {
                     onClick={() => setActiveYear(e.year)}
                     className="text-xs px-3 py-1.5 rounded-full transition-colors"
                     style={activeYear === e.year ? {
-                      background: '#c4b5fd22', color: '#7c6f9b', border: '1px solid #c4b5fd66',
+                      background: '#c4b5fd22', color: 'var(--sp-text-muted)', border: '1px solid #c4b5fd66',
                     } : {
-                      background: 'white', color: '#a89bc2', border: '1px solid #ede9f5',
+                      background: 'var(--sp-surface)', color: 'var(--sp-text-faint)', border: '1px solid var(--sp-border-faint)',
                     }}
                   >
                     {e.year}
@@ -441,12 +425,8 @@ export default function YearPage() {
                         />
                       </div>
                       <div className="flex gap-2">
-                        <button onClick={saveHeader} className="text-xs px-3 py-1.5 rounded-lg bg-[#c4b5fd] text-white hover:bg-[#b39ef7] transition-colors">
-                          save
-                        </button>
-                        <button onClick={() => setEditingHeader(false)} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">
-                          cancel
-                        </button>
+                        <Button variant="primary" size="sm" onClick={saveHeader}>save</Button>
+                        <Button variant="quiet" onClick={() => setEditingHeader(false)}>cancel</Button>
                       </div>
                     </div>
                   ) : (
@@ -455,12 +435,7 @@ export default function YearPage() {
                         <h1 className="text-3xl font-medium text-[#2d2a35]" style={{ fontFamily: 'var(--font-serif)' }}>
                           {activeYear}
                         </h1>
-                        <button
-                          onClick={startEditHeader}
-                          className="text-xs text-[#c4b8d9] hover:text-[#a89bc2] transition-colors mt-1"
-                        >
-                          edit
-                        </button>
+                        <Button variant="secondary" size="sm" className="mt-1" onClick={startEditHeader}>edit</Button>
                       </div>
                       {entry.theme && (
                         <p className="text-base text-[#7c6f9b] mt-1" style={{ fontFamily: 'var(--font-serif)' }}>
@@ -504,8 +479,8 @@ export default function YearPage() {
                       onClick={() => setFilterTag(null)}
                       className="text-[10px] px-2.5 py-1 rounded-full transition-colors"
                       style={!filterTag
-                        ? { background: '#c4b5fd22', color: '#7c6f9b', border: '1px solid #c4b5fd66' }
-                        : { background: '#f5f3fa', color: '#b0a3c8', border: '1px solid transparent' }
+                        ? { background: '#c4b5fd22', color: 'var(--sp-text-muted)', border: '1px solid #c4b5fd66' }
+                        : { background: 'var(--sp-surface-2)', color: 'var(--sp-text-faint)', border: '1px solid transparent' }
                       }
                     >
                       all
@@ -517,7 +492,7 @@ export default function YearPage() {
                         className="text-[10px] px-2.5 py-1 rounded-full font-medium transition-opacity"
                         style={filterTag === tag
                           ? { background: tagStyle(tag).bg, color: tagStyle(tag).text, outline: `1.5px solid ${tagStyle(tag).text}44` }
-                          : { background: '#f5f3fa', color: '#b0a3c8' }
+                          : { background: 'var(--sp-surface-2)', color: 'var(--sp-text-faint)' }
                         }
                       >
                         {tag}
@@ -547,13 +522,7 @@ export default function YearPage() {
                     placeholder="add a resolution..."
                     className="flex-1 text-sm text-[#2d2a35] bg-white border border-[#ede9f5] rounded-xl px-4 py-2.5 focus:outline-none focus:border-[#a89bc2] placeholder-[#c4b8d9]"
                   />
-                  <button
-                    onClick={addResolution}
-                    disabled={adding || !newTitle.trim()}
-                    className="text-xs px-4 py-2.5 rounded-xl bg-[#c4b5fd] text-white hover:bg-[#b39ef7] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-                  >
-                    add
-                  </button>
+                  <Button variant="secondary" onClick={addResolution} disabled={adding || !newTitle.trim()}>add</Button>
                 </div>
               </>
             )}
@@ -583,12 +552,7 @@ export default function YearPage() {
                 >
                   {creatingYear ? 'creating...' : 'begin'}
                 </button>
-                <button
-                  onClick={() => setShowNewYear(false)}
-                  className="flex-1 py-2.5 rounded-xl border border-[#e4dff0] text-xs text-[#a89bc2] hover:text-[#7c6f9b] transition-colors"
-                >
-                  cancel
-                </button>
+                <Button variant="quiet" className="flex-1" onClick={() => setShowNewYear(false)}>cancel</Button>
               </div>
             </div>
           </div>

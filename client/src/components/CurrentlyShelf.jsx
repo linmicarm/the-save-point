@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import MediaSearch from './MediaSearch'
 import { uploadImage } from '../utils/uploadImage'
+import Button from './Button'
 
 function ImagePicker({ imageUrl, onImageUrl, compact = false }) {
   const fileRef = useRef(null)
@@ -80,7 +81,7 @@ function ManualAddForm({ onCommit, onCancel, showSearch, type, label, accentRgb,
               className="text-[11px] px-2.5 py-1 rounded-lg transition-colors"
               style={mode === m
                 ? { background: `rgba(${accentRgb},0.12)`, color: accent, fontWeight: 500 }
-                : { color: '#c4b8d9' }}
+                : { color: 'var(--sp-text-faint)' }}
             >{m === 'search' ? 'search' : 'add manually'}</button>
           ))}
         </div>
@@ -119,7 +120,7 @@ function ManualAddForm({ onCommit, onCancel, showSearch, type, label, accentRgb,
             style={{ background: accent }}
           >add</button>
         )}
-        <button onClick={onCancel} className="text-xs text-[#c4b8d9] hover:text-[#a89bc2] transition-colors px-1">cancel</button>
+        <Button variant="quiet" onClick={onCancel}>cancel</Button>
       </div>
     </div>
   )
@@ -145,13 +146,7 @@ export default function CurrentlyShelf({ fieldDef, items = [], isOwn, accent, ac
           </p>
         </div>
         {isOwn && !adding && (
-          <button
-            onClick={() => setAdding(true)}
-            className="text-[11px] transition-colors"
-            style={{ fontFamily: 'var(--font-hand)', color: `rgba(${accentRgb}, 0.75)` }}
-            onMouseEnter={e => e.currentTarget.style.color = accent}
-            onMouseLeave={e => e.currentTarget.style.color = `rgba(${accentRgb}, 0.75)`}
-          >+ add</button>
+          <Button variant="secondary" size="sm" onClick={() => setAdding(true)}>+ add</Button>
         )}
       </div>
 

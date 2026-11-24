@@ -16,6 +16,7 @@ import {
   arrayMove,
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import Button from '../components/Button'
 
 const PRESET_GROUPS = [
   {
@@ -142,7 +143,7 @@ export default function RhythmPage() {
                 onClick={() => setLayoutAndSave('list')}
                 title="list view"
                 className="px-2 py-1 rounded-md text-xs transition-colors"
-                style={layout === 'list' ? { background: '#c4b5fd22', color: '#7c6f9b' } : { color: '#c4b8d9' }}
+                style={layout === 'list' ? { background: '#c4b5fd22', color: 'var(--sp-text-muted)' } : { color: 'var(--sp-text-faint)' }}
               >
                 ☰
               </button>
@@ -150,7 +151,7 @@ export default function RhythmPage() {
                 onClick={() => setLayoutAndSave('columns')}
                 title="column view"
                 className="px-2 py-1 rounded-md text-xs transition-colors"
-                style={layout === 'columns' ? { background: '#c4b5fd22', color: '#7c6f9b' } : { color: '#c4b8d9' }}
+                style={layout === 'columns' ? { background: '#c4b5fd22', color: 'var(--sp-text-muted)' } : { color: 'var(--sp-text-faint)' }}
               >
                 ⊞
               </button>
@@ -170,12 +171,7 @@ export default function RhythmPage() {
             <p className="text-3xl mb-4">🗓️</p>
             <p className="text-sm text-[#a89bc2] mb-2">your week is a blank page</p>
             <p className="text-xs text-[#c4b8d9] mb-6">add a day or routine to get started</p>
-            <button
-              onClick={() => setShowPicker(true)}
-              className="text-xs px-4 py-2 rounded-xl bg-[#c4b5fd] text-white hover:bg-[#b39ef7] transition-colors"
-            >
-              build my week
-            </button>
+            <Button variant="secondary" size="sm" onClick={() => setShowPicker(true)}>build my week</Button>
           </div>
         )}
 
@@ -242,23 +238,12 @@ export default function RhythmPage() {
                   autoFocus
                   className="flex-1 text-sm text-[#2d2a35] bg-[#faf8ff] border border-[#e4dff0] rounded-xl px-3 py-2 focus:outline-none focus:border-[#a89bc2] placeholder-[#c4b8d9]"
                 />
-                <button
-                  onClick={() => customLabel.trim() && addBlock(customLabel)}
-                  disabled={!customLabel.trim()}
-                  className="text-xs px-3 py-2 rounded-xl bg-[#c4b5fd] text-white hover:bg-[#b39ef7] disabled:opacity-40 transition-colors"
-                >
-                  add
-                </button>
+                <Button variant="secondary" size="sm" onClick={() => customLabel.trim() && addBlock(customLabel)} disabled={!customLabel.trim()}>add</Button>
               </div>
             </div>
           </div>
         ) : (
-          <button
-            onClick={() => setShowPicker(true)}
-            className="w-full py-3 rounded-2xl border border-dashed border-[#e4dff0] text-xs text-[#c4b8d9] hover:text-[#a89bc2] hover:border-[#c4b5fd] transition-colors"
-          >
-            + add a slot
-          </button>
+          <Button variant="secondary" full onClick={() => setShowPicker(true)}>+ add a slot</Button>
         )}
 
         <p className="text-center text-xs text-[#d4cfe3] mt-12">✦ the save point</p>
@@ -371,9 +356,7 @@ function WeekBlock({ block, onUpdateItems, onUpdateLabel, onDelete, compact = fa
               className="flex-1 text-sm text-[#2d2a35] bg-transparent focus:outline-none placeholder-[#d4cfe3]"
             />
             {newItem.trim() && (
-              <button onClick={addItem} className="text-xs text-[#a89bc2] hover:text-[#7c6f9b] transition-colors">
-                add
-              </button>
+              <Button variant="secondary" size="sm" onClick={addItem}>add</Button>
             )}
           </div>
         </div>

@@ -6,6 +6,7 @@ import EmojiPicker from '../components/EmojiPicker'
 import DeleteButton from '../components/DeleteButton'
 import SeasonBadge from '../components/SeasonBadge'
 import { uploadImage } from '../utils/uploadImage'
+import Button from '../components/Button'
 
 const TAG_COLORS = ['#c4b5fd', '#fda4af', '#86efac', '#fdba74', '#93c5fd', '#d4b896']
 const tagColor = (tag, all) => TAG_COLORS[all.indexOf(tag) % TAG_COLORS.length]
@@ -139,11 +140,7 @@ function PhotoUpload({ photos, onChange }) {
           </div>
         ))}
       </div>
-      <button
-        type="button"
-        onClick={() => fileRef.current?.click()}
-        className="text-[11px] px-3 py-1.5 rounded-lg border border-[#e4dff0] text-[#a89bc2] hover:border-[#a89bc2] transition-colors"
-      >+ add photos</button>
+      <Button variant="secondary" size="sm" type="button" onClick={() => fileRef.current?.click()}>+ add photos</Button>
       <input ref={fileRef} type="file" accept="image/*" multiple className="hidden" onChange={handleFiles} />
     </div>
   )
@@ -186,8 +183,8 @@ function PlaceCard({ place, allTags, onUpdate, onDelete }) {
             onClick={() => setDraft(d => ({ ...d, type: t.key }))}
             className="text-[11px] px-2.5 py-1 rounded-lg border transition-colors"
             style={draft.type === t.key
-              ? { background: '#c4b5fd22', color: '#7c6f9b', borderColor: '#c4b5fd66' }
-              : { color: '#c4b8d9', borderColor: '#e4dff0' }}
+              ? { background: '#c4b5fd22', color: 'var(--sp-text-muted)', borderColor: '#c4b5fd66' }
+              : { color: 'var(--sp-text-faint)', borderColor: 'var(--sp-border)' }}
           >{t.emoji} {t.label}</button>
         ))}
       </div>
@@ -227,12 +224,12 @@ function PlaceCard({ place, allTags, onUpdate, onDelete }) {
             onClick={() => setDraft(d => ({ ...d, isPublic: !d.isPublic }))}
             className="text-[10px] px-2 py-0.5 rounded-md border transition-colors"
             style={draft.isPublic
-              ? { background: '#c4b5fd22', color: '#7c6f9b', borderColor: '#c4b5fd66' }
-              : { color: '#c4b8d9', borderColor: '#e4dff0' }}
+              ? { background: '#c4b5fd22', color: 'var(--sp-text-muted)', borderColor: '#c4b5fd66' }
+              : { color: 'var(--sp-text-faint)', borderColor: 'var(--sp-border)' }}
           >{draft.isPublic ? '✦ public' : 'private'}</button>
         </div>
         <div className="flex gap-2">
-          <button onClick={() => { setEditing(false); setDraft({ ...place, photos: place.photos || [], tags: place.tags || [] }) }} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">cancel</button>
+          <Button variant="quiet" onClick={() => { setEditing(false); setDraft({ ...place, photos: place.photos || [], tags: place.tags || [] }) }}>cancel</Button>
           <button onClick={save} disabled={saving} className="text-xs px-3 py-1.5 rounded-lg bg-[#c4b5fd] text-white hover:bg-[#b39ef7] disabled:opacity-50 transition-colors">
             {saving ? 'saving...' : 'save'}
           </button>
@@ -250,10 +247,7 @@ function PlaceCard({ place, allTags, onUpdate, onDelete }) {
       {place.isPublic && (
         <span className="absolute top-3 right-10 text-[9px] text-[#c4b5fd]" title="visible on your public profile">✦</span>
       )}
-      <button
-        onClick={() => setEditing(true)}
-        className="absolute top-3 right-3 text-[10px] text-[#c4b8d9] hover:text-[#a89bc2] opacity-0 group-hover:opacity-100 transition-all"
-      >edit</button>
+      <Button variant="secondary" size="sm" onClick={() => setEditing(true)}>edit</Button>
 
       <div className="flex items-start gap-3">
         <span className="text-xl mt-0.5 shrink-0">{place.emoji || '📍'}</span>
@@ -351,11 +345,11 @@ function AddForm({ type, allTags, onCommit, onCancel, seasonId }) {
           onClick={() => setDraft(d => ({ ...d, isPublic: !d.isPublic }))}
           className="text-[10px] px-2 py-0.5 rounded-md border transition-colors"
           style={draft.isPublic
-            ? { background: '#c4b5fd22', color: '#7c6f9b', borderColor: '#c4b5fd66' }
-            : { color: '#c4b8d9', borderColor: '#e4dff0' }}
+            ? { background: '#c4b5fd22', color: 'var(--sp-text-muted)', borderColor: '#c4b5fd66' }
+            : { color: 'var(--sp-text-faint)', borderColor: 'var(--sp-border)' }}
         >{draft.isPublic ? '✦ public' : 'private'}</button>
         <div className="flex gap-2">
-          <button onClick={onCancel} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">cancel</button>
+          <Button variant="quiet" onClick={onCancel}>cancel</Button>
           <button
             onClick={commit}
             disabled={saving || !draft.name.trim()}
@@ -435,8 +429,8 @@ export default function PlacesPage() {
                 onClick={() => setFilterType(null)}
                 className="text-[11px] px-3 py-1 rounded-full border transition-colors"
                 style={!filterType
-                  ? { background: '#c4b5fd22', color: '#7c6f9b', borderColor: '#c4b5fd66' }
-                  : { color: '#c4b8d9', borderColor: '#e4dff0', background: 'white' }}
+                  ? { background: '#c4b5fd22', color: 'var(--sp-text-muted)', borderColor: '#c4b5fd66' }
+                  : { color: 'var(--sp-text-faint)', borderColor: 'var(--sp-border)', background: 'var(--sp-surface)' }}
               >all</button>
               {TYPES.map(t => (
                 <button
@@ -444,8 +438,8 @@ export default function PlacesPage() {
                   onClick={() => setFilterType(prev => prev === t.key ? null : t.key)}
                   className="text-[11px] px-3 py-1 rounded-full border transition-colors"
                   style={filterType === t.key
-                    ? { background: '#c4b5fd22', color: '#7c6f9b', borderColor: '#c4b5fd66' }
-                    : { color: '#c4b8d9', borderColor: '#e4dff0', background: 'white' }}
+                    ? { background: '#c4b5fd22', color: 'var(--sp-text-muted)', borderColor: '#c4b5fd66' }
+                    : { color: 'var(--sp-text-faint)', borderColor: 'var(--sp-border)', background: 'var(--sp-surface)' }}
                 >{t.emoji} {t.label}</button>
               ))}
             </div>

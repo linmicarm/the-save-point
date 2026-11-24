@@ -98,9 +98,9 @@ export default function DiscoverPage() {
               onClick={() => setActiveTab(t.key)}
               className="text-xs px-4 py-2 rounded-t-xl border-t border-l border-r transition-all whitespace-nowrap relative"
               style={activeTab === t.key ? {
-                background: 'white', borderColor: '#e4dff0', color: '#2d2a35', fontWeight: 500, bottom: '-2px', paddingBottom: '10px',
+                background: 'var(--sp-surface)', borderColor: 'var(--sp-border)', color: 'var(--sp-text)', fontWeight: 500, bottom: '-2px', paddingBottom: '10px',
               } : {
-                background: 'rgba(196, 181, 253, 0.06)', borderColor: '#ede9f5', color: '#a89bc2',
+                background: 'rgba(196, 181, 253, 0.06)', borderColor: 'var(--sp-border-faint)', color: 'var(--sp-text-faint)',
               }}
             >
               {t.label}

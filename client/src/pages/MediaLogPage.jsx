@@ -3,6 +3,7 @@ import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
 import { useToast } from '../contexts/ToastContext'
 import SeasonBadge from '../components/SeasonBadge'
+import Button from '../components/Button'
 
 
 const MEDIA_TYPES = [
@@ -125,7 +126,7 @@ function EntryCard({ entry, accent, onUpdate, onDelete }) {
               className="text-[9px] px-2 py-0.5 rounded-full border transition-colors disabled:opacity-40"
               style={entry.status === s.key
                 ? { background: accent + '22', color: accent, borderColor: accent + '66' }
-                : { color: '#c4b8d9', borderColor: '#e4dff0' }}
+                : { color: 'var(--sp-text-faint)', borderColor: 'var(--sp-border)' }}
             >
               {s.emoji} {s.label}
             </button>
@@ -187,7 +188,7 @@ function AddEntryForm({ accent, onAdd, onCancel }) {
             className="text-[11px] px-3 py-1 rounded-full border transition-colors"
             style={form.type === t.key
               ? { background: (TYPE_COLORS[t.key] || accent) + '22', color: TYPE_COLORS[t.key] || accent, borderColor: (TYPE_COLORS[t.key] || accent) + '66' }
-              : { color: '#a89bc2', borderColor: '#e4dff0' }}
+              : { color: 'var(--sp-text-faint)', borderColor: 'var(--sp-border)' }}
           >
             {t.emoji} {t.label}
           </button>
@@ -208,7 +209,7 @@ function AddEntryForm({ accent, onAdd, onCancel }) {
             className="text-[11px] px-3 py-1 rounded-full border transition-colors"
             style={form.status === s.key
               ? { background: accent + '22', color: accent, borderColor: accent + '66' }
-              : { color: '#a89bc2', borderColor: '#e4dff0' }}
+              : { color: 'var(--sp-text-faint)', borderColor: 'var(--sp-border)' }}
           >
             {s.label}
           </button>
@@ -251,7 +252,7 @@ function AddEntryForm({ accent, onAdd, onCancel }) {
       </div>
 
       <div className="flex justify-end gap-2 pt-1">
-        <button type="button" onClick={onCancel} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b]">cancel</button>
+        <Button variant="quiet" type="button" onClick={onCancel}>cancel</Button>
         <button
           type="submit"
           disabled={saving || !form.title.trim()}
@@ -390,7 +391,7 @@ export default function MediaLogPage() {
               className="text-xs px-3.5 py-1.5 rounded-full border transition-colors"
               style={activeType === t.key
                 ? { background: accent + '22', color: accent, borderColor: accent + '66' }
-                : { color: '#a89bc2', borderColor: '#e4dff0' }}
+                : { color: 'var(--sp-text-faint)', borderColor: 'var(--sp-border)' }}
             >
               {t.emoji} {t.label}
             </button>

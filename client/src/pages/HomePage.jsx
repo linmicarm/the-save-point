@@ -1,5 +1,6 @@
 import { useAuth } from '../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
+import Button from '../components/Button'
 
 export default function HomePage() {
   const { user, logout } = useAuth()
@@ -19,12 +20,7 @@ export default function HomePage() {
         </h1>
         <p className="text-sm text-[#a89bc2] mb-1">savepoint.app/{user?.username}</p>
         <p className="text-xs text-[#c4b8d9] mb-8">your page is coming soon</p>
-        <button
-          onClick={handleLogout}
-          className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] underline underline-offset-2 transition-colors"
-        >
-          sign out
-        </button>
+        <Button variant="secondary" size="sm" onClick={handleLogout}>sign out</Button>
       </div>
     </div>
   )

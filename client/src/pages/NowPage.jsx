@@ -161,7 +161,7 @@ function EditNowPage({ user }) {
             <button
               onClick={togglePublic}
               className="text-[10px] px-2.5 py-1 rounded-lg border transition-colors"
-              style={draft.isPublic ? { background: '#c4b5fd22', color: '#7c6f9b', borderColor: '#c4b5fd66' } : { background: 'transparent', color: '#c4b8d9', borderColor: '#e4dff0' }}
+              style={draft.isPublic ? { background: '#c4b5fd22', color: 'var(--sp-text-muted)', borderColor: '#c4b5fd66' } : { background: 'transparent', color: 'var(--sp-text-faint)', borderColor: 'var(--sp-border)' }}
             >
               {draft.isPublic ? '✦ public' : 'private'}
             </button>

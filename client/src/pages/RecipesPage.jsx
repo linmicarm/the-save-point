@@ -3,6 +3,7 @@ import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
 import { useToast } from '../contexts/ToastContext'
 import { uploadImage } from '../utils/uploadImage'
+import Button from '../components/Button'
 
 function hexToRgb(hex) {
   const r = parseInt(hex.slice(1, 3), 16)
@@ -226,13 +227,7 @@ function RecipeForm({ initial, accent, onSave, onCancel }) {
             </div>
           ))}
         </div>
-        <button
-          type="button"
-          onClick={addIngredient}
-          className="mt-2 text-[11px] text-[#c4b8d9] hover:text-[#a89bc2] transition-colors"
-        >
-          + add ingredient
-        </button>
+        <Button variant="secondary" size="sm" className="mt-2" type="button" onClick={addIngredient}>+ add ingredient</Button>
       </div>
 
       {/* steps */}
@@ -255,13 +250,7 @@ function RecipeForm({ initial, accent, onSave, onCancel }) {
             </div>
           ))}
         </div>
-        <button
-          type="button"
-          onClick={addStep}
-          className="mt-2 text-[11px] text-[#c4b8d9] hover:text-[#a89bc2] transition-colors"
-        >
-          + add step
-        </button>
+        <Button variant="secondary" size="sm" className="mt-2" type="button" onClick={addStep}>+ add step</Button>
       </div>
 
       {/* rating */}
@@ -307,12 +296,12 @@ function RecipeForm({ initial, accent, onSave, onCancel }) {
           className="text-[11px] px-3 py-1.5 rounded-full border transition-colors"
           style={form.isPublic
             ? { background: `rgba(${accentRgb}, 0.12)`, color: accent, borderColor: `${accent}66` }
-            : { color: '#c4b8d9', borderColor: '#e4dff0' }}
+            : { color: 'var(--sp-text-faint)', borderColor: 'var(--sp-border)' }}
         >
           {form.isPublic ? '✦ public' : 'private'}
         </button>
         <div className="flex gap-2">
-          <button type="button" onClick={onCancel} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b]">cancel</button>
+          <Button variant="quiet" type="button" onClick={onCancel}>cancel</Button>
           <button
             type="submit"
             disabled={saving || !form.title.trim()}
@@ -378,7 +367,7 @@ function MealPlanPopover({ recipe, accent, accentRgb, onClose, onSuccess }) {
             className="text-[10px] px-2 py-1 rounded-lg border transition-colors"
             style={selectedDay === i
               ? { background: `rgba(${accentRgb}, 0.15)`, color: accent, borderColor: `${accent}66` }
-              : { color: '#a89bc2', borderColor: '#e4dff0' }}
+              : { color: 'var(--sp-text-faint)', borderColor: 'var(--sp-border)' }}
           >
             {d}
           </button>
@@ -397,13 +386,7 @@ function MealPlanPopover({ recipe, accent, accentRgb, onClose, onSuccess }) {
       </select>
 
       <div className="flex gap-1.5 justify-end">
-        <button
-          type="button"
-          onClick={onClose}
-          className="text-[10px] text-[#b0a3c8] hover:text-[#7c6f9b] px-2 py-1"
-        >
-          cancel
-        </button>
+        <Button variant="quiet" type="button" onClick={onClose}>cancel</Button>
         <button
           type="button"
           onClick={confirm}
@@ -469,7 +452,7 @@ function RecipeCard({ recipe, accent, onEdit, onDelete, onMealPlanSuccess }) {
                 />
               )}
             </div>
-            <button onClick={() => onEdit(recipe)} className="text-[10px] text-[#c4b8d9] hover:text-[#7c6f9b]">edit</button>
+            <Button variant="secondary" size="sm" onClick={() => onEdit(recipe)}>edit</Button>
             <button onClick={handleDelete} disabled={deleting} className="text-[10px] text-[#c4b8d9] hover:text-rose-400 disabled:opacity-40">
               {deleting ? '…' : '✕'}
             </button>
@@ -595,7 +578,7 @@ export default function RecipesPage() {
             <button
               onClick={() => setFilterTag(null)}
               className="text-[10px] px-2.5 py-1 rounded-full border transition-colors"
-              style={!filterTag ? { background: '#2d2a3522', color: '#2d2a35', borderColor: '#2d2a3544' } : { color: '#a89bc2', borderColor: '#e4dff0' }}
+              style={!filterTag ? { background: 'color-mix(in srgb, var(--sp-text) 13%, transparent)', color: 'var(--sp-text)', borderColor: 'color-mix(in srgb, var(--sp-text) 27%, transparent)' } : { color: 'var(--sp-text-faint)', borderColor: 'var(--sp-border)' }}
             >
               all
             </button>
@@ -606,7 +589,7 @@ export default function RecipesPage() {
                 className="text-[10px] px-2.5 py-1 rounded-full border transition-colors"
                 style={filterTag === t
                   ? { background: `${accent}22`, color: accent, borderColor: `${accent}66` }
-                  : { color: '#a89bc2', borderColor: '#e4dff0' }}
+                  : { color: 'var(--sp-text-faint)', borderColor: 'var(--sp-border)' }}
               >
                 {t}
               </button>

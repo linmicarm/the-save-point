@@ -15,6 +15,7 @@ import { CSS } from '@dnd-kit/utilities'
 import { useAuth } from '../contexts/AuthContext'
 import { useToast } from '../contexts/ToastContext'
 import { DEFAULT_SECTION_ORDER, DEFAULT_SECTION_VISIBLE } from '../utils/sections'
+import Button from '../components/Button'
 
 // ─────────────────────────────────────────────
 //  Section metadata
@@ -140,8 +141,7 @@ function DeleteAccountSection() {
         autoComplete="current-password" />
       {error && <p className="text-xs text-rose-400">{error}</p>}
       <div className="flex items-center gap-3">
-        <button onClick={() => { setConfirming(false); setPassword(''); setError('') }}
-          className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">cancel</button>
+        <Button variant="quiet" onClick={() => { setConfirming(false); setPassword(''); setError('') }}>cancel</Button>
         <button onClick={handleDelete} disabled={deleting || !password}
           className="text-xs px-4 py-2 rounded-xl bg-rose-400 text-white hover:bg-rose-500 disabled:opacity-50 transition-colors">
           {deleting ? 'deleting...' : 'permanently delete'}
@@ -198,8 +198,8 @@ function SortableRow({ id, visible, onToggle }) {
         onClick={onToggle}
         className="shrink-0 text-[11px] px-3 py-1.5 rounded-full border transition-all"
         style={visible
-          ? { background: '#c4b5fd1a', color: '#7c6f9b', borderColor: '#c4b5fd55' }
-          : { color: '#c4b8d9', borderColor: '#e4dff0' }}
+          ? { background: '#c4b5fd1a', color: 'var(--sp-text-muted)', borderColor: '#c4b5fd55' }
+          : { color: 'var(--sp-text-faint)', borderColor: 'var(--sp-border)' }}
       >
         {visible ? 'visible' : 'hidden'}
       </button>
@@ -298,10 +298,7 @@ function MyPageSettings() {
           {saved && !saving && (
             <span className="text-[10px] text-[#86efac]">✓ saved</span>
           )}
-          <button onClick={resetToDefaults}
-            className="text-[11px] text-[#c4b8d9] hover:text-[#a89bc2] transition-colors">
-            reset defaults
-          </button>
+          <Button variant="secondary" size="sm" onClick={resetToDefaults}>reset defaults</Button>
         </div>
       </div>
 
@@ -365,8 +362,8 @@ export default function SettingsPage() {
               onClick={() => setActiveTab(t.key)}
               className="text-xs px-4 py-2 rounded-lg font-medium transition-all"
               style={activeTab === t.key
-                ? { background: 'white', color: '#5a5065', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }
-                : { color: '#a89bc2' }}
+                ? { background: 'var(--sp-surface)', color: 'var(--sp-text-muted)', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }
+                : { color: 'var(--sp-text-faint)' }}
             >
               {t.label}
             </button>

@@ -131,9 +131,10 @@ function SideNav({ accentRgb, accent, location, isOwn, onExport, onLogout }) {
   return (
     <nav className="mt-1">
       {TAB_GROUPS.map(({ group, tabs }) => (
-        <div key={group} className="mb-4">
-          <p className="text-[9px] uppercase tracking-widest font-semibold mb-1 px-2"
-            style={{ color: `rgba(${accentRgb}, 0.45)` }}>
+        <div key={group} className="mb-5">
+          {/* group label — Caveat handwriting, warm and subtle */}
+          <p className="text-[11px] mb-1.5 px-2"
+            style={{ fontFamily: 'var(--font-hand)', color: `rgba(${accentRgb}, 0.55)`, letterSpacing: '0.04em' }}>
             {group}
           </p>
           <div className="flex flex-col gap-0.5">
@@ -143,12 +144,12 @@ function SideNav({ accentRgb, accent, location, isOwn, onExport, onLogout }) {
                 <Link key={to} to={to}
                   className="flex items-center gap-2.5 text-[13px] px-3 py-1.5 rounded-xl transition-all"
                   style={active
-                    ? { background: `rgba(${accentRgb}, 0.12)`, color: accent, fontWeight: 500 }
-                    : { color: '#a89bc2' }}
-                  onMouseEnter={e => { if (!active) e.currentTarget.style.background = `rgba(${accentRgb}, 0.06)` }}
-                  onMouseLeave={e => { if (!active) e.currentTarget.style.background = 'transparent' }}
+                    ? { background: `rgba(${accentRgb}, 0.1)`, color: accent, fontWeight: 500 }
+                    : { color: 'var(--sp-text-muted)' }}
+                  onMouseEnter={e => { if (!active) { e.currentTarget.style.background = `rgba(${accentRgb}, 0.06)`; e.currentTarget.style.color = 'var(--sp-text)' } }}
+                  onMouseLeave={e => { if (!active) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--sp-text-muted)' } }}
                 >
-                  {active && <span className="w-1 h-1 rounded-full shrink-0" style={{ background: accent }} />}
+                  {active && <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: accent }} />}
                   {label}
                 </Link>
               )
@@ -158,27 +159,27 @@ function SideNav({ accentRgb, accent, location, isOwn, onExport, onLogout }) {
       ))}
       {isOwn && (
         <div className="mt-2 pt-3 border-t flex flex-col gap-0.5"
-          style={{ borderColor: `rgba(${accentRgb}, 0.12)` }}>
+          style={{ borderColor: 'var(--sp-border)' }}>
           {[
             { to: '/discover', label: '✦ discover' },
             { to: '/settings', label: 'settings' },
           ].map(({ to, label }) => (
             <Link key={to} to={to}
               className="flex items-center gap-2.5 text-[13px] px-3 py-1.5 rounded-xl transition-all"
-              style={{ color: `rgba(${accentRgb}, 0.7)` }}
+              style={{ color: 'var(--sp-text-muted)' }}
               onMouseEnter={e => { e.currentTarget.style.background = `rgba(${accentRgb}, 0.06)`; e.currentTarget.style.color = accent }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = `rgba(${accentRgb}, 0.7)` }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--sp-text-muted)' }}
             >{label}</Link>
           ))}
           {[
-            { fn: onExport,  label: 'export data' },
-            { fn: onLogout,  label: 'sign out' },
+            { fn: onExport, label: 'export data' },
+            { fn: onLogout, label: 'sign out' },
           ].map(({ fn, label }) => (
             <button key={label} onClick={fn}
               className="flex items-center gap-2.5 text-[13px] px-3 py-1.5 rounded-xl transition-all text-left w-full"
-              style={{ color: `rgba(${accentRgb}, 0.7)` }}
+              style={{ color: 'var(--sp-text-muted)' }}
               onMouseEnter={e => { e.currentTarget.style.background = `rgba(${accentRgb}, 0.06)`; e.currentTarget.style.color = accent }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = `rgba(${accentRgb}, 0.7)` }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--sp-text-muted)' }}
             >{label}</button>
           ))}
         </div>
@@ -196,30 +197,31 @@ function PageHeader({ profile, season, accent, accentRgb, isOwn, authUser,
   const seasonDays = season ? daysAgo(season.startedAt) : 0
   return (
     <div className="w-full relative overflow-hidden"
-      style={{ background: `rgba(${accentRgb}, 0.07)` }}>
+      style={{ background: `linear-gradient(135deg, rgba(${accentRgb}, 0.1) 0%, rgba(${accentRgb}, 0.05) 100%)` }}>
       {profile.headerUrl && (
         <div className="absolute inset-0 pointer-events-none"
           style={{ backgroundImage: `url(${profile.headerUrl})`, backgroundSize: 'cover',
-            backgroundPosition: 'center', opacity: 0.12 }} />
+            backgroundPosition: 'center', opacity: 0.18 }} />
       )}
-      <div className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none"
-        style={{ background: `linear-gradient(to bottom, transparent, rgba(${accentRgb}, 0.04))` }} />
-      <div className="relative max-w-6xl mx-auto px-5 py-10">
+      {/* decorative soft vignette at bottom */}
+      <div className="absolute bottom-0 left-0 right-0 h-20 pointer-events-none"
+        style={{ background: `linear-gradient(to bottom, transparent, rgba(${accentRgb}, 0.06))` }} />
+      <div className="relative max-w-6xl mx-auto px-5 py-12">
         <div className="flex flex-col sm:flex-row items-start gap-6">
-          {/* Avatar */}
-          <div className="w-20 h-20 rounded-2xl flex items-center justify-center text-white text-3xl shadow-lg overflow-hidden shrink-0 border-2"
+          {/* Avatar — slightly larger with a warm ring */}
+          <div className="w-24 h-24 rounded-2xl flex items-center justify-center text-white text-4xl shadow-lg overflow-hidden shrink-0"
             style={{ background: profile.avatarUrl ? 'transparent' : `rgba(${accentRgb}, 0.8)`,
-              borderColor: `rgba(${accentRgb}, 0.25)` }}>
+              boxShadow: `0 0 0 3px white, 0 0 0 5px rgba(${accentRgb}, 0.3), 0 8px 24px rgba(${accentRgb}, 0.2)` }}>
             {profile.avatarUrl
               ? <img src={profile.avatarUrl} className="w-full h-full object-cover" alt="" />
-              : <span style={{ fontFamily: 'var(--font-serif)' }}>{profile.displayName?.[0]?.toUpperCase() || '✦'}</span>
+              : <span style={{ fontFamily: 'var(--font-display)' }}>{profile.displayName?.[0]?.toUpperCase() || '✦'}</span>
             }
           </div>
           {/* Info */}
           <div className="flex-1 min-w-0">
             <div className="flex flex-wrap items-baseline gap-2 mb-1">
-              <h1 className="text-2xl sm:text-3xl font-medium leading-tight"
-                style={{ fontFamily: 'var(--font-serif)', color: `rgba(${accentRgb}, 0.9)` }}>
+              <h1 className="text-3xl sm:text-4xl leading-tight"
+                style={{ fontFamily: 'var(--font-display)', fontWeight: 600, color: `rgba(${accentRgb}, 0.95)`, letterSpacing: '-0.02em' }}>
                 {profile.displayName}
               </h1>
               {profile.pronouns && (
@@ -320,7 +322,8 @@ function CurrentlySection({ profile, isOwn, accent, accentRgb, onAdd, onRemove }
           if (!items.length && !isOwn) return null
           return (
             <div key={f.key} className="rounded-2xl p-4"
-              style={{ background: `rgba(${accentRgb}, 0.05)`, border: `1px solid rgba(${accentRgb}, 0.12)` }}>
+              style={{ background: 'var(--sp-surface)', border: '1px solid var(--sp-border)',
+                boxShadow: `0 1px 4px rgba(${accentRgb}, 0.06), 0 0 0 0.5px rgba(${accentRgb}, 0.08)` }}>
               <CurrentlyShelf fieldDef={f} items={items} isOwn={isOwn}
                 accent={accent} accentRgb={accentRgb}
                 onAdd={item => onAdd(f.key, item)}
@@ -342,7 +345,7 @@ function JournalPreviews({ entries, accent, accentRgb, isOwn }) {
       <div className="grid gap-3 sm:grid-cols-3">
         {entries.slice(0, 3).map(entry => (
           <div key={entry.id} className="rounded-2xl p-4 flex flex-col gap-2"
-            style={{ background: 'rgba(255,255,255,0.7)', border: `1px solid rgba(${accentRgb}, 0.12)`,
+            style={{ background: 'var(--sp-surface)', border: '1px solid var(--sp-border)',
               boxShadow: `0 1px 6px rgba(${accentRgb}, 0.06)` }}>
             {entry.mood && <span className="text-xl leading-none">{entry.mood}</span>}
             <p className="text-sm leading-relaxed flex-1" style={{ color: '#5a5065' }}>

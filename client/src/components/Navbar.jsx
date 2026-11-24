@@ -92,12 +92,12 @@ export default function Navbar() {
         {/* logo */}
         <Link
           to={user ? `/u/${user.username}` : '/login'}
-          className="flex items-center gap-1.5 shrink-0 group"
+          className="flex items-center gap-2 shrink-0 group"
         >
-          <span className="text-[15px] transition-colors" style={{ color: '#c4b5fd' }}>✦</span>
+          <span className="text-base transition-all group-hover:scale-110" style={{ color: '#c4b5fd', display: 'inline-block' }}>✦</span>
           <span
-            className="text-[15px] font-medium text-[#5a5065] group-hover:text-[#2d2a35] transition-colors"
-            style={{ fontFamily: 'var(--font-serif)' }}
+            className="text-[17px] tracking-tight transition-colors"
+            style={{ fontFamily: 'var(--font-display)', fontWeight: 600, color: 'var(--sp-text)', letterSpacing: '-0.02em' }}
           >
             save point
           </span>

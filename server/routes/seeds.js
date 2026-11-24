@@ -39,7 +39,7 @@ router.get('/', requireAuth, async (req, res) => {
 
 // POST /api/seeds — { title }
 router.post('/', requireAuth, async (req, res) => {
-  const title = req.body.title?.trim().slice(0, 120)
+  const title = req.body?.title?.trim().slice(0, 120)
   if (!title) return res.status(400).json({ error: 'Give your seed a name.' })
 
   const seasonId = await activeSeasonId(req.userId)
@@ -66,7 +66,7 @@ router.post('/:id/tend', requireAuth, async (req, res) => {
   if (seed.replantedAt) return res.status(400).json({ error: 'This seed was replanted.' })
 
   await prisma.seedAction.create({
-    data: { seedId: seed.id, userId: req.userId, note: req.body.note?.trim().slice(0, 280) || null },
+    data: { seedId: seed.id, userId: req.userId, note: req.body?.note?.trim().slice(0, 280) || null },
   })
   const updated = await prisma.seed.findUnique({ where: { id: seed.id }, include: seedInclude })
   res.status(201).json({ seed: shape(updated) })
@@ -75,7 +75,7 @@ router.post('/:id/tend', requireAuth, async (req, res) => {
 // POST /api/seeds/:id/replant — { title } — shrink a seed that feels too big into a smaller one.
 // The old seed keeps everything it grew; nothing is lost or marked as failed.
 router.post('/:id/replant', requireAuth, async (req, res) => {
-  const title = req.body.title?.trim().slice(0, 120)
+  const title = req.body?.title?.trim().slice(0, 120)
   if (!title) return res.status(400).json({ error: 'Name the smaller seed.' })
 
   const old = await prisma.seed.findFirst({ where: { id: req.params.id, userId: req.userId } })

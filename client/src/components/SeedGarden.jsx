@@ -50,7 +50,7 @@ export default function SeedGarden() {
   })
 
   const tend = (id) => run(async () => {
-    const res = await axios.post(`/api/seeds/${id}/tend`)
+    const res = await axios.post(`/api/seeds/${id}/tend`, {})
     setSeeds(prev => prev.map(s => s.id === id ? res.data.seed : s))
   })
 

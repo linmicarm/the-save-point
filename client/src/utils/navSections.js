@@ -1,9 +1,9 @@
-// Everything you can reach from the menu, grouped the way the routes are grouped in App.jsx.
-// Add a page here when you add a route, and the menu (desktop + mobile) picks it up.
+// Everything you can reach from the menu, grouped into "rooms" so the menu opens calm:
+// a handful of room names, not twenty-odd links. Add a page here when you add a route.
 
 export const NAV_SECTIONS = [
   {
-    label: 'present',
+    label: 'daily',
     items: [
       { to: '/journal', label: 'journal' },
       { to: '/now', label: 'now' },
@@ -21,7 +21,7 @@ export const NAV_SECTIONS = [
     ],
   },
   {
-    label: 'memory',
+    label: 'memories',
     items: [
       { to: '/milestones', label: 'milestones' },
       { to: '/letters', label: 'letters' },
@@ -31,7 +31,7 @@ export const NAV_SECTIONS = [
     ],
   },
   {
-    label: 'collect',
+    label: 'collections',
     items: [
       { to: '/commonplace', label: 'commonplace' },
       { to: '/places', label: 'places' },
@@ -39,17 +39,32 @@ export const NAV_SECTIONS = [
       { to: '/meals', label: 'meals' },
       { to: '/recipes', label: 'recipes' },
       { to: '/media', label: 'media log' },
+    ],
+  },
+  {
+    // other people's things — kept out of the daily path on purpose
+    label: 'community',
+    items: [
+      { to: '/feed', label: 'feed' },
+      { to: '/discover', label: 'discover' },
       { to: '/bookmarks', label: 'bookmarks' },
     ],
   },
   {
-    label: 'elsewhere',
+    label: 'you',
     items: [
-      { to: '/feed', label: 'feed' },
-      { to: '/discover', label: 'discover' },
       { to: '/settings', label: 'settings' },
     ],
   },
 ]
 
 export const NAV_PATHS = NAV_SECTIONS.flatMap(s => s.items.map(i => i.to))
+
+export function labelFor(path) {
+  for (const s of NAV_SECTIONS) for (const i of s.items) if (i.to === path) return i.label
+  return null
+}
+
+export function roomFor(path) {
+  return NAV_SECTIONS.find(s => s.items.some(i => i.to === path))?.label ?? null
+}

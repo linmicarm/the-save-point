@@ -39,7 +39,7 @@ function SeasonCard({ season, onUpdate }) {
   return (
     <div
       className="rounded-2xl border overflow-hidden"
-      style={{ borderColor: `${season.color}44`, background: isActive ? `${season.color}08` : 'white' }}
+      style={{ borderColor: `${season.color}44`, background: isActive ? `${season.color}08` : 'var(--sp-surface)' }}
     >
       {/* color bar */}
       <div className="h-1 w-full" style={{ background: season.color }} />
@@ -113,7 +113,7 @@ function SeasonCard({ season, onUpdate }) {
 
           {/* closing ceremony words */}
           {(season.carryForward || season.released) && (
-            <div className="mt-4 pt-3 border-t border-[#f0ecfa] space-y-2.5">
+            <div className="mt-4 pt-3 space-y-2.5" style={{ borderTop: '1px solid var(--sp-border-faint)' }}>
               {season.carryForward && (
                 <div>
                   <p className="text-[10px] uppercase tracking-widest text-[#c4b8d9] mb-0.5">carried forward</p>

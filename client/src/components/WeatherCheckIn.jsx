@@ -14,7 +14,7 @@ const card = {
 }
 const label = { fontFamily: 'var(--font-hand)', color: 'var(--sp-text-faint)' }
 
-export default function WeatherCheckIn() {
+export default function WeatherCheckIn({ onWeather }) {
   const [loading, setLoading]   = useState(true)
   const [today, setToday]       = useState(null)   // today's latest check-in, if any
   const [changing, setChanging] = useState(false)
@@ -28,10 +28,11 @@ export default function WeatherCheckIn() {
       .then(res => {
         const latest = res.data.checkIns.find(c => isSameLocalDay(c.createdAt))
         setToday(latest || null)
+        onWeather?.(latest?.weather ?? null)
       })
       .catch(() => {})            // the card is optional — fail quietly
       .finally(() => setLoading(false))
-  }, [])
+  }, [onWeather])
 
   const pick = async (weather) => {
     setSaving(true)
@@ -39,6 +40,7 @@ export default function WeatherCheckIn() {
     try {
       const res = await axios.post('/api/checkins', { weather, note })
       setToday(res.data.checkIn)
+      onWeather?.(weather)
       setNote('')
       setChanging(false)
       setExpanded(true)

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import axios from 'axios'
+import BackLink from '../components/BackLink'
 
 const MOOD_EMOJIS = {
   inspired: '✨', soft: '🌸', happy: '😊', tender: '🥺', melancholy: '😔',
@@ -61,9 +62,9 @@ export default function PublicBlogPage() {
 
         {/* header */}
         <div className="mb-10">
-          <Link to={`/u/${username}`} className="text-xs text-[#c4b8d9] hover:text-[#a89bc2] transition-colors block mb-3">
+          <BackLink to={`/u/${username}`} className="text-xs text-[#c4b8d9] hover:text-[#a89bc2] transition-colors block mb-3">
             ← {profile?.displayName}'s profile
-          </Link>
+          </BackLink>
           <h1 className="text-3xl font-medium text-[#2d2a35]" style={{ fontFamily: 'var(--font-serif)' }}>
             {profile?.displayName}'s blog
           </h1>

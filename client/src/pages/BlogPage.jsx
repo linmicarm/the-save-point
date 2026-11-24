@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
 import { useToast } from '../contexts/ToastContext'
+import BackLink from '../components/BackLink'
 
 function timeAgo(date) {
   const diff = Date.now() - new Date(date).getTime()
@@ -47,7 +48,7 @@ export default function BlogPage() {
         {/* header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <Link to={`/u/${user?.username}`} className="text-xs text-[#c4b8d9] hover:text-[#a89bc2] transition-colors block mb-1">← profile</Link>
+            <BackLink to={`/u/${user?.username}`} className="text-xs text-[#c4b8d9] hover:text-[#a89bc2] transition-colors block mb-1">← profile</BackLink>
             <h1 className="text-2xl font-medium text-[#2d2a35]" style={{ fontFamily: 'var(--font-serif)' }}>my blog</h1>
           </div>
           <button

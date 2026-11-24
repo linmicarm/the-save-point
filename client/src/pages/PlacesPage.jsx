@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
-import { Link } from 'react-router-dom'
+
 import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
 import EmojiPicker from '../components/EmojiPicker'
@@ -7,6 +7,7 @@ import DeleteButton from '../components/DeleteButton'
 import SeasonBadge from '../components/SeasonBadge'
 import { uploadImage } from '../utils/uploadImage'
 import Button from '../components/Button'
+import BackLink from '../components/BackLink'
 
 const TAG_COLORS = ['#c4b5fd', '#fda4af', '#86efac', '#fdba74', '#93c5fd', '#d4b896']
 const tagColor = (tag, all) => TAG_COLORS[all.indexOf(tag) % TAG_COLORS.length]
@@ -408,7 +409,7 @@ export default function PlacesPage() {
 
         {/* header */}
         <div className="flex items-center justify-between mb-1">
-          <Link to={`/u/${user.username}`} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">← your page</Link>
+          <BackLink to={`/u/${user.username}`} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">← your page</BackLink>
         </div>
         <h1 className="text-2xl font-medium text-[#2d2a35] mb-1" style={{ fontFamily: 'var(--font-serif)' }}>places</h1>
         <p className="text-sm text-[#a89bc2] mb-6">the places that made you, and the ones still waiting</p>

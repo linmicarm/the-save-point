@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+
 import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
 import {
@@ -17,6 +17,7 @@ import {
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import Button from '../components/Button'
+import BackLink from '../components/BackLink'
 
 const PRESET_GROUPS = [
   {
@@ -134,9 +135,9 @@ export default function RhythmPage() {
 
         {/* nav */}
         <div className="flex items-center justify-between mb-8">
-          <Link to={`/u/${user.username}`} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">
+          <BackLink to={`/u/${user.username}`} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">
             ← your page
-          </Link>
+          </BackLink>
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1 bg-white border border-[#ede9f5] rounded-lg p-0.5">
               <button

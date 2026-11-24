@@ -149,6 +149,7 @@ model Season {
   wishItems      WishItem[]
   habits         Habit[]
   checkIns       CheckIn[]
+  seeds          Seed[]
 
   @@index([userId])
 }
@@ -165,6 +166,34 @@ model CheckIn {
 
   @@index([userId, createdAt])
   @@index([seasonId])
+}
+
+model Seed {
+  id               String       @id @default(cuid())
+  userId           String
+  user             User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  seasonId         String?
+  season           Season?      @relation(fields: [seasonId], references: [id], onDelete: SetNull)
+  title            String
+  replantedAt      DateTime?    // set when this seed was replanted as something smaller; it stays in the garden
+  replantedFromId  String?      // the seed this one was replanted from (plain id, no FK — history only)
+  createdAt        DateTime     @default(now())
+  actions          SeedAction[]
+
+  @@index([userId, seasonId])
+}
+
+model SeedAction {
+  id        String   @id @default(cuid())
+  seedId    String
+  seed      Seed     @relation(fields: [seedId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  note      String?
+  createdAt DateTime @default(now())
+
+  @@index([seedId, createdAt])
+  @@index([userId])
 }
 
 model Letter {
@@ -418,6 +447,8 @@ model User {
   passwordResetExpiry DateTime?
   seasons            Season[]
   checkIns           CheckIn[]
+  seeds              Seed[]
+  seedActions        SeedAction[]
   journalEntries     JournalEntry[]
   wishItems          WishItem[]
   rhythmBlocks       RhythmBlock[]

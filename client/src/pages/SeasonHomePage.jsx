@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
 import WeatherCheckIn from '../components/WeatherCheckIn'
+import SeedGarden from '../components/SeedGarden'
 import SeasonModal from '../components/SeasonModal'
 
 // Private "today" home — everything revolves around the season you're in.
@@ -106,6 +107,9 @@ export default function SeasonHomePage() {
 
         {/* weather */}
         <WeatherCheckIn />
+
+        {/* garden + seeds — only once there's a season to plant in */}
+        {season && <SeedGarden key={season.id} />}
 
         {/* today's prompt — a doorway to the journal, not a form */}
         <Link

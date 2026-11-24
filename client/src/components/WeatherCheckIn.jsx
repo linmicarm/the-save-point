@@ -17,6 +17,7 @@ export default function WeatherCheckIn() {
   const [loading, setLoading]   = useState(true)
   const [today, setToday]       = useState(null)   // today's latest check-in, if any
   const [changing, setChanging] = useState(false)
+  const [expanded, setExpanded] = useState(false)  // suggestion shown; open right after a check-in, collapsed on later visits
   const [note, setNote]         = useState('')
   const [saving, setSaving]     = useState(false)
   const [error, setError]       = useState('')
@@ -39,6 +40,7 @@ export default function WeatherCheckIn() {
       setToday(res.data.checkIn)
       setNote('')
       setChanging(false)
+      setExpanded(true)
     } catch {
       setError('Something went wrong.')
     } finally {
@@ -52,10 +54,12 @@ export default function WeatherCheckIn() {
   const meta = today ? weatherMeta(today.weather) : null
 
   return (
-    <div className="rounded-2xl p-5 mb-6" style={card}>
-      <p className="text-[11px] mb-3 uppercase tracking-widest" style={label}>
-        weather inside today
-      </p>
+    <div className={`rounded-2xl mb-6 ${showPicker || expanded ? 'p-5' : 'px-5 py-4'}`} style={card}>
+      {(showPicker || expanded) && (
+        <p className="text-[11px] mb-3 uppercase tracking-widest" style={label}>
+          weather inside today
+        </p>
+      )}
 
       {showPicker ? (
         <>
@@ -98,25 +102,36 @@ export default function WeatherCheckIn() {
         </>
       ) : (
         <>
-          <div className="flex items-center gap-3">
-            <span className="text-3xl leading-none">{meta?.emoji}</span>
-            <div className="min-w-0">
-              <p className="text-base" style={{ fontFamily: 'var(--font-display)', color: 'var(--sp-text)' }}>
+          {/* slim summary row — tap to show or hide the suggestion */}
+          <button
+            onClick={() => setExpanded(e => !e)}
+            className="w-full flex items-center gap-3 text-left"
+            aria-expanded={expanded}
+          >
+            <span className="text-2xl leading-none">{meta?.emoji}</span>
+            <span className="min-w-0 flex-1">
+              <span className="text-base" style={{ fontFamily: 'var(--font-display)', color: 'var(--sp-text)' }}>
                 {meta?.label ?? today.weather}
-              </p>
+              </span>
               {today.note && (
-                <p className="text-xs italic truncate" style={{ fontFamily: 'var(--font-serif)', color: 'var(--sp-text-faint)' }}>
+                <span className="text-xs italic ml-2" style={{ fontFamily: 'var(--font-serif)', color: 'var(--sp-text-faint)' }}>
                   {today.note}
-                </p>
+                </span>
               )}
-            </div>
-          </div>
-          <p className="text-sm leading-relaxed italic mt-3" style={{ fontFamily: 'var(--font-serif)', color: 'var(--sp-text-muted)' }}>
-            {suggestionFor(today.weather)}
-          </p>
-          <button onClick={() => setChanging(true)} className="text-xs mt-3 hover:opacity-70 transition-opacity" style={label}>
-            weather changed?
+            </span>
+            <span className="text-xs shrink-0" style={label}>{expanded ? 'less' : 'more'}</span>
           </button>
+
+          {expanded && (
+            <>
+              <p className="text-sm leading-relaxed italic mt-3" style={{ fontFamily: 'var(--font-serif)', color: 'var(--sp-text-muted)' }}>
+                {suggestionFor(today.weather)}
+              </p>
+              <button onClick={() => setChanging(true)} className="text-xs mt-3 hover:opacity-70 transition-opacity" style={label}>
+                weather changed?
+              </button>
+            </>
+          )}
         </>
       )}
     </div>

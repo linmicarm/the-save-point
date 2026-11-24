@@ -1,9 +1,8 @@
 const express = require('express')
 const jwt = require('jsonwebtoken')
-const { PrismaClient } = require('@prisma/client')
 
 const router = express.Router()
-const prisma = new PrismaClient()
+const prisma = require('../db')
 
 router.get('/public/:username', async (req, res) => {
   const user = await prisma.user.findUnique({ where: { username: req.params.username } })

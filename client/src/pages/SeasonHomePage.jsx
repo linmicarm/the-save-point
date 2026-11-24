@@ -4,6 +4,7 @@ import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
 import WeatherCheckIn from '../components/WeatherCheckIn'
 import SeedGarden from '../components/SeedGarden'
+import Button from '../components/Button'
 import SeasonModal from '../components/SeasonModal'
 
 // Private "today" home — everything revolves around the season you're in.
@@ -95,13 +96,9 @@ export default function SeasonHomePage() {
             <p className="text-sm mb-5" style={{ fontFamily: 'var(--font-serif)', color: 'var(--sp-text-muted)' }}>
               a new city, a new job, a fresh start — name it, and the rest of your save point grows around it.
             </p>
-            <button
-              onClick={() => setShowModal(true)}
-              className="text-xs px-4 py-2 rounded-xl text-white font-medium transition-opacity hover:opacity-90"
-              style={{ background: accent }}
-            >
+            <Button variant="primary" color={accent} onClick={() => setShowModal(true)}>
               begin a season
-            </button>
+            </Button>
           </header>
         )}
 
@@ -132,9 +129,7 @@ export default function SeasonHomePage() {
           <section className="mb-10">
             <div className="flex items-baseline justify-between mb-3">
               <p className="text-[11px] uppercase tracking-widest" style={label}>recently</p>
-              <Link to="/journal" className="text-xs hover:opacity-70 transition-opacity" style={label}>
-                all entries
-              </Link>
+              <Button to="/journal" size="sm">all entries</Button>
             </div>
             <div className="space-y-2">
               {entries.map(e => (
@@ -158,19 +153,11 @@ export default function SeasonHomePage() {
           </section>
         )}
 
-        {/* footer links — quiet on purpose */}
+        {/* footer actions */}
         <div className="flex items-center justify-between pt-6" style={{ borderTop: '1px solid var(--sp-border-faint)' }}>
-          <Link to={`/u/${user.username}`} className="text-xs hover:opacity-70 transition-opacity" style={label}>
-            your page
-          </Link>
+          <Button to={`/u/${user.username}`} size="sm">your page</Button>
           {season && (
-            <button
-              onClick={() => setShowModal(true)}
-              className="text-xs hover:opacity-70 transition-opacity"
-              style={label}
-            >
-              edit or end this season
-            </button>
+            <Button size="sm" onClick={() => setShowModal(true)}>edit or end this season</Button>
           )}
         </div>
       </div>

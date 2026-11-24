@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import axios from 'axios'
 import EmojiPicker from './EmojiPicker'
+import Button from './Button'
 import { SEASON_TEMPLATES, applyTemplate } from '../utils/seasonTemplates'
 import { stageFor, isActive } from '../utils/garden'
 
@@ -190,17 +191,10 @@ export default function SeasonModal({ season, onClose, onSave }) {
             {error && <p className="text-xs text-rose-400 mb-3">{error}</p>}
 
             <div className="flex flex-col gap-2">
-              <button
-                onClick={handleClose}
-                disabled={closing}
-                className="w-full py-2.5 rounded-xl text-white text-xs font-medium transition-opacity disabled:opacity-50"
-                style={{ background: form.color }}
-              >
+              <Button variant="primary" size="lg" full color={form.color} onClick={handleClose} disabled={closing}>
                 {closing ? 'closing...' : 'close this season'}
-              </button>
-              <button onClick={() => setStep('edit')} className="text-xs text-[#c4b8d9] hover:text-[#a89bc2] transition-colors text-center py-1">
-                not yet
-              </button>
+              </Button>
+              <Button variant="quiet" full onClick={() => setStep('edit')}>not yet</Button>
             </div>
           </>
         )}
@@ -260,17 +254,10 @@ export default function SeasonModal({ season, onClose, onSave }) {
             {error && <p className="text-xs text-rose-400 mb-3">{error}</p>}
 
             <div className="flex flex-col gap-2">
-              <button
-                onClick={handleStartNew}
-                disabled={saving}
-                className="w-full py-2.5 rounded-xl text-white text-xs font-medium transition-opacity disabled:opacity-50"
-                style={{ background: form.color }}
-              >
+              <Button variant="primary" size="lg" full color={form.color} onClick={handleStartNew} disabled={saving}>
                 {saving ? 'starting...' : 'begin new season'}
-              </button>
-              <button onClick={handleEndWithoutNew} className="text-xs text-[#c4b8d9] hover:text-[#a89bc2] transition-colors text-center py-1">
-                not yet
-              </button>
+              </Button>
+              <Button variant="quiet" full onClick={handleEndWithoutNew}>not yet</Button>
             </div>
           </>
         )}
@@ -349,21 +336,11 @@ export default function SeasonModal({ season, onClose, onSave }) {
 
             <div className="flex gap-2">
               {!isNew && (
-                <button
-                  onClick={beginCeremony}
-                  className="flex-1 py-2.5 rounded-xl border border-[#e4dff0] text-xs text-[#a89bc2] hover:text-[#7c6f9b] transition-colors"
-                >
-                  end this season
-                </button>
+                <Button size="lg" className="flex-1" onClick={beginCeremony}>end this season</Button>
               )}
-              <button
-                onClick={handleSave}
-                disabled={saving}
-                className="flex-1 py-2.5 rounded-xl text-white text-xs font-medium transition-opacity disabled:opacity-50"
-                style={{ background: form.color }}
-              >
+              <Button variant="primary" size="lg" className="flex-1" color={form.color} onClick={handleSave} disabled={saving}>
                 {saving ? 'saving...' : isNew ? 'begin season' : 'save changes'}
-              </button>
+              </Button>
             </div>
           </>
         )}

@@ -369,7 +369,7 @@ export default function MealPlanPage() {
         {/* header */}
         <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
           <div>
-            <h1 className="text-2xl font-medium text-[#2d2a35]" style={{ fontFamily: 'var(--font-serif)' }}>meal plan</h1>
+            <h1 className="text-2xl" style={{ fontFamily: 'var(--font-display)', fontWeight: 600, color: 'var(--sp-text)' }}>meal plan</h1>
             <p className="text-xs text-[#a89bc2] mt-0.5">
               {fmt(weekStart, { month: 'long', day: 'numeric' })} — {fmt(addDays(weekStart, 6), { month: 'long', day: 'numeric', year: 'numeric' })}
             </p>

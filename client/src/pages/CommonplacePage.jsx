@@ -151,7 +151,7 @@ export default function CommonplacePage() {
           <Button variant="secondary" size="sm" onClick={() => setAdding(true)}>+ add entry</Button>
         </div>
 
-        <h1 className="text-2xl font-medium text-[#2d2a35] mb-1" style={{ fontFamily: 'var(--font-serif)' }}>commonplace</h1>
+        <h1 className="text-2xl mb-1" style={{ fontFamily: 'var(--font-display)', fontWeight: 600, color: 'var(--sp-text)' }}>commonplace</h1>
         <p className="text-sm text-[#a89bc2] mb-8">quotes, passages, and things worth keeping</p>
 
         {/* tag filter */}

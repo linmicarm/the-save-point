@@ -87,7 +87,7 @@ export default function DiscoverPage() {
       <div className="h-1 w-full bg-[#c4b5fd]" />
       <div className="max-w-lg mx-auto px-5 py-10">
 
-        <h1 className="text-2xl font-medium text-[#2d2a35] mb-1" style={{ fontFamily: 'var(--font-serif)' }}>discover</h1>
+        <h1 className="text-2xl mb-1" style={{ fontFamily: 'var(--font-display)', fontWeight: 600, color: 'var(--sp-text)' }}>discover</h1>
         <p className="text-sm text-[#a89bc2] mb-6">see what others are doing this season</p>
 
         {/* tab toggle */}

@@ -556,19 +556,13 @@ export default function RecipesPage() {
         {/* header */}
         <div className="flex items-start justify-between mb-6 gap-4 flex-wrap">
           <div>
-            <h1 className="text-2xl font-medium text-[#2d2a35]" style={{ fontFamily: 'var(--font-serif)' }}>
+            <h1 className="text-2xl" style={{ fontFamily: 'var(--font-display)', fontWeight: 600, color: 'var(--sp-text)' }}>
               recipes
             </h1>
             <p className="text-sm text-[#a89bc2] mt-1">your personal recipe book</p>
           </div>
           {!showForm && !editingRecipe && (
-            <button
-              onClick={() => setShowForm(true)}
-              className="text-xs px-4 py-2 rounded-full text-white transition-opacity hover:opacity-90 shrink-0"
-              style={{ background: accent }}
-            >
-              + add recipe
-            </button>
+            <Button variant="primary" size="sm" color={accent} onClick={() => setShowForm(true)}>+ add recipe</Button>
           )}
         </div>
 
@@ -620,13 +614,7 @@ export default function RecipesPage() {
               {filterTag ? `no recipes tagged "${filterTag}"` : 'your recipe book is empty'}
             </p>
             {!filterTag && (
-              <button
-                onClick={() => setShowForm(true)}
-                className="text-xs px-4 py-2 rounded-xl text-white transition-opacity hover:opacity-90"
-                style={{ background: accent }}
-              >
-                add your first recipe
-              </button>
+              <Button variant="primary" size="sm" color={accent} onClick={() => setShowForm(true)}>add your first recipe</Button>
             )}
           </div>
         ) : (

@@ -13,6 +13,18 @@ const SIZES = {
   lg: 'text-sm px-5 py-2.5',
 }
 
+// White text unless the fill is too light for it (WCAG contrast < 3 against white).
+function textOn(hex) {
+  const m = /^#([0-9a-f]{6})$/i.exec(hex || '')
+  if (!m) return '#fff'
+  const [r, g, b] = [0, 2, 4].map(i => {
+    const c = parseInt(m[1].slice(i, i + 2), 16) / 255
+    return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4
+  })
+  const L = 0.2126 * r + 0.7152 * g + 0.0722 * b
+  return 1.05 / (L + 0.05) < 3 ? '#2d2a35' : '#fff'
+}
+
 export default function Button({
   variant = 'secondary',
   size = 'md',
@@ -27,8 +39,9 @@ export default function Button({
   let cls, st
 
   if (variant === 'primary') {
-    cls = `${SIZES[size]} rounded-full font-medium text-white hover:opacity-90`
-    st = { background: color || '#a89bc2' }
+    cls = `${SIZES[size]} rounded-full font-medium hover:opacity-90`
+    const bg = color || '#a89bc2'
+    st = { background: bg, color: textOn(bg) }
   } else if (variant === 'quiet') {
     cls = 'text-sm px-1 py-1.5 hover:opacity-70'
     st = { color: 'var(--sp-text-faint)', fontFamily: 'var(--font-hand)' }

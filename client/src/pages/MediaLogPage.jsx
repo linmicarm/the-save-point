@@ -368,18 +368,12 @@ export default function MediaLogPage() {
         {/* header */}
         <div className="flex items-start justify-between mb-6 gap-4 flex-wrap">
           <div>
-            <h1 className="text-2xl font-medium text-[#2d2a35]" style={{ fontFamily: 'var(--font-serif)' }}>
+            <h1 className="text-2xl" style={{ fontFamily: 'var(--font-display)', fontWeight: 600, color: 'var(--sp-text)' }}>
               media log
             </h1>
             <p className="text-sm text-[#a89bc2] mt-1">books, movies, shows, music, games</p>
           </div>
-          <button
-            onClick={() => setShowAddForm(v => !v)}
-            className="text-xs px-4 py-2 rounded-full text-white transition-opacity hover:opacity-90 shrink-0"
-            style={{ background: accent }}
-          >
-            + add entry
-          </button>
+          <Button variant="primary" size="sm" color={accent} onClick={() => setShowAddForm(v => !v)}>+ add entry</Button>
         </div>
 
         {/* type tabs */}
@@ -411,13 +405,7 @@ export default function MediaLogPage() {
           <div className="text-center py-20">
             <p className="text-4xl mb-4">📚</p>
             <p className="text-sm text-[#a89bc2] mb-6">nothing logged yet</p>
-            <button
-              onClick={() => setShowAddForm(true)}
-              className="text-xs px-4 py-2 rounded-xl text-white transition-opacity hover:opacity-90"
-              style={{ background: accent }}
-            >
-              add your first entry
-            </button>
+            <Button variant="primary" size="sm" color={accent} onClick={() => setShowAddForm(true)}>add your first entry</Button>
           </div>
         ) : (
           <>

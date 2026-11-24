@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
 import { useToast } from '../contexts/ToastContext'
+import Button from '../components/Button'
 import BackLink from '../components/BackLink'
 
 function timeAgo(date) {
@@ -49,13 +50,9 @@ export default function BlogPage() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <BackLink to={`/u/${user?.username}`} className="text-xs text-[#c4b8d9] hover:text-[#a89bc2] transition-colors block mb-1">← profile</BackLink>
-            <h1 className="text-2xl font-medium text-[#2d2a35]" style={{ fontFamily: 'var(--font-serif)' }}>my blog</h1>
+            <h1 className="text-2xl" style={{ fontFamily: 'var(--font-display)', fontWeight: 600, color: 'var(--sp-text)' }}>my blog</h1>
           </div>
-          <button
-            onClick={() => navigate('/blog/new')}
-            className="text-sm px-4 py-2 rounded-full text-white"
-            style={{ background: '#c4b5fd' }}
-          >+ write</button>
+          <Button variant="primary" size="sm" color="#c4b5fd" onClick={() => navigate('/blog/new')}>+ write</Button>
         </div>
 
         {loading && <p className="text-sm text-[#a89bc2]">loading...</p>}
@@ -64,10 +61,7 @@ export default function BlogPage() {
           <div className="text-center py-20">
             <p className="text-4xl mb-4">✦</p>
             <p className="text-[#a89bc2] text-sm mb-6">no posts yet — write your first entry</p>
-            <button onClick={() => navigate('/blog/new')}
-              className="text-sm px-5 py-2.5 rounded-full text-white" style={{ background: '#c4b5fd' }}>
-              start writing
-            </button>
+            <Button variant="primary" size="lg" color="#c4b5fd" onClick={() => navigate('/blog/new')}>start writing</Button>
           </div>
         )}
 

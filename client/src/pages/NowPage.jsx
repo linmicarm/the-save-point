@@ -68,7 +68,7 @@ function PublicNowPage({ username }) {
           )}
         </div>
 
-        <h1 className="text-2xl font-medium text-[#2d2a35] mb-1" style={{ fontFamily: 'var(--font-serif)' }}>now</h1>
+        <h1 className="text-2xl mb-1" style={{ fontFamily: 'var(--font-display)', fontWeight: 600, color: 'var(--sp-text)' }}>now</h1>
         <p className="text-sm text-[#a89bc2] mb-8">a snapshot of where {username} is right now</p>
 
         {filled.length === 0 ? (
@@ -169,7 +169,7 @@ function EditNowPage({ user }) {
           </div>
         </div>
 
-        <h1 className="text-2xl font-medium text-[#2d2a35] mb-1" style={{ fontFamily: 'var(--font-serif)' }}>now</h1>
+        <h1 className="text-2xl mb-1" style={{ fontFamily: 'var(--font-display)', fontWeight: 600, color: 'var(--sp-text)' }}>now</h1>
         <p className="text-sm text-[#a89bc2] mb-8">a snapshot of where you are right now</p>
 
         <div className="space-y-5">

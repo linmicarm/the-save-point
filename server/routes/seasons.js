@@ -44,6 +44,15 @@ router.get('/user/:username/all', async (req, res) => {
   res.json({ seasons })
 })
 
+// GET /api/seasons/:id — one of your own seasons
+router.get('/:id', requireAuth, async (req, res) => {
+  const season = await prisma.season.findFirst({
+    where: { id: req.params.id, userId: req.userId },
+  })
+  if (!season) return res.status(404).json({ error: 'Season not found.' })
+  res.json({ season })
+})
+
 // POST /api/seasons — start a new season
 router.post('/', requireAuth, async (req, res) => {
   const { name, emoji, color, intention } = req.body

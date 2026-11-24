@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import Button from './Button'
 import { WEATHER, suggestionFor, weatherMeta, isSameLocalDay } from '../utils/weather'
 
 // "what's the weather inside today?" — a gentle capacity check-in.
@@ -94,9 +95,7 @@ export default function WeatherCheckIn() {
             }}
           />
           {changing && (
-            <button onClick={() => setChanging(false)} className="text-xs mt-2 hover:opacity-70 transition-opacity" style={label}>
-              never mind
-            </button>
+            <div className="mt-2"><Button variant="quiet" onClick={() => setChanging(false)}>never mind</Button></div>
           )}
           {error && <p className="text-xs text-rose-400 mt-2">{error}</p>}
         </>
@@ -127,9 +126,7 @@ export default function WeatherCheckIn() {
               <p className="text-sm leading-relaxed italic mt-3" style={{ fontFamily: 'var(--font-serif)', color: 'var(--sp-text-muted)' }}>
                 {suggestionFor(today.weather)}
               </p>
-              <button onClick={() => setChanging(true)} className="text-xs mt-3 hover:opacity-70 transition-opacity" style={label}>
-                weather changed?
-              </button>
+              <div className="mt-3"><Button size="sm" onClick={() => setChanging(true)}>weather changed?</Button></div>
             </>
           )}
         </>

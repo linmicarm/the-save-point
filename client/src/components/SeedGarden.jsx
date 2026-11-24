@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import Button from './Button'
 import { stageFor, isActive, tendedToday } from '../utils/garden'
 
 // Seeds: a few small things you're tending this season. Tending one grows it;
@@ -97,23 +98,15 @@ export default function SeedGarden() {
               {tendedToday(s) ? (
                 <span className="text-xs" style={label}>tended today ✓</span>
               ) : (
-                <button
-                  onClick={() => tend(s.id)}
-                  disabled={busy}
-                  className="text-xs px-3 py-1 rounded-full transition-opacity hover:opacity-80 disabled:opacity-50"
-                  style={{ background: 'var(--sp-surface-2)', border: '1px solid var(--sp-border)', color: 'var(--sp-text-muted)', fontFamily: 'var(--font-hand)' }}
-                >
-                  tend
-                </button>
+                <Button size="sm" onClick={() => tend(s.id)} disabled={busy}>tend</Button>
               )}
-              <button
+              <Button
+                size="sm"
                 onClick={() => { setReplanting(replanting === s.id ? null : s.id); setNewTitle('') }}
-                className="text-xs hover:opacity-70 transition-opacity"
-                style={label}
                 title="feels too big? plant a smaller version"
               >
                 replant
-              </button>
+              </Button>
             </div>
 
             {replanting === s.id && (
@@ -128,14 +121,9 @@ export default function SeedGarden() {
                   className="flex-1 min-w-0 px-3 py-1.5 rounded-xl text-xs focus:outline-none"
                   style={inputStyle}
                 />
-                <button
-                  onClick={() => replant(s.id)}
-                  disabled={busy || !newTitle.trim()}
-                  className="text-xs px-3 rounded-xl text-white disabled:opacity-40"
-                  style={{ background: '#a89bc2' }}
-                >
+                <Button variant="primary" size="sm" onClick={() => replant(s.id)} disabled={busy || !newTitle.trim()}>
                   replant
-                </button>
+                </Button>
               </div>
             )}
           </li>
@@ -152,14 +140,7 @@ export default function SeedGarden() {
           className="flex-1 min-w-0 px-3 py-2 rounded-xl text-xs focus:outline-none"
           style={inputStyle}
         />
-        <button
-          onClick={plant}
-          disabled={busy || !title.trim()}
-          className="text-xs px-4 rounded-xl text-white font-medium disabled:opacity-40"
-          style={{ background: '#a89bc2' }}
-        >
-          plant
-        </button>
+        <Button variant="primary" onClick={plant} disabled={busy || !title.trim()}>plant</Button>
       </div>
 
       {error && <p className="text-xs text-rose-400 mt-2">{error}</p>}

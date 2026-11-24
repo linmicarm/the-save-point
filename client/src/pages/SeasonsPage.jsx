@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
 import SeasonModal from '../components/SeasonModal'
+import Button from '../components/Button'
 
 function formatDateRange(startedAt, endedAt) {
   const fmt = (iso) => new Date(iso).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
@@ -39,7 +40,7 @@ function SeasonCard({ season, onUpdate }) {
   return (
     <div
       className="rounded-2xl border overflow-hidden"
-      style={{ borderColor: `${season.color}44`, background: isActive ? `${season.color}08` : 'white' }}
+      style={{ borderColor: `${season.color}44`, background: isActive ? `${season.color}08` : 'var(--sp-surface)' }}
     >
       {/* color bar */}
       <div className="h-1 w-full" style={{ background: season.color }} />
@@ -83,37 +84,26 @@ function SeasonCard({ season, onUpdate }) {
                 className="w-full text-sm text-[#5a5065] bg-[#faf8ff] border border-[#e4dff0] rounded-xl px-3 py-2 focus:outline-none focus:border-[#a89bc2] resize-none placeholder-[#c4b8d9] leading-relaxed"
               />
               <div className="flex gap-2 mt-2">
-                <button
-                  onClick={saveReflection}
-                  disabled={saving}
-                  className="text-xs px-3 py-1.5 rounded-lg bg-[#c4b5fd] text-white hover:bg-[#b39ef7] disabled:opacity-50 transition-colors"
-                >
+                <Button variant="primary" size="sm" onClick={saveReflection} disabled={saving}>
                   {saving ? 'saving...' : 'save'}
-                </button>
-                <button onClick={() => { setEditing(false); setReflection(season.reflection || '') }} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">
+                </Button>
+                <Button variant="quiet" onClick={() => { setEditing(false); setReflection(season.reflection || '') }}>
                   cancel
-                </button>
+                </Button>
               </div>
             </div>
           ) : season.reflection ? (
             <div>
               <p className="text-sm text-[#5a5065] leading-relaxed whitespace-pre-wrap">{season.reflection}</p>
-              <button onClick={() => setEditing(true)} className="text-[10px] text-[#c4b8d9] hover:text-[#a89bc2] mt-2 transition-colors">
-                edit reflection
-              </button>
+              <div className="mt-3"><Button size="sm" onClick={() => setEditing(true)}>edit reflection</Button></div>
             </div>
           ) : (
-            <button
-              onClick={() => setEditing(true)}
-              className="text-xs text-[#c4b8d9] hover:text-[#a89bc2] transition-colors italic"
-            >
-              + add a reflection
-            </button>
+            <Button size="sm" onClick={() => setEditing(true)}>+ add a reflection</Button>
           )}
 
           {/* closing ceremony words */}
           {(season.carryForward || season.released) && (
-            <div className="mt-4 pt-3 border-t border-[#f0ecfa] space-y-2.5">
+            <div className="mt-4 pt-3 space-y-2.5" style={{ borderTop: '1px solid var(--sp-border-faint)' }}>
               {season.carryForward && (
                 <div>
                   <p className="text-[10px] uppercase tracking-widest text-[#c4b8d9] mb-0.5">carried forward</p>
@@ -174,12 +164,9 @@ export default function SeasonsPage() {
           <Link to={`/u/${user.username}`} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">
             ← your page
           </Link>
-          <button
-            onClick={() => setShowModal(true)}
-            className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors"
-          >
+          <Button size="sm" onClick={() => setShowModal(true)}>
             {activeSeason ? 'manage season' : '+ new season'}
-          </button>
+          </Button>
         </div>
 
         <h1 className="text-2xl font-medium text-[#2d2a35] mb-1" style={{ fontFamily: 'var(--font-serif)' }}>
@@ -191,12 +178,7 @@ export default function SeasonsPage() {
           <div className="text-center py-16">
             <p className="text-3xl mb-4">✦</p>
             <p className="text-sm text-[#a89bc2] mb-6">no seasons yet</p>
-            <button
-              onClick={() => setShowModal(true)}
-              className="text-xs px-4 py-2 rounded-xl bg-[#c4b5fd] text-white hover:bg-[#b39ef7] transition-colors"
-            >
-              begin your first season
-            </button>
+            <Button variant="primary" onClick={() => setShowModal(true)}>begin your first season</Button>
           </div>
         ) : (
           <div className="space-y-4">

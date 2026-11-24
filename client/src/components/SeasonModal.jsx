@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import axios from 'axios'
 import EmojiPicker from './EmojiPicker'
+import Button from './Button'
 import { SEASON_TEMPLATES, applyTemplate } from '../utils/seasonTemplates'
 import { stageFor, isActive } from '../utils/garden'
 
@@ -132,12 +133,13 @@ export default function SeasonModal({ season, onClose, onSave }) {
                 closing {season?.name}
               </h2>
               <p className="text-xs text-[#a89bc2]">take a moment to look back before it ends</p>
+              <p className="text-[11px] text-[#c4b8d9] mt-1">everything here is optional</p>
             </div>
 
             {/* what grew */}
             <div className="rounded-xl border border-[#ede9f5] bg-[#faf8ff] px-4 py-3 mb-5">
               <p className="text-xs text-[#a89bc2] mb-2">
-                {summary ? `${summary.days} days` : ''}
+                {summary ? `${summary.days} ${summary.days === 1 ? 'day' : 'days'}` : ''}
                 {summary?.entryCount != null && ` · ${summary.entryCount >= 200 ? '200+' : summary.entryCount} journal ${summary.entryCount === 1 ? 'entry' : 'entries'}`}
               </p>
               {summary?.seeds?.length > 0 ? (
@@ -155,7 +157,7 @@ export default function SeasonModal({ season, onClose, onSave }) {
             </div>
 
             <div className="mb-4">
-              <p className="text-xs text-[#a89bc2] mb-1.5">what do you want to remember about this season? <span className="text-[#d4cfe3]">(optional)</span></p>
+              <p className="text-xs text-[#a89bc2] mb-1.5">what do you want to remember about this season?</p>
               <textarea
                 value={reflection}
                 onChange={e => setReflection(e.target.value)}
@@ -165,7 +167,7 @@ export default function SeasonModal({ season, onClose, onSave }) {
             </div>
 
             <div className="mb-4">
-              <p className="text-xs text-[#a89bc2] mb-1.5">what are you carrying forward? <span className="text-[#d4cfe3]">(optional)</span></p>
+              <p className="text-xs text-[#a89bc2] mb-1.5">what are you carrying forward?</p>
               <textarea
                 value={carryForward}
                 onChange={e => setCarryForward(e.target.value)}
@@ -176,7 +178,7 @@ export default function SeasonModal({ season, onClose, onSave }) {
             </div>
 
             <div className="mb-5">
-              <p className="text-xs text-[#a89bc2] mb-1.5">what are you ready to let go of? <span className="text-[#d4cfe3]">(optional)</span></p>
+              <p className="text-xs text-[#a89bc2] mb-1.5">what are you ready to let go of?</p>
               <textarea
                 value={released}
                 onChange={e => setReleased(e.target.value)}
@@ -189,17 +191,10 @@ export default function SeasonModal({ season, onClose, onSave }) {
             {error && <p className="text-xs text-rose-400 mb-3">{error}</p>}
 
             <div className="flex flex-col gap-2">
-              <button
-                onClick={handleClose}
-                disabled={closing}
-                className="w-full py-2.5 rounded-xl text-white text-xs font-medium transition-opacity disabled:opacity-50"
-                style={{ background: form.color }}
-              >
+              <Button variant="primary" size="lg" full color={form.color} onClick={handleClose} disabled={closing}>
                 {closing ? 'closing...' : 'close this season'}
-              </button>
-              <button onClick={() => setStep('edit')} className="text-xs text-[#c4b8d9] hover:text-[#a89bc2] transition-colors text-center py-1">
-                not yet
-              </button>
+              </Button>
+              <Button variant="quiet" full onClick={() => setStep('edit')}>not yet</Button>
             </div>
           </>
         )}
@@ -259,17 +254,10 @@ export default function SeasonModal({ season, onClose, onSave }) {
             {error && <p className="text-xs text-rose-400 mb-3">{error}</p>}
 
             <div className="flex flex-col gap-2">
-              <button
-                onClick={handleStartNew}
-                disabled={saving}
-                className="w-full py-2.5 rounded-xl text-white text-xs font-medium transition-opacity disabled:opacity-50"
-                style={{ background: form.color }}
-              >
+              <Button variant="primary" size="lg" full color={form.color} onClick={handleStartNew} disabled={saving}>
                 {saving ? 'starting...' : 'begin new season'}
-              </button>
-              <button onClick={handleEndWithoutNew} className="text-xs text-[#c4b8d9] hover:text-[#a89bc2] transition-colors text-center py-1">
-                not yet
-              </button>
+              </Button>
+              <Button variant="quiet" full onClick={handleEndWithoutNew}>not yet</Button>
             </div>
           </>
         )}
@@ -348,21 +336,11 @@ export default function SeasonModal({ season, onClose, onSave }) {
 
             <div className="flex gap-2">
               {!isNew && (
-                <button
-                  onClick={beginCeremony}
-                  className="flex-1 py-2.5 rounded-xl border border-[#e4dff0] text-xs text-[#a89bc2] hover:text-[#7c6f9b] transition-colors"
-                >
-                  end this season
-                </button>
+                <Button size="lg" className="flex-1" onClick={beginCeremony}>end this season</Button>
               )}
-              <button
-                onClick={handleSave}
-                disabled={saving}
-                className="flex-1 py-2.5 rounded-xl text-white text-xs font-medium transition-opacity disabled:opacity-50"
-                style={{ background: form.color }}
-              >
+              <Button variant="primary" size="lg" className="flex-1" color={form.color} onClick={handleSave} disabled={saving}>
                 {saving ? 'saving...' : isNew ? 'begin season' : 'save changes'}
-              </button>
+              </Button>
             </div>
           </>
         )}

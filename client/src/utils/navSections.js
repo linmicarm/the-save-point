@@ -7,16 +7,14 @@ export const NAV_SECTIONS = [
     items: [
       { to: '/journal', label: 'journal' },
       { to: '/now', label: 'now' },
-      { to: '/week', label: 'week' },
-      { to: '/habits', label: 'habits' },
+      { to: '/habits', label: 'habits & week', also: ['/week'] },
     ],
   },
   {
     label: 'time',
     items: [
       { to: '/seasons', label: 'seasons' },
-      { to: '/month', label: 'month' },
-      { to: '/year', label: 'year' },
+      { to: '/month', label: 'month & year', also: ['/year'] },
       { to: '/traditions', label: 'traditions' },
     ],
   },
@@ -24,8 +22,7 @@ export const NAV_SECTIONS = [
     label: 'memories',
     items: [
       { to: '/milestones', label: 'milestones' },
-      { to: '/letters', label: 'letters' },
-      { to: '/capsule', label: 'time capsule' },
+      { to: '/letters', label: 'letters & capsule', also: ['/capsule'] },
       { to: '/photos', label: 'photos' },
       { to: '/blog', label: 'blog' },
     ],
@@ -58,13 +55,20 @@ export const NAV_SECTIONS = [
   },
 ]
 
-export const NAV_PATHS = NAV_SECTIONS.flatMap(s => s.items.map(i => i.to))
+// every path the menu knows about, including pages folded into another entry (`also`)
+export const NAV_PATHS = NAV_SECTIONS.flatMap(s => s.items.flatMap(i => [i.to, ...(i.also || [])]))
+
+// a page folded into another entry maps to that entry's own path ('/week' -> '/habits')
+export function canonical(path) {
+  for (const s of NAV_SECTIONS) for (const i of s.items) if (i.to === path || i.also?.includes(path)) return i.to
+  return null
+}
 
 export function labelFor(path) {
-  for (const s of NAV_SECTIONS) for (const i of s.items) if (i.to === path) return i.label
+  for (const s of NAV_SECTIONS) for (const i of s.items) if (i.to === path || i.also?.includes(path)) return i.label
   return null
 }
 
 export function roomFor(path) {
-  return NAV_SECTIONS.find(s => s.items.some(i => i.to === path))?.label ?? null
+  return NAV_SECTIONS.find(s => s.items.some(i => i.to === path || i.also?.includes(path)))?.label ?? null
 }

@@ -18,6 +18,7 @@ import {
 import { CSS } from '@dnd-kit/utilities'
 import Button from '../components/Button'
 import BackLink from '../components/BackLink'
+import PageTabs from '../components/PageTabs'
 
 const PRESET_GROUPS = [
   {
@@ -132,6 +133,7 @@ export default function RhythmPage() {
     <div className="min-h-screen bg-[#faf8f5]">
       <div className="h-1 w-full bg-[#c4b5fd]" />
       <div className={`mx-auto px-5 py-10 ${layout === 'columns' ? 'max-w-5xl' : 'max-w-lg'}`}>
+        <PageTabs group="rhythm" />
 
         {/* nav */}
         <div className="flex items-center justify-between mb-8">

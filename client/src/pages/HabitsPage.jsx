@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext'
 import { useToast } from '../contexts/ToastContext'
 import SeasonBadge from '../components/SeasonBadge'
 import Button from '../components/Button'
+import PageTabs from '../components/PageTabs'
 
 function hexToRgb(hex) {
   const r = parseInt(hex.slice(1, 3), 16)
@@ -288,6 +289,7 @@ export default function HabitsPage() {
     <div className="min-h-screen bg-[#faf8ff] pt-2">
       <div className="h-0.5 w-full" style={{ background: accent }} />
       <div className="max-w-5xl mx-auto px-5 py-8">
+        <PageTabs group="rhythm" />
 
         {/* header */}
         <div className="flex items-start justify-between mb-8 gap-4 flex-wrap">

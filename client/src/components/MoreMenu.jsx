@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { NAV_SECTIONS, NAV_PATHS, labelFor, roomFor } from '../utils/navSections'
+import { NAV_SECTIONS, NAV_PATHS, labelFor, roomFor, canonical } from '../utils/navSections'
 import { pushRecent, togglePin, loadList, saveList } from '../utils/navPrefs'
 
 // Everything in the app, in one calm panel. Opens showing only what you actually use:
@@ -20,9 +20,10 @@ export default function MoreMenu({ open, onClose }) {
 
   // remember the pages you visit
   useEffect(() => {
-    if (!NAV_PATHS.includes(location.pathname)) return
+    const here = canonical(location.pathname)
+    if (!here) return
     setRecent(prev => {
-      const next = pushRecent(prev, location.pathname)
+      const next = pushRecent(prev, here)
       saveList(RECENT_KEY, next)
       return next
     })
@@ -48,10 +49,11 @@ export default function MoreMenu({ open, onClose }) {
 
   if (!open) return null
 
-  const recents = recent.filter(p => !pins.includes(p) && p !== location.pathname)
+  const here = canonical(location.pathname)
+  const recents = recent.filter(p => !pins.includes(p) && p !== here)
 
   const Row = ({ to, label, showPin }) => {
-    const active = location.pathname === to
+    const active = here === to
     const pinned = pins.includes(to)
     return (
       <div className="flex items-center rounded-xl hover:bg-[var(--sp-surface-2)]"

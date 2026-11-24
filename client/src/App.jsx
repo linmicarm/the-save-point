@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useState } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
 import { ThemeProvider } from './contexts/ThemeContext'
@@ -6,6 +6,7 @@ import { ToastProvider } from './contexts/ToastContext'
 import ProtectedRoute from './components/ProtectedRoute'
 import Navbar from './components/Navbar'
 import MobileNav from './components/MobileNav'
+import MoreMenu from './components/MoreMenu'
 
 // Always-loaded (tiny, needed immediately or for auth flow)
 import LoginPage    from './pages/LoginPage'
@@ -54,9 +55,10 @@ const PageLoader = () => (
 
 function AnimatedRoutes() {
   const location = useLocation()
+  const [menuOpen, setMenuOpen] = useState(false)
   return (
     <>
-      <Navbar />
+      <Navbar menuOpen={menuOpen} onMenu={() => setMenuOpen(o => !o)} />
       <Suspense fallback={<PageLoader />}>
       <div key={location.pathname} className="page-enter pt-14 pb-16 lg:pb-0">
         <Routes>
@@ -113,7 +115,8 @@ function AnimatedRoutes() {
         </Routes>
       </div>
       </Suspense>
-      <MobileNav />
+      <MobileNav menuOpen={menuOpen} onMenu={() => setMenuOpen(o => !o)} />
+      <MoreMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
     </>
   )
 }

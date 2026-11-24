@@ -3,8 +3,9 @@ import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { useTheme } from '../contexts/ThemeContext'
 import axios from 'axios'
+import Button from './Button'
 
-export default function Navbar() {
+export default function Navbar({ menuOpen = false, onMenu }) {
   const { user } = useAuth()
   const { dark, toggle: toggleTheme } = useTheme()
   const navigate = useNavigate()
@@ -122,6 +123,9 @@ export default function Navbar() {
                 </Link>
               )
             })}
+            <Button size="sm" className="ml-1" onClick={onMenu} aria-expanded={menuOpen} aria-haspopup="true">
+              menu
+            </Button>
           </div>
         )}
 

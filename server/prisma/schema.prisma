@@ -138,6 +138,8 @@ model Season {
   color      String    @default("#c4b5fd")
   intention  String?
   reflection String?
+  carryForward String?   // closing ceremony: what you're taking into the next season
+  released     String?   // closing ceremony: what you're ready to put down
   coverUrl   String?
   startedAt  DateTime  @default(now())
   endedAt    DateTime?

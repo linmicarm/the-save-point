@@ -4,6 +4,7 @@ import axios from 'axios'
 import { uploadImage } from '../utils/uploadImage'
 import { useAuth } from '../contexts/AuthContext'
 import { useToast } from '../contexts/ToastContext'
+import Button from '../components/Button'
 
 const MOODS = [
   { emoji: '✨', label: 'inspired' },
@@ -137,15 +138,9 @@ export default function BlogEditorPage() {
     <div className="min-h-screen bg-[#faf8f5]">
       {/* toolbar */}
       <div className="sticky top-0 z-10 bg-white/90 backdrop-blur border-b border-[#e4dff0] px-5 py-2.5 flex items-center justify-between gap-4">
-        <button onClick={() => navigate('/blog')} className="text-[#a89bc2] hover:text-[#5a5065] transition-colors text-sm">
-          ← back
-        </button>
+        <Button variant="quiet" onClick={() => navigate('/blog')}>← back</Button>
         <div className="flex items-center gap-2">
-          <button
-            onClick={() => save(false)}
-            disabled={saving}
-            className="text-xs px-4 py-1.5 rounded-full border border-[#e4dff0] text-[#a89bc2] hover:border-[#a89bc2] hover:text-[#5a5065] transition-colors disabled:opacity-40"
-          >save draft</button>
+          <Button variant="secondary" size="sm" onClick={() => save(false)} disabled={saving}>save draft</Button>
           <button
             onClick={() => save(true)}
             disabled={saving}
@@ -168,10 +163,7 @@ export default function BlogEditorPage() {
               >✕</button>
             </div>
           ) : (
-            <button
-              onClick={() => document.getElementById('cover-upload').click()}
-              className="w-full h-20 rounded-2xl border-2 border-dashed border-[#e4dff0] flex items-center justify-center gap-2 text-[#c4b8d9] hover:border-[#a89bc2] hover:text-[#a89bc2] transition-colors text-sm mb-3"
-            >📷 add cover image</button>
+            <Button variant="secondary" full className="mb-3" onClick={() => document.getElementById('cover-upload').click()}>📷 add cover image</Button>
           )}
           <input id="cover-upload" type="file" accept="image/*" className="hidden"
             onChange={async e => {
@@ -203,7 +195,7 @@ export default function BlogEditorPage() {
             {showMoods && (
               <div className="absolute top-7 left-0 z-10 bg-white border border-[#e4dff0] rounded-2xl shadow-lg p-3 grid grid-cols-4 gap-1.5 w-52">
                 {mood && (
-                  <button onClick={() => { setMood(''); setShowMoods(false) }} className="col-span-4 text-[10px] text-[#c4b8d9] hover:text-rose-400 mb-1 text-left">clear</button>
+                  <Button variant="quiet" className="col-span-4 mb-1" onClick={() => { setMood(''); setShowMoods(false) }}>clear</Button>
                 )}
                 {MOODS.map(m => (
                   <button key={m.label} onClick={() => { setMood(m.label); setShowMoods(false) }}
@@ -251,10 +243,7 @@ export default function BlogEditorPage() {
                         className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/40 text-white flex items-center justify-center text-xs hover:bg-black/60">✕</button>
                     </div>
                   ) : (
-                    <button
-                      onClick={() => document.getElementById(`img-${i}`).click()}
-                      className="w-full h-36 flex items-center justify-center gap-2 text-[#c4b8d9] hover:text-[#a89bc2] transition-colors text-sm"
-                    >📷 click to upload image</button>
+                    <Button variant="secondary" full onClick={() => document.getElementById(`img-${i}`).click()}>📷 click to upload image</Button>
                   )}
                   <input id={`img-${i}`} type="file" accept="image/*" className="hidden"
                     onChange={e => handleImageUpload(i, e.target.files[0])} />
@@ -280,14 +269,8 @@ export default function BlogEditorPage() {
               {/* insert block button */}
               <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity py-1 mt-0.5">
                 <div className="flex-1 h-px bg-[#e4dff0]" />
-                <button onClick={() => insertAfter(i, 'text')}
-                  className="text-[10px] text-[#c4b8d9] hover:text-[#a89bc2] transition-colors px-2 py-0.5 rounded-full hover:bg-[#f5f0ff]">
-                  + text
-                </button>
-                <button onClick={() => insertAfter(i, 'image')}
-                  className="text-[10px] text-[#c4b8d9] hover:text-[#a89bc2] transition-colors px-2 py-0.5 rounded-full hover:bg-[#f5f0ff]">
-                  + image
-                </button>
+                <Button variant="secondary" size="sm" onClick={() => insertAfter(i, 'text')}>+ text</Button>
+                <Button variant="secondary" size="sm" onClick={() => insertAfter(i, 'image')}>+ image</Button>
                 <div className="flex-1 h-px bg-[#e4dff0]" />
               </div>
             </div>
@@ -325,8 +308,8 @@ export default function BlogEditorPage() {
             onClick={() => setIsPublic(v => !v)}
             className="text-xs px-3 py-1.5 rounded-full border transition-colors"
             style={isPublic
-              ? { background: 'rgba(196,181,253,0.12)', color: '#7c6f9b', borderColor: 'rgba(196,181,253,0.4)' }
-              : { color: '#c4b8d9', borderColor: '#e4dff0' }}
+              ? { background: 'rgba(196,181,253,0.12)', color: 'var(--sp-text-muted)', borderColor: 'rgba(196,181,253,0.4)' }
+              : { color: 'var(--sp-text-faint)', borderColor: 'var(--sp-border)' }}
           >{isPublic ? 'unpublish' : 'make public'}</button>
         </div>
 

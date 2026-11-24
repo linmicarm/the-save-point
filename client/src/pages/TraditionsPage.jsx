@@ -4,6 +4,7 @@ import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
 import EmojiPicker from '../components/EmojiPicker'
 import DeleteButton from '../components/DeleteButton'
+import Button from '../components/Button'
 
 const PRESET_HOLIDAYS = [
   { name: "Christmas",        emoji: "🎄" },
@@ -96,9 +97,7 @@ function EntryCard({ entry, onUpdate, onDelete, onPhotoClick }) {
           <button onClick={() => { setExpanded(e => !e); setEditing(false) }} className="text-xs text-[#c4b8d9] hover:text-[#a89bc2] transition-colors">
             {expanded ? '▲' : '▼'}
           </button>
-          <button onClick={() => { setExpanded(true); setEditing(true) }} className="text-xs text-[#c4b8d9] hover:text-[#a89bc2] transition-colors">
-            edit
-          </button>
+          <Button variant="secondary" size="sm" onClick={() => { setExpanded(true); setEditing(true) }}>edit</Button>
           <DeleteButton onDelete={() => onDelete(entry.id)} label="✕" className="text-xs text-[#e4dff0] hover:text-rose-300 transition-colors" />
         </div>
       </div>
@@ -171,7 +170,7 @@ function EntryCard({ entry, onUpdate, onDelete, onPhotoClick }) {
                 <button onClick={save} disabled={saving} className="text-xs px-3 py-1.5 rounded-lg bg-[#c4b5fd] text-white hover:bg-[#b39ef7] disabled:opacity-50 transition-colors">
                   {saving ? 'saving...' : 'save'}
                 </button>
-                <button onClick={cancel} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">cancel</button>
+                <Button variant="quiet" onClick={cancel}>cancel</Button>
               </div>
             </>
           ) : (
@@ -283,9 +282,7 @@ export default function TraditionsPage() {
           <Link to={`/u/${user.username}`} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">
             ← your page
           </Link>
-          <button onClick={() => setShowPicker(true)} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">
-            + add entry
-          </button>
+          <Button variant="secondary" size="sm" onClick={() => setShowPicker(true)}>+ add entry</Button>
         </div>
 
         {/* heading */}
@@ -298,12 +295,7 @@ export default function TraditionsPage() {
           <div className="text-center py-16">
             <p className="text-3xl mb-4">🕯️</p>
             <p className="text-sm text-[#a89bc2] mb-6">no traditions logged yet</p>
-            <button
-              onClick={() => setShowPicker(true)}
-              className="text-xs px-4 py-2 rounded-xl bg-[#c4b5fd] text-white hover:bg-[#b39ef7] transition-colors"
-            >
-              log your first tradition
-            </button>
+            <Button variant="primary" onClick={() => setShowPicker(true)}>log your first tradition</Button>
           </div>
         ) : (
           <>
@@ -314,9 +306,9 @@ export default function TraditionsPage() {
                   onClick={() => setFilterYear(null)}
                   className="text-xs px-3 py-1 rounded-full transition-colors"
                   style={filterYear === null ? {
-                    background: '#2d2a3522', color: '#2d2a35', border: '1px solid #2d2a3544',
+                    background: 'color-mix(in srgb, var(--sp-text) 13%, transparent)', color: 'var(--sp-text)', border: '1px solid color-mix(in srgb, var(--sp-text) 27%, transparent)',
                   } : {
-                    background: 'white', color: '#c4b8d9', border: '1px solid #ede9f5',
+                    background: 'var(--sp-surface)', color: 'var(--sp-text-faint)', border: '1px solid var(--sp-border-faint)',
                   }}
                 >
                   all years
@@ -327,9 +319,9 @@ export default function TraditionsPage() {
                     onClick={() => setFilterYear(filterYear === y ? null : y)}
                     className="text-xs px-3 py-1 rounded-full transition-colors"
                     style={filterYear === y ? {
-                      background: '#c4b5fd22', color: '#7c6f9b', border: '1px solid #c4b5fd66',
+                      background: '#c4b5fd22', color: 'var(--sp-text-muted)', border: '1px solid #c4b5fd66',
                     } : {
-                      background: 'white', color: '#a89bc2', border: '1px solid #ede9f5',
+                      background: 'var(--sp-surface)', color: 'var(--sp-text-faint)', border: '1px solid var(--sp-border-faint)',
                     }}
                   >
                     {y}
@@ -347,9 +339,9 @@ export default function TraditionsPage() {
                     onClick={() => setActiveHoliday(name)}
                     className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full transition-colors"
                     style={activeHoliday === name ? {
-                      background: '#c4b5fd22', color: '#7c6f9b', border: '1px solid #c4b5fd66',
+                      background: '#c4b5fd22', color: 'var(--sp-text-muted)', border: '1px solid #c4b5fd66',
                     } : {
-                      background: 'white', color: '#a89bc2', border: '1px solid #ede9f5',
+                      background: 'var(--sp-surface)', color: 'var(--sp-text-faint)', border: '1px solid var(--sp-border-faint)',
                     }}
                   >
                     <span>{getEmoji(name)}</span>
@@ -435,13 +427,7 @@ export default function TraditionsPage() {
                   placeholder="e.g. Obon, Songkran, Nowruz..."
                   className="flex-1 text-sm text-[#2d2a35] bg-[#faf8ff] border border-[#e4dff0] rounded-xl px-3 py-2.5 focus:outline-none focus:border-[#a89bc2] placeholder-[#c4b8d9]"
                 />
-                <button
-                  onClick={() => customHoliday.trim() && createEntry(customHoliday)}
-                  disabled={creating || !customHoliday.trim()}
-                  className="text-xs px-3 py-2.5 rounded-xl bg-[#c4b5fd] text-white hover:bg-[#b39ef7] transition-colors disabled:opacity-40"
-                >
-                  add
-                </button>
+                <Button variant="secondary" onClick={() => customHoliday.trim() && createEntry(customHoliday)} disabled={creating || !customHoliday.trim()}>add</Button>
               </div>
             </div>
           </div>

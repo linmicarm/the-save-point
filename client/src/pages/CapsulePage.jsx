@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
 import DeleteButton from '../components/DeleteButton'
+import Button from '../components/Button'
 
 function isOpen(openOn) {
   return new Date(openOn) <= new Date()
@@ -86,7 +87,7 @@ function CapsuleCard({ entry, onUpdate, onDelete }) {
                   <div className="flex items-center justify-between">
                     <DeleteButton onDelete={() => onDelete(entry.id)} className="text-xs text-[#e4dff0] hover:text-rose-300 transition-colors" />
                     <div className="flex gap-2">
-                      <button onClick={() => { setEditing(false); setDraft({ ...entry, openOn: entry.openOn.split('T')[0] }) }} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">cancel</button>
+                      <Button variant="quiet" onClick={() => { setEditing(false); setDraft({ ...entry, openOn: entry.openOn.split('T')[0] }) }}>cancel</Button>
                       <button onClick={save} disabled={saving} className="text-xs px-3 py-1.5 rounded-lg bg-[#c4b5fd] text-white hover:bg-[#b39ef7] disabled:opacity-50 transition-colors">
                         {saving ? 'saving...' : 'save'}
                       </button>
@@ -102,7 +103,7 @@ function CapsuleCard({ entry, onUpdate, onDelete }) {
                         onError={e => e.target.closest('button').style.display = 'none'} />
                     </button>
                   )}
-                  <button onClick={() => setEditing(true)} className="text-[10px] text-[#c4b8d9] hover:text-[#a89bc2] transition-colors">edit</button>
+                  <Button variant="secondary" size="sm" onClick={() => setEditing(true)}>edit</Button>
                 </>
               )}
             </div>
@@ -166,7 +167,7 @@ export default function CapsulePage() {
       <div className="max-w-lg mx-auto px-5 py-10">
         <div className="flex items-center justify-between mb-8">
           <Link to={`/u/${user.username}`} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">← your page</Link>
-          <button onClick={() => setCreating(true)} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">+ new capsule</button>
+          <Button variant="secondary" size="sm" onClick={() => setCreating(true)}>+ new capsule</Button>
         </div>
 
         <h1 className="text-2xl font-medium text-[#2d2a35] mb-1" style={{ fontFamily: 'var(--font-serif)' }}>capsule</h1>
@@ -208,9 +209,7 @@ export default function CapsulePage() {
           <div className="text-center py-16">
             <p className="text-3xl mb-4">📦</p>
             <p className="text-sm text-[#a89bc2] mb-6">no capsules yet</p>
-            <button onClick={() => setCreating(true)} className="text-xs px-4 py-2 rounded-xl bg-[#c4b5fd] text-white hover:bg-[#b39ef7] transition-colors">
-              seal your first capsule
-            </button>
+            <Button variant="primary" onClick={() => setCreating(true)}>seal your first capsule</Button>
           </div>
         )}
 

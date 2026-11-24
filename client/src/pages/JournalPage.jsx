@@ -236,7 +236,7 @@ export default function JournalPage() {
                 title={isPublic ? 'public' : 'private'}
                 className="text-xs px-2.5 py-1.5 rounded-xl border transition-all"
                 style={isPublic
-                  ? { borderColor: 'rgba(196,181,253,0.5)', color: '#7c6f9b', background: 'rgba(196,181,253,0.1)' }
+                  ? { borderColor: 'rgba(196,181,253,0.5)', color: 'var(--sp-text-muted)', background: 'rgba(196,181,253,0.1)' }
                   : { borderColor: 'var(--sp-border)', color: 'var(--sp-text-faint)' }}>
                 {isPublic ? '🌐 public' : '🔒 private'}
               </button>

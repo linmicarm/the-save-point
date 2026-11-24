@@ -10,6 +10,7 @@ import { uploadImage } from '../utils/uploadImage'
 import { useToast } from '../contexts/ToastContext'
 import { hexToRgb, daysAgo, lastTended, fmtDate } from '../utils/format'
 import { DEFAULT_SECTION_ORDER, DEFAULT_SECTION_VISIBLE } from '../utils/sections'
+import Button from '../components/Button'
 
 // ─────────────────────────────────────────────
 //  Constants
@@ -253,11 +254,7 @@ function PageHeader({ profile, season, accent, accentRgb, isOwn, authUser,
                   </span>
                 </>
               ) : isOwn ? (
-                <button onClick={onSeasonClick}
-                  className="inline-flex items-center gap-1.5 text-xs rounded-full px-3 py-1.5 border border-dashed transition-colors"
-                  style={{ color: `rgba(${accentRgb}, 0.5)`, borderColor: `rgba(${accentRgb}, 0.25)` }}>
-                  ✦ start a season
-                </button>
+                <Button variant="primary" onClick={onSeasonClick}>✦ start a season</Button>
               ) : null}
             </div>
             {profile.bio && (
@@ -281,13 +278,7 @@ function PageHeader({ profile, season, accent, accentRgb, isOwn, authUser,
           {/* Edit / Follow */}
           <div className="shrink-0 flex flex-col items-end gap-2 sm:pt-1">
             {isOwn ? (
-              <button onClick={onEdit}
-                className="text-xs px-4 py-2 rounded-full border font-medium transition-colors"
-                style={{ borderColor: `rgba(${accentRgb}, 0.3)`, color: accent }}
-                onMouseEnter={e => e.currentTarget.style.background = `rgba(${accentRgb}, 0.08)`}
-                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
-                edit profile
-              </button>
+              <Button variant="secondary" size="sm" onClick={onEdit}>edit profile</Button>
             ) : authUser && (
               <button disabled={followLoading} onClick={onFollow}
                 className="text-xs px-4 py-2 rounded-full border font-medium transition-all disabled:opacity-50"
@@ -348,7 +339,7 @@ function JournalPreviews({ entries, accent, accentRgb, isOwn }) {
             style={{ background: 'var(--sp-surface)', border: '1px solid var(--sp-border)',
               boxShadow: `0 1px 6px rgba(${accentRgb}, 0.06)` }}>
             {entry.mood && <span className="text-xl leading-none">{entry.mood}</span>}
-            <p className="text-sm leading-relaxed flex-1" style={{ color: '#5a5065' }}>
+            <p className="text-sm leading-relaxed flex-1" style={{ color: 'var(--sp-text-muted)' }}>
               {entry.body.slice(0, 120)}{entry.body.length > 120 && '…'}
             </p>
             <div className="flex items-center justify-between mt-auto pt-1 gap-2 flex-wrap">
@@ -418,7 +409,7 @@ function SeasonMediaShelf({ items, season, accent, accentRgb, isOwn }) {
                 </div>
             }
             <div className="px-2.5 py-2">
-              <p className="text-[11px] font-medium leading-tight line-clamp-2" style={{ color: '#2d2a35' }}>
+              <p className="text-[11px] font-medium leading-tight line-clamp-2" style={{ color: 'var(--sp-text)' }}>
                 {item.title}
               </p>
               <span className="inline-block text-[9px] mt-1 px-1.5 py-0.5 rounded-full"
@@ -598,7 +589,7 @@ function PlacesSection({ publicPlaces, accent, accentRgb, isOwn }) {
                 {section.map(p => (
                   <span key={p.id} className="text-xs px-3 py-1.5 rounded-full"
                     style={{ background: 'rgba(255,255,255,0.7)',
-                      border: `1px solid rgba(${accentRgb}, 0.15)`, color: '#5a5065' }}>
+                      border: `1px solid rgba(${accentRgb}, 0.15)`, color: 'var(--sp-text-muted)' }}>
                     {p.emoji || '📍'} {p.name}
                   </span>
                 ))}
@@ -1029,7 +1020,7 @@ export default function UserPage() {
                   className="text-[10px] px-3 py-1 rounded-full border transition-colors"
                   style={draft.isDiscoverable
                     ? { background: `rgba(${accentRgb},0.12)`, color: accent, borderColor: `rgba(${accentRgb},0.3)` }
-                    : { color: '#c4b8d9', borderColor: '#e4dff0' }}>
+                    : { color: 'var(--sp-text-faint)', borderColor: 'var(--sp-border)' }}>
                   {draft.isDiscoverable ? '✦ on' : 'off'}
                 </button>
               </div>

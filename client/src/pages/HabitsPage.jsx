@@ -3,6 +3,7 @@ import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
 import { useToast } from '../contexts/ToastContext'
 import SeasonBadge from '../components/SeasonBadge'
+import Button from '../components/Button'
 
 function hexToRgb(hex) {
   const r = parseInt(hex.slice(1, 3), 16)
@@ -205,7 +206,7 @@ function AddHabitForm({ accent, onAdd, onCancel }) {
       </div>
 
       <div className="flex justify-end gap-2">
-        <button type="button" onClick={onCancel} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b]">cancel</button>
+        <Button variant="quiet" type="button" onClick={onCancel}>cancel</Button>
         <button
           type="submit"
           disabled={saving || !name.trim()}

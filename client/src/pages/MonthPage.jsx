@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
 import EmojiPicker from '../components/EmojiPicker'
+import Button from '../components/Button'
 
 const MONTH_NAMES = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -93,13 +94,7 @@ function BulletField({ label, value, placeholder, onChange }) {
           </div>
         ))}
       </div>
-      <button
-        type="button"
-        onClick={() => addItem(items.length - 1)}
-        className="mt-2 text-[10px] text-[#c4b8d9] hover:text-[#a89bc2] transition-colors"
-      >
-        + add
-      </button>
+      <Button variant="secondary" size="sm" className="mt-2" type="button" onClick={() => addItem(items.length - 1)}>+ add</Button>
     </div>
   )
 }
@@ -162,9 +157,9 @@ function MonthModal({ entry, onClose, onSave, onDelete }) {
                 onClick={togglePublic}
                 className="text-[10px] px-2 py-1 rounded-lg border transition-colors"
                 style={draft.isPublic ? {
-                  background: '#c4b5fd22', color: '#7c6f9b', border: '1px solid #c4b5fd66',
+                  background: '#c4b5fd22', color: 'var(--sp-text-muted)', border: '1px solid #c4b5fd66',
                 } : {
-                  background: 'transparent', color: '#c4b8d9', border: '1px solid #e4dff0',
+                  background: 'transparent', color: 'var(--sp-text-faint)', border: '1px solid var(--sp-border)',
                 }}
               >
                 {draft.isPublic ? '✦ public' : 'private'}
@@ -313,8 +308,8 @@ function MonthCard({ month, entry, onClick }) {
       onClick={onClick}
       className="w-full text-left rounded-2xl border overflow-hidden transition-all hover:shadow-sm group"
       style={{
-        background: isEmpty ? '#faf8f5' : 'white',
-        borderColor: '#ede9f5',
+        background: isEmpty ? 'var(--sp-bg)' : 'var(--sp-surface)',
+        borderColor: 'var(--sp-border-faint)',
       }}
     >
       {entry?.photoUrl && (
@@ -430,9 +425,9 @@ export default function MonthPage() {
               onClick={() => setYear(y)}
               className="text-xs px-3 py-1.5 rounded-full transition-colors"
               style={year === y ? {
-                background: '#c4b5fd22', color: '#7c6f9b', border: '1px solid #c4b5fd66',
+                background: '#c4b5fd22', color: 'var(--sp-text-muted)', border: '1px solid #c4b5fd66',
               } : {
-                background: 'white', color: '#a89bc2', border: '1px solid #ede9f5',
+                background: 'var(--sp-surface)', color: 'var(--sp-text-faint)', border: '1px solid var(--sp-border-faint)',
               }}
             >
               {y}

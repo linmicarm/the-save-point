@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext'
 import { useToast } from '../contexts/ToastContext'
 import { uploadImage } from '../utils/uploadImage'
 import SeasonBadge from '../components/SeasonBadge'
+import Button from '../components/Button'
 
 function hexToRgb(hex) {
   const r = parseInt(hex.slice(1, 3), 16)
@@ -196,13 +197,7 @@ function UploadForm({ accent, onUpload, onCancel }) {
       {preview ? (
         <div className="relative">
           <img src={preview} alt="preview" className="w-full max-h-64 object-cover rounded-xl" />
-          <button
-            type="button"
-            onClick={() => { setPreview(null); setUploadedUrl(null); if (fileRef.current) fileRef.current.value = '' }}
-            className="absolute top-2 right-2 text-[10px] bg-black/50 text-white px-2 py-0.5 rounded-full"
-          >
-            change
-          </button>
+          <Button variant="secondary" size="sm" type="button" onClick={() => { setPreview(null); setUploadedUrl(null); if (fileRef.current) fileRef.current.value = '' }}>change</Button>
         </div>
       ) : (
         <div
@@ -255,7 +250,7 @@ function UploadForm({ accent, onUpload, onCancel }) {
       </div>
 
       <div className="flex justify-end gap-2">
-        <button type="button" onClick={onCancel} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b]">cancel</button>
+        <Button variant="quiet" type="button" onClick={onCancel}>cancel</Button>
         <button
           type="submit"
           disabled={saving || uploading || !uploadedUrl}

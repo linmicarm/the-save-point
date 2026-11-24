@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
 import DeleteButton from '../components/DeleteButton'
+import Button from '../components/Button'
 
 function isUnlocked(openOn) {
   if (!openOn) return true
@@ -88,7 +89,7 @@ function LetterCard({ letter, onUpdate, onDelete }) {
               <div className="flex items-center justify-between pt-1">
                 <DeleteButton onDelete={() => onDelete(letter.id)} className="text-xs text-[#e4dff0] hover:text-rose-300 transition-colors" />
                 <div className="flex gap-2">
-                  <button onClick={() => { setEditing(false); setDraft({ ...letter }) }} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">cancel</button>
+                  <Button variant="quiet" onClick={() => { setEditing(false); setDraft({ ...letter }) }}>cancel</Button>
                   <button onClick={save} disabled={saving} className="text-xs px-3 py-1.5 rounded-lg bg-[#c4b5fd] text-white hover:bg-[#b39ef7] disabled:opacity-50 transition-colors">
                     {saving ? 'saving...' : 'save'}
                   </button>
@@ -101,7 +102,7 @@ function LetterCard({ letter, onUpdate, onDelete }) {
                 {letter.body}
               </p>
               <div className="flex justify-end mt-4">
-                <button onClick={() => setEditing(true)} className="text-xs text-[#c4b8d9] hover:text-[#a89bc2] transition-colors">edit</button>
+                <Button variant="secondary" size="sm" onClick={() => setEditing(true)}>edit</Button>
               </div>
             </div>
           )}
@@ -161,7 +162,7 @@ export default function LettersPage() {
 
         <div className="flex items-center justify-between mb-8">
           <Link to={`/u/${user.username}`} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">← your page</Link>
-          <button onClick={() => setComposing(true)} className="text-xs text-[#b0a3c8] hover:text-[#7c6f9b] transition-colors">+ write a letter</button>
+          <Button variant="secondary" size="sm" onClick={() => setComposing(true)}>+ write a letter</Button>
         </div>
 
         <h1 className="text-2xl font-medium text-[#2d2a35] mb-1" style={{ fontFamily: 'var(--font-serif)' }}>letters</h1>
@@ -171,9 +172,7 @@ export default function LettersPage() {
           <div className="text-center py-16">
             <p className="text-3xl mb-4">✉️</p>
             <p className="text-sm text-[#a89bc2] mb-6">no letters yet</p>
-            <button onClick={() => setComposing(true)} className="text-xs px-4 py-2 rounded-xl bg-[#c4b5fd] text-white hover:bg-[#b39ef7] transition-colors">
-              write your first letter
-            </button>
+            <Button variant="primary" onClick={() => setComposing(true)}>write your first letter</Button>
           </div>
         )}
 

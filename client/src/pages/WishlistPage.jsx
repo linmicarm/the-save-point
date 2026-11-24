@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
 import SeasonBadge from '../components/SeasonBadge'
+import Button from '../components/Button'
 
 const CATEGORIES = [
   { key: 'cook',  label: 'cook',  emoji: '🍳' },
@@ -124,12 +125,12 @@ export default function WishlistPage() {
                 className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full transition-colors"
                 style={activeTab === cat.key ? {
                   background: '#c4b5fd22',
-                  color: '#7c6f9b',
+                  color: 'var(--sp-text-muted)',
                   border: '1px solid #c4b5fd66',
                 } : {
-                  background: 'white',
-                  color: '#a89bc2',
-                  border: '1px solid #ede9f5',
+                  background: 'var(--sp-surface)',
+                  color: 'var(--sp-text-faint)',
+                  border: '1px solid var(--sp-border-faint)',
                 }}
               >
                 <span>{cat.emoji}</span>
@@ -162,13 +163,7 @@ export default function WishlistPage() {
             >
               ···
             </button>
-            <button
-              onClick={handleAdd}
-              disabled={adding || !newTitle.trim()}
-              className="text-xs px-3 py-1.5 rounded-lg bg-[#c4b5fd] hover:bg-[#b39ef7] text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-            >
-              add
-            </button>
+            <Button variant="secondary" size="sm" onClick={handleAdd} disabled={adding || !newTitle.trim()}>add</Button>
           </div>
           {showNotes && (
             <input
@@ -285,8 +280,8 @@ function WishItem({ item, editingId, editTitle, setEditTitle, onToggle, onDelete
       {/* actions */}
       {isEditing ? (
         <div className="flex gap-2 shrink-0">
-          <button onClick={() => onSaveEdit(item.id)} className="text-xs text-[#a89bc2] hover:text-[#7c6f9b]">save</button>
-          <button onClick={onCancelEdit} className="text-xs text-[#c4b8d9] hover:text-[#a89bc2]">cancel</button>
+          <Button variant="primary" size="sm" onClick={() => onSaveEdit(item.id)}>save</Button>
+          <Button variant="quiet" onClick={onCancelEdit}>cancel</Button>
         </div>
       ) : (
         <button
